@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
   --ink: #0d1f15;
@@ -12,7 +12,7 @@
   --off: #ff6b57;
   --border: #dfe8e1;
   --radius: 14px;
-  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --mono: 'Inter', -apple-system, sans-serif;
 }
 
 * { box-sizing: border-box; }
