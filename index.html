@@ -1,44 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harshita Bhargava</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Harshita Bhargava — Complexity Simplified is Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;1,300&family=Rubik:wght@300&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #122d1e;
-    color: #eef5f0;
-    font-family: 'Inter', -apple-system, sans-serif;
-    text-align: center;
-    padding: 24px;
+  :root{
+    --blue: #72cbff;
+    --grey: #d0d0d0;
+    --purple: #4e3ed8;
+    --ink: #1f1e1e;
+    --margin: 72px;
+    --gutter: 20px;
+    --columns: 12;
   }
-  h1 { font-size: 28px; margin: 0 0 12px; }
-  p { color: rgba(238,245,240,0.7); margin: 0 0 24px; font-size: 15px; }
-  a {
-    display: inline-block;
-    background: #04e25f;
-    color: #08210f;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 14px;
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    color:#000;
+    background:#fff;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    width:100%;
+    height:758px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(118deg, rgb(183,222,245) 15%, rgba(252,248,249,0) 42%, rgb(254,247,32) 78%);
+  }
+  .hero-nav{
+    position:absolute;
+    top:32px;
+    right:40px;
+    font-family:'Rubik', sans-serif;
+    font-weight:300;
+    font-size:14px;
+    color:var(--ink);
+    letter-spacing:0.5px;
+  }
+  .hero h1{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    font-family:'Rubik', sans-serif;
+    font-weight:300;
+    font-size:56px;
+    line-height:70px;
+    margin:0;
+    padding:0 20px;
+  }
+  .hero h1 .thin{ font-family:'Inter', sans-serif; font-weight:200; }
+  .hero h1 .light{ font-family:'Inter', sans-serif; font-weight:300; }
+
+  /* ---------- SECTIONS ---------- */
+  section{
+    max-width:1440px;
+    margin:0 auto;
+    padding:0 var(--margin);
+  }
+  .section-label{
+    font-weight:600;
+    font-size:24px;
+    color:var(--blue);
+    margin:0 0 32px 0;
+    padding-top:64px;
+  }
+  /* 12-column grid: 72px margins (on the section), 20px gutter.
+     At the 1440px design width this yields a column of ~89.67px,
+     so a 4-column-span thumbnail = 418px, matching the 418x266 covers. */
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(var(--columns), 1fr);
+    column-gap:var(--gutter);
+    padding-bottom:80px;
+  }
+  .card{
+    grid-column: span 4;
+  }
+  .card figure{
+    margin:0 0 17px 0;
+  }
+  .card img.cover{
+    width:100%;
+    aspect-ratio: 418 / 266;
+    height:auto;
+    object-fit:cover;
+    display:block;
+    background:var(--grey);
+  }
+  .card p.caption{
+    font-weight:300;
+    font-size:16px;
+    line-height:22px;
+    margin:0 0 11px 0;
+  }
+  .tags{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .tag{
+    border:1px solid var(--blue);
+    border-radius:8px;
+    padding:8px;
+    font-weight:300;
+    font-size:12px;
+    color:#4c4c4c;
+  }
+
+  /* ---------- WRITING COVERS ---------- */
+  .writing-cover{
+    width:100%;
+    aspect-ratio: 418 / 266;
+    height:auto;
+    display:block;
+    object-fit:cover;
+    background:#000;
+  }
+
+  @media (max-width:900px){
+    .hero{height:520px;}
+    .hero h1{font-size:34px;line-height:44px;}
+    section{padding:0 24px;}
+    .card{grid-column: span 12;}
   }
 </style>
 </head>
 <body>
-  <div>
-    <h1>Harshita Bhargava</h1>
-    <p>Portfolio coming soon!</p>
+
+  <div class="hero">
+    <div class="hero-nav">ABOUT</div>
+    <h1><span class="thin">Complexity</span> <span class="light">Simplified</span><br><span class="light">is Design</span></h1>
   </div>
+
+  <section>
+    <p class="section-label">PROJECT</p>
+    <div class="cards">
+      <div class="card">
+        <figure>
+          <img class="cover" src="https://placehold.co/418x266/d0d0d0/d0d0d0" alt="" />
+        </figure>
+        <p class="caption">Redesigning the TB Screening Camp Deployment and Setup Experience</p>
+        <div class="tags">
+          <span class="tag">System Design</span>
+          <span class="tag">Product Design</span>
+          <span class="tag">Design Research</span>
+        </div>
+      </div>
+      <div class="card">
+        <figure>
+          <img class="cover" src="https://placehold.co/418x266/d0d0d0/d0d0d0" alt="" />
+        </figure>
+        <p class="caption">Designing support experience for onprem systems with no reliable internet</p>
+        <div class="tags">
+          <span class="tag">UX Design</span>
+          <span class="tag">Product Design</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label">WRITING</p>
+    <div class="cards">
+      <div class="card">
+        <figure>
+          <img class="writing-cover" src="images/writing-1.svg" alt="404 error illustration" style="background:#000;" />
+        </figure>
+        <p class="caption">Design beyond the interface: Blending human and digital touchpoints</p>
+      </div>
+      <div class="card">
+        <figure>
+          <img class="writing-cover" src="images/writing-2.png" alt="Two hands pointing at each other illustration" style="background:#4e3ed8;" />
+        </figure>
+        <p class="caption">How to know if the product needs a redesign or just better training?</p>
+      </div>
+    </div>
+  </section>
+
 </body>
 </html>
