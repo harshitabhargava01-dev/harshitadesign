@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Designing support experience for onprem systems with no reliable internet — Harshita Bhargava</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;1,300&family=Rubik:wght@300&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue: #72cbff;
+    --grey: #d0d0d0;
+    --purple: #4e3ed8;
+    --ink: #1f1e1e;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    color:#1a1a1a;
+    background:#fff;
+  }
+  a{ color:inherit; }
+
+  .top-nav{
+    max-width:900px;
+    margin:0 auto;
+    padding:32px 24px 0 24px;
+  }
+  .top-nav a{
+    font-family:'Rubik', sans-serif;
+    font-weight:300;
+    font-size:14px;
+    text-decoration:none;
+    color:var(--ink);
+    letter-spacing:0.5px;
+  }
+  .top-nav a:hover{ color:var(--purple); }
+
+  .hero-banner{
+    width:100%;
+    max-width:900px;
+    margin:24px auto 0 auto;
+    padding:0 24px;
+  }
+  .hero-banner img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:10px;
+  }
+
+  header.page-head{
+    max-width:900px;
+    margin:0 auto;
+    padding:32px 24px 0 24px;
+  }
+  h1{
+    font-family:'Rubik', sans-serif;
+    font-weight:300;
+    font-size:42px;
+    line-height:1.2;
+    margin:0 0 20px 0;
+  }
+  .meta{
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+    font-size:14px;
+    color:#666;
+    margin-bottom:16px;
+  }
+  .tags{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:32px; }
+  .tag{
+    border:1px solid var(--blue);
+    border-radius:8px;
+    padding:8px 12px;
+    font-weight:300;
+    font-size:12px;
+    color:#4c4c4c;
+  }
+
+  article{
+    max-width:900px;
+    margin:0 auto;
+    padding:0 24px 96px 24px;
+  }
+  section{ padding-top:48px; }
+  h2{
+    font-size:24px;
+    font-weight:600;
+    color:var(--purple);
+    margin:0 0 20px 0;
+  }
+  h3{
+    font-size:18px;
+    font-weight:600;
+    color:var(--ink);
+    margin:28px 0 12px 0;
+  }
+  p{
+    font-weight:300;
+    font-size:17px;
+    line-height:1.7;
+    margin:0 0 20px 0;
+    color:#2a2a2a;
+  }
+  strong{ font-weight:600; }
+  ul, ol{
+    font-weight:300;
+    font-size:17px;
+    line-height:1.7;
+    color:#2a2a2a;
+    padding-left:22px;
+    margin:0 0 20px 0;
+  }
+  li{ margin-bottom:8px; }
+
+  .callout{
+    background:#f3f8fd;
+    border-left:3px solid var(--blue);
+    border-radius:6px;
+    padding:18px 22px;
+    margin:0 0 24px 0;
+    font-size:16px;
+    line-height:1.6;
+  }
+  .callout strong{ color:var(--purple); }
+
+  figure.shot{ margin:0 0 32px 0; }
+  figure.shot img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:8px;
+    border:1px solid #e6e6e6;
+  }
+  figcaption{
+    font-size:13px;
+    color:#888;
+    font-style:italic;
+    text-align:center;
+    margin-top:8px;
+  }
+  .ph{
+    aspect-ratio:16/10;
+    background:#f2f2f2;
+    border:1px dashed #c9c9c9;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#999;
+    font-size:14px;
+    text-align:center;
+    padding:24px;
+  }
+
+  .shot-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media (max-width:640px){
+    .shot-row{ grid-template-columns:1fr; }
+    h1{ font-size:30px; }
+  }
+
+  footer{
+    max-width:900px;
+    margin:0 auto;
+    padding:0 24px 64px 24px;
+  }
+  footer a{
+    font-family:'Rubik', sans-serif;
+    font-weight:300;
+    font-size:14px;
+    text-decoration:none;
+    color:var(--purple);
+  }
+</style>
+</head>
+<body>
+
+  <div class="top-nav"><a href="index.html">← Harshita Bhargava</a></div>
+
+  <div class="hero-banner">
+    <img src="images/case-studies/onprem-support/hero-banner.png" alt="" />
+  </div>
+
+  <header class="page-head">
+    <h1>Designing support experience for onprem systems with no reliable internet</h1>
+    <div class="meta">Created January 3, 2026</div>
+    <div class="tags">
+      <span class="tag">Product Design</span>
+      <span class="tag">UX</span>
+    </div>
+  </header>
+
+  <article>
+
+    <section>
+      <h2>Background</h2>
+      <p>Qure is a B2B AI healthcare company. Its product, qTrack, is an AI-based chest X-ray screening platform used in TB screening camps across low resource, low-connectivity environments. These camps are run day to day by a range of healthcare workers - radiologists, radiographers, TB nurses, doctors.</p>
+    </section>
+
+    <section>
+      <h2>Problem</h2>
+      <p>Leadership raised concerns about the high number of support tickets being raised by clients. It was creating a poor customer experience and client trust on the app, and a significant bandwidth of CS and TechOps was going into resolving these issues manually. Every quarter from 45 - 53% of the tickets were L1 category (basic issues which can be resolved by users themselves).</p>
+      <p>The analysis product and engineering team shared they attributed to client side mistakes rather than product faults. They framed this as a communication and knowledge gap: users did not fully understand how to use the qTrack, so this was a training problem, not something that is going wrong on the product. Whatever wrong is happening because users fully don't understand the product and it is leading to such errors.</p>
+      <p>Few approaches initially tried to solve this "communication and knowledge gap" as framed by product and engineering teams were to design collaterals (user manuals, one pagers, self troubleshooting guides) followed by a rule based chatbot.</p>
+    </section>
+
+    <section>
+      <h2>Discovery</h2>
+      <h3>1. Learnings from previous approaches</h3>
+      <p><strong>Collaterals</strong></p>
+      <ul>
+        <li>Had right information, but they were too complex to actually be followed and used by end users. The steps were written the way the team would explain something to each other, not the way a healthcare worker could understand and most sites did not have on site IT teams to ask help if they got stuck or faced any issue.</li>
+        <li>Next challenge was accessibility - to make sure they are circulated with the users at the right time via WhatsApp groups and then making sure users have them hand when some issue came up.</li>
+      </ul>
+
+      <p><strong>Rule based Chatbot</strong></p>
+      <ul>
+        <li>The purpose of creating chatbot was to solve the problem to have a dedicated support channel. Customer success teams maintained WhatsApp groups for every project and with scale of deployments increasing it got very difficult to manage these groups. Hence, there was a need for a dedicated support channel which will help users raise issues quicker and a faster response time.</li>
+        <li>The chatbot had similar problem of information being too complex because same collaterals were being sent to users through the rule based chatbot workflow as a DIY solution.</li>
+        <li>The success rate of issue getting resolved by the bot was very low.</li>
+      </ul>
+
+      <figure class="shot">
+        <img src="images/case-studies/onprem-support/chatbot-workflow.png" alt="Flowchart of the rule-based WhatsApp chatbot workflow connecting customers, CS, and TechOps" />
+        <figcaption>Chatbot workflow — how it connects different teams.</figcaption>
+      </figure>
+
+      <h3>2. Jira ticket analysis</h3>
+      <p>The analysis shared by product and engineering team did not show the full picture. They often shared data from Jira by exporting the relevant fields. All the data was technical and quantitative there was no clear why for any type of issues. So, I started going through the Jira tickets myself one by one to simply understand both client and internal team side perspective.</p>
+      <p>I specifically started looking into how the issue was reported by the client, meaning how did they describe (Jira had client conversation SS). Then, how the CS team was describing the issue when raising the ticket in behalf of client and then techops engineering perspective. The techops team identifies the issue and provide RCA which was technically aligned and more accurate.</p>
+      <p>They fill the other jira field where they are supposed to categorise the issue level (L1, L2, L3) and issue type — not an issue, client side issue, issue. It further had categories like knowledge gap, communication gap, expected behaviour of product. These fields were little inconsistent throughout the tickets and was subjective to interpretation specially in L1 type issues.</p>
+
+      <h3>3. Working with Techops</h3>
+      <p>I collaborated with techops to understand what was the cause of these issues in simpler language. The purpose of this exercise was to break down technical issue in simpler language. I categorised these issues into symptom versus cause framework. What the user reported - what did they experience, versus what was actually going on underneath. Asking "why" for every issue showed different levels of each issue. What could really be understood by a non technical person and where will they need help. This gave a lot of clarity which was not possible to get by just looking at the jira tickets analysis.</p>
+
+      <figure class="shot">
+        <img src="images/case-studies/onprem-support/cause-symptom-framework.png" alt="Table mapping each issue to the symptom the user experienced and its underlying cause" />
+        <figcaption>Cause &amp; Symptom Framework — separating what the user experienced from what was actually happening underneath.</figcaption>
+      </figure>
+
+      <p>How issues were added in jira was little open to interpretation the person who is assigned the ticket and resolving that issue.</p>
+      <ul>
+        <li><strong>Mislabeled</strong> - The product simply wasn't telling users what was happening, so a normal delay in AI processing or background app not starting looked like a failure. Example - LAN cable unplugged from the laptop</li>
+        <li><strong>What users could during trainings</strong> - things users could genuinely learn, like not uninstalling a background app the system depended on, how to export CSV (feature in qTrack). Issues related to how to navigate product were also raised but that was rare.</li>
+        <li><strong>Out of scope of frontline healthcare workers</strong> - issues like understanding wifi switching between saved networks, which required some understanding infrastructure knowledge that had nothing to do with a healthcare worker's actual job.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Core Insight</h2>
+      <div class="callout"><strong>The issues raised by end users were not happening due to communication / knowledge gap or poor understanding of the product. For users, they were not getting any next step information if something went wrong. The qTrack was not communicating if something went wrong or if any error was about to occur.</strong></div>
+      <p>The end users of qTrack are front line healthcare workers in their day to day they are not expected to deal with such issues or resolve them. That is not what they do. When something did not work the product stopped working or should some technical message which is not something end users can understand. These screening camps are high stress environments the product not working any way means screening would have to be stopped so in such cases end users act from panic and immediately report the issue, which is a natural behaviour.</p>
+      <p>And even where training could technically close the gap, it was not a great experience for heath care workers to start learning about engineering errors.</p>
+    </section>
+
+    <section>
+      <h2>Scoping the opportunity</h2>
+      <ul>
+        <li><strong>Issues categorised</strong> based on:
+          <ul>
+            <li>How common that issue is</li>
+            <li>How is it impacting users</li>
+          </ul>
+        </li>
+      </ul>
+      <p>The issues prioritized were technical in nature, but the reason they were prioritized was how often they occurred and how negatively they impacted users, whether they added friction to getting into qTrack, or stopped the on-ground workflow midway. In both cases, the product wasn't signaling anything to the user: not that something had gone wrong, not what to do about it, not even a way to tell if something was wrong at all.</p>
+
+      <figure class="shot">
+        <img src="images/case-studies/onprem-support/issue-priority-quadrant.png" alt="Quadrant chart plotting issues by how often they occur against how much they impact users" />
+        <figcaption>Issues plotted by frequency and impact to decide what to prioritize.</figcaption>
+      </figure>
+
+      <p><strong>Issues picked</strong> — Issues shortlisted to start the design work based on what can be controlled by Qure and effort required (engineering + design).</p>
+    </section>
+
+    <section>
+      <h2>Technical Challenges</h2>
+      <ol>
+        <li>No single issue on this list had one clean root cause. "qTrack not opening" could mean five different things underneath, so there was no single fix to jump straight to. Instead, users needed a way to work through possibilities one at a time - ruling things out until the actual cause was clear, with the app guiding them toward the next step at each point, telling the user what was happening, instead of solving the switch itself.</li>
+        <li>The network disconnect or switching between saved network was the starting cause for so many issues. Engineering shared this cannot be automated - detected and fixed directly, without user getting involved. This is where things get complicated its difficult for non technical health care workers understand networking. And it was not even worth it because teaching this to end users was requiring more time than actually getting familiar the product qTrack. Not a great experience if users spend more time in learning about what type of issues can occur than engaging with the product.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Design solution</h2>
+      <p>With so many uncertainties there was a need of an environment which supports users in their day to day tasks and give them preventive measures to reduce the chances of errors. That is how the 'Start Screening' button was added to mimic the workflow of onground users and guide them. It is divided into 2 main sections -</p>
+      <ol>
+        <li><strong>AI Screening Setup</strong></li>
+        <li><strong>Start Registering Patients</strong></li>
+      </ol>
+      <p><em>Note: This case study covers "start registering patients" in more detail. To understand how section one was created, see the companion case study — <a href="tb-screening-camp.html">Redesigning the TB Screening Camp Deployment and Setup Experience</a>.</em></p>
+
+      <h3>How workflow looks for the onground users</h3>
+      <p><strong>Users start with the AI screening Setup</strong></p>
+      <p>While connecting their equipment during onboarding, the user names the network they're on, directly in the app. It's a small addition to a step they're already doing, not a separate task. That name gets saved, and becomes the reference point for everything that follows.</p>
+      <p><em>(Note: This onboarding flow, AI Screening Setup, is covered in full detail in the other case study. The network name field is the one addition made here, for this project.)</em></p>
+
+      <h3>1. Network Name Field</h3>
+      <p><em>(Addresses: Network disconnect between different machines/devices)</em></p>
+      <p>An addition to the first section, AI Screening Setup (onboarding flow) an input field where users can add the network name for easy recall instead of getting into technicalities. In the setup, users name the networks they are connecting to, directly in the app. Ideally this stays the same every time, but these are mobile camps, so the team packs up and sets up again regularly, which naturally leads to small errors. Devices (laptops, mobiles, tablets) can also hold onto multiple saved networks, and if one connects automatically to a different saved network instead of the intended one, the connection between the two software systems breaks and has to be reconnected by reconfiguring the IP address. That's not something a non-technical user should be expected to do, no matter how clearly the steps are written. This couldn't be automated from the backend either, since multiple networks can be involved, with no way for the system to know which one is meant for what.</p>
+      <p><strong>How it works</strong></p>
+      <p>Users name the network once, at setup. That name becomes the reference point the setup connection check compares against before a session starts, confirming the user is still on the network they originally intended before they move on to registering patients. Users can edit it any time something changes.</p>
+
+      <p><strong>Users are ready to start registering patients</strong></p>
+      <h3>2. Network Connection Check &amp; Best practices reminder</h3>
+      <p><em>(Addresses: Network disconnect between different machines/devices)</em></p>
+      <p>The next section in the Start Screening flow is "Start Registering Patients." This runs a few last minute checks before the user begins, and surfaces best practices for a smoother session.</p>
+      <p>Two states:</p>
+      <ul>
+        <li>Both connected - user sees both saved network names confirmed, and can move on.</li>
+        <li>Mismatch in connection - the app names exactly which network is missing, rather than a generic "not connected" message, so the user knows what to check. A retry button lets them recheck without restarting the whole setup.</li>
+      </ul>
+      <p><strong>How it works</strong></p>
+      <p>Once the user has named their networks, the app checks their current connection status against those names once, at setup, before they start registering patients. This catches a mismatch upfront, before the TB screening camp begins, rather than letting it surface later as a "scans not visible" issue mid-session.</p>
+
+      <div class="shot-row">
+        <figure class="shot">
+          <img src="images/case-studies/onprem-support/setup-and-connection-check.png" alt="Two setup screens side by side: choosing setup type and confirming both networks are connected" />
+        </figure>
+        <figure class="shot">
+          <img src="images/case-studies/onprem-support/connection-mismatch.png" alt="Connection check screen showing one network is not connected, with a retry option" />
+        </figure>
+      </div>
+      <figcaption style="margin-top:-16px; margin-bottom:32px;">Both-connected state next to the mismatch state — the app names exactly what's missing.</figcaption>
+
+      <p><strong>Camp Screening session has started</strong></p>
+      <h3>3. Running Session Bar</h3>
+      <p><em>(Enables: background monitoring during a session)</em></p>
+      <p>A green bar runs across the top of the screen, just below the nav bar, for as long as a screening session is active. It does two things:</p>
+      <ul>
+        <li><strong>Signals that the session is live.</strong> Since screening at a camp runs for hours at a stretch, the bar gives users a constant, ambient confirmation that they are still "in session" without needing to check anywhere else.</li>
+        <li><strong>Triggers the background checks that run during session</strong> — like the session check-in prompt and network monitoring — since those only make sense while screening is actually active, not when a user is just browsing patient records.</li>
+      </ul>
+      <p><strong>How it works</strong></p>
+      <p>The bar appears as soon as a user taps "Start Screening" and completes setup. It stays on screen continuously until the user explicitly stops the session at the end of the day.</p>
+
+      <figure class="shot">
+        <img src="images/case-studies/onprem-support/session-bar.png" alt="qTrack worklist screen with a green session bar running across the top of the app" />
+        <figcaption>The green session bar signals an active screening session and enables background checks.</figcaption>
+      </figure>
+
+      <p><strong>Checking in between the session</strong></p>
+      <h3>4. Session check in prompt</h3>
+      <p><em>(Addresses: Scans not visible on qTrack or any on ground issues)</em></p>
+      <p>Scans not appearing on qTrack once pushed from the X-Ray Viewing software is a common issue and can happen for various reasons. With this check, we check -</p>
+      <ul>
+        <li>X-Ray scans not coming to qTrack - what's the reason? Did something break, or did something happen on the ground that needs help? This check verifies that everything on the ground is running smoothly.</li>
+        <li>This also helps the Qure team to understand user activity by going through the logs.</li>
+      </ul>
+      <p><strong>How it works</strong></p>
+      <ul>
+        <li>Once a user has started the screening session, the backend runs a check in the background for when the last scan was received on qTrack. If no scan comes in for 30 minutes straight, this check-in prompt appears for the user.</li>
+      </ul>
+
+      <figure class="shot">
+        <img src="images/case-studies/onprem-support/session-checkin-prompt.png" alt="Screening still on? prompt asking the user to confirm status after 30 minutes of no scans" />
+        <figcaption>The check-in prompt surfaces after 30 minutes of no scans, instead of leaving the user guessing.</figcaption>
+      </figure>
+
+      <p>5. <strong>Mid Session Network change / switch</strong></p>
+      <p><em>(Addresses: Network disconnect between different machines/devices)</em></p>
+      <p>If the network changes while a session is already active, qTrack names the change directly and surfaces it immediately so users can take action.</p>
+      <p><strong>How it works</strong></p>
+      <p>Once a session is active, the app continues watching the network against the name saved at setup. If it detects a change, it alerts the user right away.</p>
+
+      <figure class="shot">
+        <img src="images/case-studies/onprem-support/qr-support-prompt.png" alt="Choose Setup prompt showing a QR code to connect with the Qure support team" />
+        <figcaption>When users need more help, a QR code connects them directly with the Qure support team.</figcaption>
+      </figure>
+    </section>
+
+  </article>
+
+  <footer><a href="index.html">← Back to home</a></footer>
+
+</body>
+</html>
