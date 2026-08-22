@@ -33,7 +33,7 @@
     overflow:hidden;
     display:flex;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-start;
   }
   .hero::before{
     content:"";
@@ -49,8 +49,10 @@
     position:relative;
     z-index:1;
     width:100%;
-    max-width:900px;
-    padding:0 20px;
+    max-width:1440px;
+    margin:0 auto;
+    padding:0 var(--margin);
+    transform:translateY(-40px);
   }
   .hero-intro{
     font-family:'Inter', sans-serif;
@@ -144,7 +146,7 @@
   @media (max-width:900px){
     .hero{height:520px;}
     .hero h1{font-size:34px;line-height:44px;}
-    section{padding:0 24px;}
+    section, .hero-content{padding:0 24px;}
     .card{grid-column: span 12;}
   }
 </style>
@@ -153,7 +155,7 @@
 
   <div class="hero">
     <div class="hero-content">
-      <p class="hero-intro">Hi I am Harshita Bhargava</p>
+      <p class="hero-intro">Hi, I am Harshita Bhargava</p>
       <h1>Mapping the unseen complexity.<br>Simplified by Design.</h1>
     </div>
   </div>
