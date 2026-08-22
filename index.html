@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Harshita Bhargava — Complexity Simplified is Design</title>
+<title>Harshita Bhargava — Mapping the unseen complexity. Simplified by Design.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;1,300&family=Rubik:wght@300&display=swap" rel="stylesheet">
@@ -45,29 +45,30 @@
     background-position: center, center;
     background-repeat: no-repeat, no-repeat;
   }
-  .hero-nav{
-    position:absolute;
-    top:32px;
-    right:40px;
-    font-family:'Rubik', sans-serif;
-    font-weight:300;
-    font-size:14px;
-    color:var(--ink);
-    letter-spacing:0.5px;
-  }
-  .hero h1{
+  .hero-content{
     position:relative;
     z-index:1;
+    width:100%;
+    max-width:900px;
+    padding:0 20px;
+  }
+  .hero-intro{
+    font-family:'Inter', sans-serif;
+    font-weight:400;
+    font-size:14px;
+    color:#FE4520;
+    text-align:right;
+    margin:0 0 40px 0;
+  }
+  .hero h1{
     text-align:center;
     font-family:'Rubik', sans-serif;
     font-weight:300;
     font-size:56px;
     line-height:70px;
+    color:#000000;
     margin:0;
-    padding:0 20px;
   }
-  .hero h1 .thin{ font-family:'Inter', sans-serif; font-weight:200; }
-  .hero h1 .light{ font-family:'Inter', sans-serif; font-weight:300; }
 
   /* ---------- SECTIONS ---------- */
   section{
@@ -151,8 +152,10 @@
 <body>
 
   <div class="hero">
-    <div class="hero-nav">ABOUT</div>
-    <h1><span class="thin">Complexity</span> <span class="light">Simplified</span><br><span class="light">is Design</span></h1>
+    <div class="hero-content">
+      <p class="hero-intro">Hi I am Harshita Bhargava</p>
+      <h1>Mapping the unseen complexity.<br>Simplified by Design.</h1>
+    </div>
   </div>
 
   <section>
