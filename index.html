@@ -45,6 +45,17 @@
     background-position: center, center;
     background-repeat: no-repeat, no-repeat;
   }
+  .hero-nav{
+    position:absolute;
+    top:32px;
+    right:var(--margin);
+    z-index:1;
+    font-family:'Rubik', sans-serif;
+    font-weight:300;
+    font-size:14px;
+    color:#1F1E1E;
+    letter-spacing:0.5px;
+  }
   .hero-content{
     position:relative;
     z-index:1;
@@ -147,6 +158,7 @@
     .hero{height:520px;}
     .hero h1{font-size:34px;line-height:44px;}
     section, .hero-content{padding:0 24px;}
+    .hero-nav{right:24px;}
     .card{grid-column: span 12;}
   }
 </style>
@@ -154,6 +166,7 @@
 <body>
 
   <div class="hero">
+    <div class="hero-nav">ABOUT</div>
     <div class="hero-content">
       <p class="hero-intro">Hi, I am Harshita Bhargava</p>
       <h1>Mapping the unseen complexity.<br>Simplified by Design.</h1>
