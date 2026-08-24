@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Designing support experience for onprem systems with no reliable internet — Harshita Bhargava</title>
+<title>Designing support experience for onprem systems with no reliable internet - Harshita Bhargava</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;1,300&family=Rubik:wght@300&display=swap" rel="stylesheet">
@@ -214,20 +214,20 @@
 
       <figure class="shot">
         <img src="images/case-studies/onprem-support/chatbot-workflow.png" alt="Flowchart of the rule-based WhatsApp chatbot workflow connecting customers, CS, and TechOps" />
-        <figcaption>Chatbot workflow — how it connects different teams.</figcaption>
+        <figcaption>Chatbot workflow - how it connects different teams.</figcaption>
       </figure>
 
       <h3>2. Jira ticket analysis</h3>
       <p>The analysis shared by product and engineering team did not show the full picture. They often shared data from Jira by exporting the relevant fields. All the data was technical and quantitative there was no clear why for any type of issues. So, I started going through the Jira tickets myself one by one to simply understand both client and internal team side perspective.</p>
       <p>I specifically started looking into how the issue was reported by the client, meaning how did they describe (Jira had client conversation SS). Then, how the CS team was describing the issue when raising the ticket in behalf of client and then techops engineering perspective. The techops team identifies the issue and provide RCA which was technically aligned and more accurate.</p>
-      <p>They fill the other jira field where they are supposed to categorise the issue level (L1, L2, L3) and issue type — not an issue, client side issue, issue. It further had categories like knowledge gap, communication gap, expected behaviour of product. These fields were little inconsistent throughout the tickets and was subjective to interpretation specially in L1 type issues.</p>
+      <p>They fill the other jira field where they are supposed to categorise the issue level (L1, L2, L3) and issue type - not an issue, client side issue, issue. It further had categories like knowledge gap, communication gap, expected behaviour of product. These fields were little inconsistent throughout the tickets and was subjective to interpretation specially in L1 type issues.</p>
 
       <h3>3. Working with Techops</h3>
       <p>I collaborated with techops to understand what was the cause of these issues in simpler language. The purpose of this exercise was to break down technical issue in simpler language. I categorised these issues into symptom versus cause framework. What the user reported - what did they experience, versus what was actually going on underneath. Asking "why" for every issue showed different levels of each issue. What could really be understood by a non technical person and where will they need help. This gave a lot of clarity which was not possible to get by just looking at the jira tickets analysis.</p>
 
       <figure class="shot">
         <img src="images/case-studies/onprem-support/cause-symptom-framework.png" alt="Table mapping each issue to the symptom the user experienced and its underlying cause" />
-        <figcaption>Cause &amp; Symptom Framework — separating what the user experienced from what was actually happening underneath.</figcaption>
+        <figcaption>Cause &amp; Symptom Framework - separating what the user experienced from what was actually happening underneath.</figcaption>
       </figure>
 
       <p>How issues were added in jira was little open to interpretation the person who is assigned the ticket and resolving that issue.</p>
@@ -262,7 +262,7 @@
         <figcaption>Issues plotted by frequency and impact to decide what to prioritize.</figcaption>
       </figure>
 
-      <p><strong>Issues picked</strong> — Issues shortlisted to start the design work based on what can be controlled by Qure and effort required (engineering + design).</p>
+      <p><strong>Issues picked</strong> - Issues shortlisted to start the design work based on what can be controlled by Qure and effort required (engineering + design).</p>
     </section>
 
     <section>
@@ -280,7 +280,7 @@
         <li><strong>AI Screening Setup</strong></li>
         <li><strong>Start Registering Patients</strong></li>
       </ol>
-      <p><em>Note: This case study covers "start registering patients" in more detail. To understand how section one was created, see the companion case study — <a href="tb-screening-camp.html">Redesigning the TB Screening Camp Deployment and Setup Experience</a>.</em></p>
+      <p><em>Note: This case study covers "start registering patients" in more detail. To understand how section one was created, see the companion case study - <a href="tb-screening-camp.html">Redesigning the TB Screening Camp Deployment and Setup Experience</a>.</em></p>
 
       <h3>How workflow looks for the onground users</h3>
       <p><strong>Users start with the AI screening Setup</strong></p>
@@ -313,7 +313,7 @@
           <img src="images/case-studies/onprem-support/connection-mismatch.png" alt="Connection check screen showing one network is not connected, with a retry option" />
         </figure>
       </div>
-      <figcaption style="margin-top:-16px; margin-bottom:32px;">Both-connected state next to the mismatch state — the app names exactly what's missing.</figcaption>
+      <figcaption style="margin-top:-16px; margin-bottom:32px;">Both-connected state next to the mismatch state - the app names exactly what's missing.</figcaption>
 
       <p><strong>Camp Screening session has started</strong></p>
       <h3>3. Running Session Bar</h3>
@@ -321,7 +321,7 @@
       <p>A green bar runs across the top of the screen, just below the nav bar, for as long as a screening session is active. It does two things:</p>
       <ul>
         <li><strong>Signals that the session is live.</strong> Since screening at a camp runs for hours at a stretch, the bar gives users a constant, ambient confirmation that they are still "in session" without needing to check anywhere else.</li>
-        <li><strong>Triggers the background checks that run during session</strong> — like the session check-in prompt and network monitoring — since those only make sense while screening is actually active, not when a user is just browsing patient records.</li>
+        <li><strong>Triggers the background checks that run during session</strong> - like the session check-in prompt and network monitoring - since those only make sense while screening is actually active, not when a user is just browsing patient records.</li>
       </ul>
       <p><strong>How it works</strong></p>
       <p>The bar appears as soon as a user taps "Start Screening" and completes setup. It stays on screen continuously until the user explicitly stops the session at the end of the day.</p>

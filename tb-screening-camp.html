@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Redesigning the TB Screening Camp Deployment and Setup Experience — Harshita Bhargava</title>
+<title>Redesigning the TB Screening Camp Deployment and Setup Experience - Harshita Bhargava</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;1,300&family=Rubik:wght@300&display=swap" rel="stylesheet">
@@ -119,6 +119,8 @@
   figure.shot{ margin:0 0 32px 0; }
   figure.shot--small{ width:220px; }
   figure.shot--small img{ width:100%; }
+  figure.shot--reduced{ width:70%; }
+  figure.shot--reduced img{ width:100%; }
   figure.shot img{
     width:100%;
     height:auto;
@@ -221,16 +223,16 @@
 
       <h3>2. Understanding what enables the capability</h3>
       <p>To understand why the experience kept breaking down, I worked with TechOps to understand what was required to make this feature successful.</p>
-      <p>The investigation revealed that this capability depended on a chain of setup steps spanning both the product and the physical deployment environment — connecting the right hardware accessories, establishing a local network between devices, and preparing the environment correctly before a single patient could be registered. Each step had to happen in the right order; getting one wrong meant the rest wouldn't work either.</p>
+      <p>The investigation revealed that this capability depended on a chain of setup steps spanning both the product and the physical deployment environment - connecting the right hardware accessories, establishing a local network between devices, and preparing the environment correctly before a single patient could be registered. Each step had to happen in the right order; getting one wrong meant the rest wouldn't work either.</p>
 
       <h3>3. Mapping the deployment journey</h3>
       <p>To bring these findings together, I mapped the complete deployment journey from initial deployment, through onboarding, to the site going live using a service blueprint.</p>
       <p>Looking at the journey end to end helped identify how different teams contributed to a successful deployment, where responsibilities changed hands, and where users were expected to figure things out on their own.</p>
       <p>The mapping made it clear: while every team understood their own part of the process, the overall experience was fragmented across touchpoints. Critical on-ground setup and connection workflows were not standardized, and this caused last-minute chaos on the ground.</p>
 
-      <figure class="shot">
+      <figure class="shot shot--reduced">
         <img src="images/case-study-1/service-blueprint.png" alt="Service blueprint mapping the customer journey across getting ready for deployment, onsite training, and site going live, split by front stage and backstage teams" />
-        <figcaption>Service blueprint across Funder, Training Partner, OEM Partner, Product, CS, TechOps, and Supply Chain — showing where responsibility for setup was fragmented.</figcaption>
+        <figcaption>Service blueprint across Funder, Training Partner, OEM Partner, Product, CS, TechOps, and Supply Chain - showing where responsibility for setup was fragmented.</figcaption>
       </figure>
     </section>
 
@@ -254,8 +256,8 @@
 
       <h3>Insight 4: Mismatch in training timeline vs when the users actually start using the product on ground</h3>
       <p>Once the Qure team left (CS, Techops & third party partners) a site, users were expected to set up and troubleshoot basic issues without enough resources.</p>
-      <p>There's often a months long gap between when a team is trained and when they actually start using the product on camp sites. By the time of real use, people forget the workflow, and new team members who joined in the interim were never trained at all. Since camp sites run at high patient load, any setup/workflow issue doesn't just inconvenience one person — it halts screenings for the whole camp in real time, causing panic and forcing your team into reactive, mid-camp remote fixes rather than calm, scheduled support.</p>
-      <div class="callout"><strong>Design Opportunity:</strong> Build guidance into the product itself (in app workflow) so users are not dependent on memory of a one time training done months earlier — reducing ticket spikes and costly in-person retraining.</div>
+      <p>There's often a months long gap between when a team is trained and when they actually start using the product on camp sites. By the time of real use, people forget the workflow, and new team members who joined in the interim were never trained at all. Since camp sites run at high patient load, any setup/workflow issue doesn't just inconvenience one person - it halts screenings for the whole camp in real time, causing panic and forcing your team into reactive, mid-camp remote fixes rather than calm, scheduled support.</p>
+      <div class="callout"><strong>Design Opportunity:</strong> Build guidance into the product itself (in app workflow) so users are not dependent on memory of a one time training done months earlier - reducing ticket spikes and costly in-person retraining.</div>
     </section>
 
     <section>
@@ -288,22 +290,12 @@
       <figure class="shot shot--small">
         <img src="images/case-study-1/why-play-pause.png" alt="Play and pause style buttons used to start and stop a screening session" style="border:none;" />
       </figure>
-      <p>TB screening camps are intense — high patient load, a lot happening at once. The whole process feels like a session, and I wanted the button to reflect that. Once you start, you're in it until you're done for the day, so the interaction needed to feel like starting and stopping a session, not just a one-off action. The intention behind this section was to create a safe, guided environment once users start screening patients on the ground. It walks them through the exact steps needed to get the setup running so they can use qTrack, then quietly checks on a few basic things in the background and reminds them what to watch out for, so the rest of the session runs smoothly.</p>
+      <p>TB screening camps are intense - high patient load, a lot happening at once. The whole process feels like a session, and I wanted the button to reflect that. Once you start, you're in it until you're done for the day, so the interaction needed to feel like starting and stopping a session, not just a one-off action. The intention behind this section was to create a safe, guided environment once users start screening patients on the ground. It walks them through the exact steps needed to get the setup running so they can use qTrack, then quietly checks on a few basic things in the background and reminds them what to watch out for, so the rest of the session runs smoothly.</p>
 
       <h3>2. What had to be standardized before hardware and app could feel like a single product experience</h3>
       <p>The next challenge was deciding how to handle deployment variation. Previously, accessory configuration depended on what each site's infrastructure could support (for example, sometimes a site's own local network was used, sometimes Qure's accessories were used to create one instead). This was mostly decided once the team reached the site, since business deal conversations mostly focused on how funders'/health ministry goals could be met through the program. On-ground camp workflow conditions and end-user motivations took a back seat. This gap caused delay and confusion in configuring accessories. It worked at a small scale, where 6-10 sites were present under one program, but became difficult to manage once a single program started having 100+ sites.</p>
-      <p>This shifted the approach: instead of depending on client-side infrastructure that couldn't be known or controlled in advance, the team decided to control the variables that were easy to manage — every deployment would ship with pre configured accessory kits, regardless of site conditions, creating a consistent, controlled setup rather than guessing at what a site could offer. This gave the onboarding workflow two clear configurations to design for: a single laptop running both qTrack and the modality software, or two separate laptops, one for each.</p>
+      <p>This shifted the approach: instead of depending on client-side infrastructure that couldn't be known or controlled in advance, the team decided to control the variables that were easy to manage - every deployment would ship with pre configured accessory kits, regardless of site conditions, creating a consistent, controlled setup rather than guessing at what a site could offer. This gave the onboarding workflow two clear configurations to design for: a single laptop running both qTrack and the modality software, or two separate laptops, one for each.</p>
       <p>The hardware and qTrack application have always felt like two different experiences. Once the Qure kit was received, adding clear instructions on how to use it right there in the onboarding workflow, alongside the laptop helped make this feel like one experience instead of two. One cannot exist without the other. It set the right expectations with the user: this is part of the process of getting started with qTrack, bridging the physical and digital into a single, cohesive experience. Since the on-ground team varies by role (TB nurse, radiographer, radiologist, healthcare worker, modality engineer, IT), the goal was to keep this simple enough for non-technical users clearly highlighting, visually, what was needed at each step.</p>
-
-      <figure class="shot">
-        <img src="images/case-study-1/step2-accessories.png" alt="Setup guide showing the Qure Kit accessories required: network adapters and the Qure dongle" />
-        <figcaption>The accessories required from the Qure Kit are shown visually, since teams vary in technical background.</figcaption>
-      </figure>
-
-      <figure class="shot">
-        <img src="images/case-study-1/step3-connection-workflow.png" alt="Diagram showing how the detector panel, X-ray viewing laptop, qTrack AI laptop, and mobile connect once everything is set up" />
-        <figcaption>The full connection workflow, shown once so users know what the end state looks like.</figcaption>
-      </figure>
 
       <figure class="shot">
         <img src="images/case-study-1/step4-detail-steps.png" alt="Detailed step-by-step instructions for connecting the modality laptop to the detector panel" />
@@ -311,7 +303,12 @@
       </figure>
 
       <h3>3. Simplifying technical steps into plain questions which non technical users can answer</h3>
-      <p>Narrowing every deployment down to two configurations meant the setup could be written as fixed, simple questions, which was impossible when every site had custom setup workflows. The goal was to break it into the simplest possible question format, so reading a question felt like guidance on the next action rather than getting lost in what am I supposed to do next, or who should I reach out to — a maze to work through. This meant working with training partners and the Qure CS/TechOps teams to simplify the steps and use user friendly language without diluting the purpose but making sure a non technical person is able to understand and take next action with confidence.</p>
+      <p>Narrowing every deployment down to two configurations meant the setup could be written as fixed, simple questions, which was impossible when every site had custom setup workflows. The goal was to break it into the simplest possible question format, so reading a question felt like guidance on the next action rather than getting lost in what am I supposed to do next, or who should I reach out to - a maze to work through. This meant working with training partners and the Qure CS/TechOps teams to simplify the steps and use user friendly language without diluting the purpose but making sure a non technical person is able to understand and take next action with confidence.</p>
+
+      <figure class="shot">
+        <img src="images/case-study-1/step3-connection-workflow.png" alt="Diagram showing how the detector panel, X-ray viewing laptop, qTrack AI laptop, and mobile connect once everything is set up" />
+        <figcaption>The full connection workflow, shown once so users know what the end state looks like.</figcaption>
+      </figure>
 
       <figure class="shot">
         <video src="images/case-study-1/onboarding-workflow.mp4" controls playsinline></video>
@@ -325,7 +322,7 @@
         <li><strong>Org level changes</strong>
           <ul>
             <li>The problem got reframed across the organization from "a feature isn't working" to "the deployment and setup experience needs to be designed end to end."</li>
-            <li>Got cross-functional alignment on a standardization rule — accessories are now pre-configured for every deployment, regardless of site, removing last minute guesswork and confusion.</li>
+            <li>Got cross-functional alignment on a standardization rule - accessories are now pre-configured for every deployment, regardless of site, removing last minute guesswork and confusion.</li>
           </ul>
         </li>
         <li><strong>Operational workflow for TechOps changed</strong>
@@ -337,26 +334,26 @@
         <li><strong>Secondary effects that surfaced downstream</strong>
           <ul>
             <li>Reduced dependency on a single experienced person being physically present at each site to make deployments succeed.</li>
-            <li>Elevated the Qure Kit's hardware accessories from a fallback option to core infrastructure — since every deployment now depends on them, they were re-benchmarked for reliability. Saving cost, no wastage of accessories, no faulty ones.</li>
+            <li>Elevated the Qure Kit's hardware accessories from a fallback option to core infrastructure - since every deployment now depends on them, they were re-benchmarked for reliability. Saving cost, no wastage of accessories, no faulty ones.</li>
           </ul>
         </li>
       </ol>
       <h3>Strategic positioning</h3>
-      <p>Qure gets an edge as the first touchpoint in the onboarding workflow — there's an existing tension between OEM and Qure over who the user associates with the product experience, and this shifts that in Qure's favor.</p>
+      <p>Qure gets an edge as the first touchpoint in the onboarding workflow - there's an existing tension between OEM and Qure over who the user associates with the product experience, and this shifts that in Qure's favor.</p>
     </section>
 
     <section>
       <h2>Validation on the design direction</h2>
       <p>I visited Kenya for the site visit. There we had two on ground partner teams supporting. They have been part of multiple projects. Both teams responsible for specific geographies under that project. These partners act as Qure's local presence, managing sites, installing qTrack software if needed, handling technical issues, and training end users.</p>
       <p>The two teams were quite different in their understanding of technical aspects. Both team comprised of bio medical engineers (3-4 members in each team). Team A picked up TechOps and engineering training quickly and was able retain it well. The other Team B struggled, they understood the process conceptually, but it was difficult for them to do the steps independently.</p>
-      <p>I tested the new onboarding workflow, here the users were different — they are expected to be little more tech savvy than end users. But if these on ground partners don't feel confident then how can we expect them to train end users. The workflow helped them.</p>
+      <p>I tested the new onboarding workflow, here the users were different - they are expected to be little more tech savvy than end users. But if these on ground partners don't feel confident then how can we expect them to train end users. The workflow helped them.</p>
       <p>These teams have been part of multiple deployment projects so they had something to compare it with when no in app guidance existed. They were aware about the on ground chaos that happens when there is no structured way to deploy but with this new onboarding workflow they had clear choices A &amp; B to choose from and follow the steps.</p>
       <p>The validation I needed was -</p>
       <ul>
         <li>Can you rely on these steps that are mentioned, is there anything else needed which was getting missed</li>
         <li>Is it following the same workflow as on ground or not</li>
       </ul>
-      <p>(See how this validation helps in evolving the idea further — <a href="onprem-support-experience.html">Designing Support experience for onprem systems with no reliable internet</a>)</p>
+      <p>(See how this validation helps in evolving the idea further - <a href="onprem-support-experience.html">Designing Support experience for onprem systems with no reliable internet</a>)</p>
     </section>
 
   </article>
