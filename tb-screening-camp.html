@@ -22,6 +22,7 @@
     background:#fff;
   }
   a{ color:inherit; }
+  article a{ color:#2f6fed; }
 
   .top-nav{
     max-width:900px;
@@ -116,6 +117,8 @@
   .callout strong{ color:var(--purple); }
 
   figure.shot{ margin:0 0 32px 0; }
+  figure.shot--small{ width:220px; }
+  figure.shot--small img{ width:100%; }
   figure.shot img{
     width:100%;
     height:auto;
@@ -282,6 +285,9 @@
       </figure>
 
       <p><strong>Why it looks like play and pause</strong></p>
+      <figure class="shot shot--small">
+        <img src="images/case-study-1/why-play-pause.png" alt="Play and pause style buttons used to start and stop a screening session" style="border:none;" />
+      </figure>
       <p>TB screening camps are intense — high patient load, a lot happening at once. The whole process feels like a session, and I wanted the button to reflect that. Once you start, you're in it until you're done for the day, so the interaction needed to feel like starting and stopping a session, not just a one-off action. The intention behind this section was to create a safe, guided environment once users start screening patients on the ground. It walks them through the exact steps needed to get the setup running so they can use qTrack, then quietly checks on a few basic things in the background and reminds them what to watch out for, so the rest of the session runs smoothly.</p>
 
       <h3>2. What had to be standardized before hardware and app could feel like a single product experience</h3>
@@ -294,9 +300,6 @@
         <figcaption>The accessories required from the Qure Kit are shown visually, since teams vary in technical background.</figcaption>
       </figure>
 
-      <h3>3. Simplifying technical steps into plain questions which non technical users can answer</h3>
-      <p>Narrowing every deployment down to two configurations meant the setup could be written as fixed, simple questions, which was impossible when every site had custom setup workflows. The goal was to break it into the simplest possible question format, so reading a question felt like guidance on the next action rather than getting lost in what am I supposed to do next, or who should I reach out to — a maze to work through. This meant working with training partners and the Qure CS/TechOps teams to simplify the steps and use user friendly language without diluting the purpose but making sure a non technical person is able to understand and take next action with confidence.</p>
-
       <figure class="shot">
         <img src="images/case-study-1/step3-connection-workflow.png" alt="Diagram showing how the detector panel, X-ray viewing laptop, qTrack AI laptop, and mobile connect once everything is set up" />
         <figcaption>The full connection workflow, shown once so users know what the end state looks like.</figcaption>
@@ -306,6 +309,9 @@
         <img src="images/case-study-1/step4-detail-steps.png" alt="Detailed step-by-step instructions for connecting the modality laptop to the detector panel" />
         <figcaption>Each connection is then broken down into a single, plain-language step at a time.</figcaption>
       </figure>
+
+      <h3>3. Simplifying technical steps into plain questions which non technical users can answer</h3>
+      <p>Narrowing every deployment down to two configurations meant the setup could be written as fixed, simple questions, which was impossible when every site had custom setup workflows. The goal was to break it into the simplest possible question format, so reading a question felt like guidance on the next action rather than getting lost in what am I supposed to do next, or who should I reach out to — a maze to work through. This meant working with training partners and the Qure CS/TechOps teams to simplify the steps and use user friendly language without diluting the purpose but making sure a non technical person is able to understand and take next action with confidence.</p>
 
       <figure class="shot">
         <video src="images/case-study-1/onboarding-workflow.mp4" controls playsinline></video>
