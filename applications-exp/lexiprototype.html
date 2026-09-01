@@ -13,6 +13,11 @@
   .problem{margin-bottom:32px;}
   .problem h2{font-size:18px; font-weight:600; color:#22221f; margin-bottom:8px;}
   .problem p{font-size:14px; color:#5c5b56; line-height:1.5; max-width:640px;}
+  .scope{margin-bottom:32px;}
+  .scope h2{font-size:18px; font-weight:600; color:#22221f; margin-bottom:8px;}
+  .scope p{font-size:14px; color:#5c5b56; line-height:1.5; max-width:640px; margin-bottom:12px;}
+  .scope ul{padding-left:18px; max-width:640px; display:flex; flex-direction:column; row-gap:8px;}
+  .scope li{font-size:14px; color:#5c5b56; line-height:1.5;}
   .rationale{margin-top:40px;}
   .rationale h2{font-size:18px; font-weight:600; color:#22221f; margin-bottom:16px;}
   .rationale img{width:100%; display:block; border:1px solid #b8b6ae; margin-bottom:24px;}
@@ -112,6 +117,19 @@
   <div class="problem">
     <h2>Problem</h2>
     <p>How do we make verifying an AI's claim about a legal document fast and safe?</p>
+  </div>
+
+  <div class="scope">
+    <h2>Scope</h2>
+    <p>This quick prototype focused on designing the claim verification experience for an AI assisted contract review tool. Specifically, the moment where a lawyer reviews a document, sees the AI's flagged issues, and needs to confirm whether each one is accurate before acting on it.</p>
+    <p>Within that, the design covers:</p>
+    <ul>
+      <li>How flagged claims are organized and displayed, grouped by type: deviations from policy versus gaps where no policy exists</li>
+      <li>How a claim is verified against its real source, with the source clearly identified and traceable</li>
+      <li>A clear separation between reading a claim and formally verifying or rejecting it</li>
+      <li>Keeping the document completely untouched by the AI, so the user stays in full ownership and control of their own work</li>
+      <li>Visual progress tracking, so a lawyer can see at a glance how much review is still outstanding</li>
+    </ul>
   </div>
 
   <div class="frame">
