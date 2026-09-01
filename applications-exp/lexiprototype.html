@@ -10,17 +10,17 @@
   *{box-sizing:border-box; margin:0; padding:0;}
   body{font-family:sans-serif; background:#fafaf3; padding:96px 16px 32px;}
   .wrap{max-width:1050px; margin:0 auto;}
-  .problem{margin-bottom:32px;}
-  .problem h2{font-size:18px; font-weight:600; color:#22221f; margin-bottom:8px;}
-  .problem p{font-size:14px; color:#5c5b56; line-height:1.5; max-width:640px;}
-  .scope{margin-bottom:32px;}
-  .scope h2{font-size:18px; font-weight:600; color:#22221f; margin-bottom:8px;}
-  .scope p{font-size:14px; color:#5c5b56; line-height:1.5; max-width:640px; margin-bottom:12px;}
-  .scope ul{padding-left:18px; max-width:640px; display:flex; flex-direction:column; row-gap:8px;}
-  .scope li{font-size:14px; color:#5c5b56; line-height:1.5;}
+  .brief{display:grid; grid-template-columns:0.8fr 1.2fr; column-gap:64px; padding:40px 0; border-top:1px solid #e0ded4; border-bottom:1px solid #e0ded4; margin:48px 0;}
+  .brief-kicker{font-family:'Inter', sans-serif; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:#918f88; margin-bottom:14px;}
+  .problem-statement{font-family:'Inter', sans-serif; font-size:22px; font-weight:400; color:#22221f; line-height:1.45;}
+  .scope p{font-size:14px; color:#5c5b56; line-height:1.6; margin-bottom:16px;}
+  .scope ul{list-style:none; display:flex; flex-direction:column; row-gap:12px;}
+  .scope li{font-size:14px; color:#5c5b56; line-height:1.5; padding-left:18px; position:relative;}
+  .scope li::before{content:"—"; position:absolute; left:0; color:#c9c6ba;}
+  @media (max-width:760px){ .brief{grid-template-columns:1fr; row-gap:32px;} }
   .rationale{margin-top:40px;}
   .rationale h2{font-size:18px; font-weight:600; color:#22221f; margin-bottom:16px;}
-  .rationale img{width:100%; display:block; border:1px solid #b8b6ae; margin-bottom:24px;}
+  .rationale img{width:100%; display:block; margin-bottom:24px;}
   .frame{display:flex; width:1040px; height:760px; background:#FFFFFF; overflow:hidden; border:1px solid #b8b6ae; box-shadow:0 1px 3px rgba(0,0,0,0.08);}
 
   /* ===== Document pane — exact flex values from Penpot ===== */
@@ -254,22 +254,23 @@
     </div>
   </div>
 
-  <div class="problem">
-    <h2>Problem</h2>
-    <p>How do we make verifying an AI's claim about a legal document fast and safe?</p>
-  </div>
+  <div class="brief">
+    <div class="brief-col">
+      <div class="brief-kicker">Problem</div>
+      <p class="problem-statement">How do we make verifying an AI's claim about a legal document fast and safe?</p>
+    </div>
 
-  <div class="scope">
-    <h2>Scope</h2>
-    <p>This quick prototype focused on designing the claim verification experience for an AI assisted contract review tool. Specifically, the moment where a lawyer reviews a document, sees the AI's flagged issues, and needs to confirm whether each one is accurate before acting on it.</p>
-    <p>Within that, the design covers:</p>
-    <ul>
-      <li>How flagged claims are organized and displayed, grouped by type: deviations from policy versus gaps where no policy exists</li>
-      <li>How a claim is verified against its real source, with the source clearly identified and traceable</li>
-      <li>A clear separation between reading a claim and formally verifying or rejecting it</li>
-      <li>Keeping the document completely untouched by the AI, so the user stays in full ownership and control of their own work</li>
-      <li>Visual progress tracking, so a lawyer can see at a glance how much review is still outstanding</li>
-    </ul>
+    <div class="scope">
+      <div class="brief-kicker">Scope</div>
+      <p>This quick prototype focused on designing the claim verification experience for an AI assisted contract review tool. Specifically, the moment where a lawyer reviews a document, sees the AI's flagged issues, and needs to confirm whether each one is accurate before acting on it. Within that, the design covers:</p>
+      <ul>
+        <li>How flagged claims are organized and displayed, grouped by type: deviations from policy versus gaps where no policy exists</li>
+        <li>How a claim is verified against its real source, with the source clearly identified and traceable</li>
+        <li>A clear separation between reading a claim and formally verifying or rejecting it</li>
+        <li>Keeping the document completely untouched by the AI, so the user stays in full ownership and control of their own work</li>
+        <li>Visual progress tracking, so a lawyer can see at a glance how much review is still outstanding</li>
+      </ul>
+    </div>
   </div>
 
   <div class="rationale">
