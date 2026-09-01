@@ -27,7 +27,7 @@
   .document-pane{width:595px; flex:none; background:#ffffff; display:flex; flex-direction:column;}
   .doc-bar{width:595px; height:36px; background:#0070c0; display:flex; align-items:center; gap:8px; padding-inline:16px; flex-shrink:0;}
   .doc-bar .filename{color:#fff; font-size:12px; font-family:Arial, sans-serif; font-weight:400;}
-  .toolbar{width:595px; min-height:40px; background:#f7f7f7; border-bottom:1px solid #e5e3dc; display:flex; align-items:center; gap:2px; padding-inline:10px; flex-shrink:0; flex-wrap:wrap;}
+  .toolbar{width:595px; height:61px; background:#f7f7f7; border-bottom:1px solid #e5e3dc; display:flex; align-items:center; gap:2px; padding-inline:10px; flex-shrink:0; flex-wrap:wrap;}
   .tb-group{display:flex; align-items:center; gap:2px;}
   .tb-divider{width:1px; height:20px; background:#d5d3c9; margin:0 6px; flex:none;}
   .tb-btn{width:26px; height:26px; border-radius:3px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#3c3c3c; font-family:Arial, sans-serif; font-size:13px; user-select:none;}
@@ -56,9 +56,9 @@
   .clause-title{height:17px; color:#22221f; font-size:14px; font-family:Arial, sans-serif; font-weight:400; display:flex; align-items:center; gap:8px;}
   .clause-body{width:400px; color:#5c5b56; font-size:13px; font-family:Arial, sans-serif; font-weight:400; line-height:1.3;}
   .clause-pair{border-radius:3px; transition:background 0.6s;}
-  .clause-pair.flash{background:#b7efd7; transition:background 0.05s;}
-  .clause-tag{font-size:9px; font-weight:600; color:#918f88; background:#f2f1ec; border:1px solid #d8d5ca; border-radius:3px; padding:1px 5px; cursor:pointer; font-family:Arial, sans-serif;}
-  .clause-tag:hover{background:#b7efd7; color:#22221f;}
+  .clause-pair.flash{background:#c9e0fa; transition:background 0.05s;}
+  .clause-tag{font-size:9px; font-weight:600; color:#ffffff; background:#084ffa; border:1px solid #084ffa; border-radius:9999px; padding:2px 9px; cursor:pointer; font-family:Arial, sans-serif;}
+  .clause-tag:hover{background:#0640c8; border-color:#0640c8;}
 
   /* ===== AI agent panel — exact flex values ===== */
   .ai-agent{width:445px; flex:none; background:rgba(242,242,242,0.5); display:flex; flex-direction:column; overflow-y:auto;}
@@ -68,7 +68,7 @@
   .back-arrow{color:#fff; cursor:pointer; line-height:1; display:flex; align-items:center; flex:none;}
   .play-book{color:#fff; font-size:14px; font-family:"Source Sans 3"; font-weight:400;}
   .bar{width:335px; height:8px; border:1px solid #1c9f66; border-radius:4px; position:relative; margin-left:28px;}
-  .bar-fill{position:absolute; left:0; top:0; height:8px; background:#b7efd7; border-radius:4px 0 0 4px; width:0%; transition:width 0.3s ease;}
+  .bar-fill{position:absolute; left:0; top:0; height:8px; background:#1c9f66; border-radius:4px 0 0 4px; width:0%; transition:width 0.3s ease;}
 
   .list{padding:22px 0 22px 16px; display:flex; flex-direction:column; row-gap:22px;}
 
@@ -78,26 +78,27 @@
   .icon-placeholder svg{width:12px; height:12px;}
 
   .item{display:flex; flex-direction:column; row-gap:6px; border-radius:4px; transition:background 0.15s ease; padding:4px; margin:-4px;}
-  .item.flash{background:#b7efd7;}
-  .item-head{cursor:pointer; width:100%; display:flex; align-items:center; gap:11px;}
-  .item-clause{color:#000; font-size:11px; font-family:"Inter"; font-weight:600; flex:none;}
+  .item.flash{background:#eefaf3;}
+  .item-head{cursor:pointer; width:100%; display:flex; align-items:center; gap:0;}
+  .item-clause{color:#000; font-size:11px; font-family:"Inter"; font-weight:600; flex:0 0 44px; white-space:nowrap;}
   .item-title{color:#000; font-size:16px; font-family:"Inter"; font-weight:400;}
-  .item-draft, .item-playbook{color:#444444; font-size:12px; font-family:"Inter"; font-weight:400;}
-  .review-row{display:flex; align-items:center; gap:3px; cursor:pointer;}
+  .item-draft, .item-playbook{color:#444444; font-size:12px; font-family:"Inter"; font-weight:400; margin-left:44px;}
+  .review-row{display:flex; align-items:center; gap:3px; cursor:pointer; margin-left:44px;}
   .review-row .action-mark{color:#084ffa; font-size:12px; font-family:"Inter"; font-weight:400;}
   .link-dot{width:10px; height:10px; display:flex; align-items:center; justify-content:center; flex:none;}
   .link-dot svg{width:10px; height:10px;}
-  .reviewed-row{display:flex; align-items:center; gap:3px;}
+  .reviewed-row{display:flex; align-items:center; gap:3px; margin-left:44px; cursor:pointer;}
   .reviewed-row .action-mark{color:#1c9f66; font-size:12px; font-family:"Inter"; font-weight:400;}
-  .link-dot.green{background:#1c9f66; border-radius:50%; width:10px; height:10px;}
-  .link-dot.green svg{width:5px; height:5px;}
 
-  .preview-box{width:351px; background:#efefef; border:0.5px solid #b1b2b5; border-radius:4px; position:relative; height:144px; overflow:hidden; transition:height 0.25s ease; display:none;}
+  .preview-box{width:351px; margin-left:44px; background:#efefef; border:0.5px solid #b1b2b5; border-radius:4px; position:relative; height:144px; overflow:hidden; transition:height 0.25s ease; display:none;}
   .preview-box.show{display:block;}
-  .expand-placeholder{position:absolute; left:286px; top:13px; width:14px; height:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+  .preview-controls{position:absolute; right:11px; top:12px; display:flex; align-items:center; gap:6px;}
+  .expand-placeholder{width:14px; height:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex:none;}
   .expand-placeholder svg{width:14px; height:14px;}
-  .verify-pill{position:absolute; left:308px; top:12px; background:#1c9f66; border:none; border-radius:2px; color:#fff; font-size:8px; font-family:"Inter"; padding:4px 6px; cursor:pointer;}
+  .verify-pill{background:#1c9f66; border:none; border-radius:2px; color:#fff; font-size:8px; font-family:"Inter"; padding:4px 6px; cursor:pointer; white-space:nowrap;}
   .verify-pill.done{background:transparent; border:1px solid #1c9f66; color:#1c9f66;}
+  .reject-pill{background:#fff; border:1px solid #b1382e; border-radius:2px; color:#b1382e; font-size:8px; font-family:"Inter"; padding:4px 6px; cursor:pointer; white-space:nowrap;}
+  .reject-pill.done{background:#b1382e; border:1px solid #b1382e; color:#fff;}
   .preview-compare{position:absolute; left:11px; top:9px; font-size:12px; font-family:"Source Sans 3"; color:#000; line-height:1.35;}
   .preview-divider{position:absolute; left:11px; top:44px; width:326px; height:1px; background:#000; opacity:0.2;}
   .source-label{position:absolute; left:11px; top:52px; font-size:9px; font-weight:600; color:#666; font-family:"Inter"; text-transform:uppercase; letter-spacing:0.3px;}
@@ -283,6 +284,8 @@
 <script>
 const chevBlue = '<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#084ffa"/><path d="M3 3.6 L5.04 6.4 L7 3.7" fill="none" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const chevGrey = '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="6" fill="#444444"/><path d="M3.6 4.3 L6.05 7.7 L8.4 4.4" fill="none" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const chevRed = '<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#b1382e"/><path d="M3 3.6 L5.04 6.4 L7 3.7" fill="none" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const chevGreen = '<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#1c9f66"/><path d="M3 3.6 L5.04 6.4 L7 3.7" fill="none" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const expandIconSvg = '<svg viewBox="0 0 14 14"><path d="M1 4V1h3M13 4V1h-3M1 10v3h3M13 10v3h-3" fill="none" stroke="#444444" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const minimizeIconSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4.326869964599609,9.31540298461914L1.3280905485153198,9.31540298461914C1.1022604703903198,9.31540298461914,0.9191550016403198,9.49850845336914,0.9191550016403198,9.72458267211914C0.9191550016403198,9.95016860961914,1.1022604703903198,10.13327407836914,1.3280905485153198,10.13327407836914L3.3400535583496094,10.13327407836914L0.17110812664031982,13.30221939086914C0.011440158821642399,13.46188735961914,0.011440158821642399,13.72067642211914,0.17110812664031982,13.88034439086914C0.3307760953903198,14.04001235961914,0.5895651578903198,14.04001235961914,0.7492331266403198,13.88034439086914L3.9181785583496094,10.71139907836914L3.9181785583496094,12.72311782836914C3.9181785583496094,12.94919204711914,4.101039886474609,13.13180923461914,4.326869964599609,13.13180923461914C4.552700042724609,13.13180923461914,4.735805511474609,12.94919204711914,4.735805511474609,12.72311782836914L4.735805511474609,9.72458267211914C4.735805511474609,9.49850845336914,4.552700042724609,9.31540298461914,4.326869964599609,9.31540298461914Z" fill="#444444"/><path d="M3.2914695739746094,3.917942523956299L1.2765768766403198,3.917942523956299C1.0507467985153198,3.917942523956299,0.8678854703903198,4.101047992706299,0.8678854703903198,4.327122211456299C0.8678854703903198,4.552708148956299,1.0507467985153198,4.735813617706299,1.2765768766403198,4.735813617706299L4.275600433349609,4.735813617706299C4.501430511474609,4.735813617706299,4.684291839599609,4.552708148956299,4.684291839599609,4.327122211456299L4.684291839599609,1.3280986547470093C4.684291839599609,1.1025127172470093,4.501430511474609,0.919407308101654,4.275600433349609,0.919407308101654C4.049770355224609,0.919407308101654,3.8666648864746094,1.1025127172470093,3.8666648864746094,1.3280986547470093L3.8666648864746094,3.339817523956299L0.6979635953903198,0.17087215185165405C0.5382956266403198,0.011692458763718605,0.2792624235153198,0.011692458763718605,0.11959445476531982,0.17087215185165405C-0.039829373359680176,0.33102840185165405,-0.039829373359680176,0.589817464351654,0.11959445476531982,0.748997151851654Z" fill="#444444"/><path d="M9.67306137084961,4.684544086456299L12.67184066772461,4.684544086456299C12.89767074584961,4.684544086456299,13.08077621459961,4.501438617706299,13.08077621459961,4.275364398956299C13.08077621459961,4.049778461456299,12.89767074584961,3.866672992706299,12.67184066772461,3.866672992706299L10.65987777709961,3.866672992706299L13.82882308959961,0.697727620601654C13.98849105834961,0.538059651851654,13.98849105834961,0.27927058935165405,13.82882308959961,0.11960261315107346C13.66915512084961,-0.040065351873636246,13.41036605834961,-0.040065351873636246,13.25069808959961,0.11960261315107346L10.08175277709961,3.291477680206299L10.08175277709961,1.2763408422470093C10.08175277709961,1.0507549047470093,9.89864730834961,0.867649495601654,9.67306137084961,0.867649495601654C9.44723129272461,0.867649495601654,9.26412582397461,1.0507549047470093,9.26412582397461,1.2763408422470093L9.26412582397461,4.275364398956299C9.26412582397461,4.501438617706299,9.44723129272461,4.684544086456299,9.67306137084961,4.684544086456299Z" fill="#444444"/><path d="M13.88033676147461,13.25094985961914L10.71139144897461,10.08200454711914L12.72335433959961,10.08200454711914C12.94918441772461,10.08200454711914,13.13204574584961,9.89889907836914,13.13204574584961,9.67282485961914C13.13204574584961,9.44723892211914,12.94918441772461,9.26413345336914,12.72335433959961,9.26413345336914L9.72433090209961,9.26413345336914C9.49850082397461,9.26413345336914,9.31563949584961,9.44723892211914,9.31563949584961,9.67282485961914L9.31563949584961,12.67184829711914C9.31563949584961,12.89743423461914,9.49850082397461,13.08053970336914,9.72433090209961,13.08053970336914C9.95016098022461,13.08053970336914,10.13326644897461,12.89743423461914,10.13326644897461,12.67184829711914L10.13326644897461,10.66012954711914L13.30196762084961,13.82907485961914C13.46163558959961,13.98825454711914,13.72066879272461,13.98825454711914,13.88033676147461,13.82907485961914C14.03976058959961,13.66891860961914,14.03976058959961,13.41012954711914,13.88033676147461,13.25094985961914Z" fill="#444444"/></svg>';
 const checkSvg = '<svg viewBox="0 0 10 10"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>';
@@ -300,6 +303,7 @@ const claims = [
 
 let expandedId = 4;
 let verified = {2: true};
+let rejected = {1: true};
 let bigId = null;
 
 const allSections = [
@@ -323,14 +327,18 @@ const allSections = [
 ];
 
 function updateBar(){
-  const pct = (Object.keys(verified).length / claims.length) * 100;
+  const resolved = claims.filter(c => verified[c.id] || rejected[c.id] || c.status === 'reviewed').length;
+  const pct = (resolved / claims.length) * 100;
   document.getElementById('barFill').style.width = pct + '%';
 }
 
 function reviewRowHtml(c){
+  if(rejected[c.id]){
+    return `<div class="reviewed-row" data-review="${c.id}"><span class="action-mark" style="color:#b1382e;">Rejected</span><span class="link-dot">${chevRed}</span></div>`;
+  }
   const isDone = verified[c.id] || c.status === 'reviewed';
   if(isDone){
-    return `<div class="reviewed-row"><span class="action-mark">Reviewed</span><span class="link-dot green">${checkSvg}</span></div>`;
+    return `<div class="reviewed-row" data-review="${c.id}"><span class="action-mark">Reviewed</span><span class="link-dot">${chevGreen}</span></div>`;
   }
   return `<div class="review-row" data-review="${c.id}"><span class="action-mark">Review</span><span class="link-dot">${chevBlue}</span></div>`;
 }
@@ -361,6 +369,7 @@ const msaHighlight = {1:'4.2', 2:'5.1', 4:'11.4'};
 
 function previewHtml(c){
   const isVerified = !!verified[c.id];
+  const isRejected = !!rejected[c.id];
   const isBig = bigId === c.id;
   const sourceLabel = msaHighlight[c.id] ? 'Master Service Agreement' : 'Draft document — no playbook precedent';
   let excerptContent;
@@ -372,8 +381,11 @@ function previewHtml(c){
     excerptContent = `<div class="highlight-excerpt">${c.excerpt}</div>`;
   }
   return `<div class="preview-box ${expandedId === c.id ? 'show' : ''}" id="preview-${c.id}" style="height:${isBig ? '482px' : '144px'};">
-    <div class="expand-placeholder" data-zoom="${c.id}" title="${isBig ? 'minimize' : 'expand'}">${isBig ? minimizeIconSvg : expandIconSvg}</div>
-    <button class="verify-pill ${isVerified ? 'done' : ''}" data-verify="${c.id}">${isVerified ? 'Verified' : 'Verify'}</button>
+    <div class="preview-controls">
+      <div class="expand-placeholder" data-zoom="${c.id}" title="${isBig ? 'minimize' : 'expand'}">${isBig ? minimizeIconSvg : expandIconSvg}</div>
+      <button class="verify-pill ${isVerified ? 'done' : ''}" data-verify="${c.id}">${isVerified ? 'Verified' : 'Verify'}</button>
+      <button class="reject-pill ${isRejected ? 'done' : ''}" data-reject="${c.id}">${isRejected ? 'Rejected' : 'Reject'}</button>
+    </div>
     <div class="preview-compare">${c.draft}<br>${c.playbook}</div>
     <div class="preview-divider"></div>
     <div class="source-label">${sourceLabel}</div>
@@ -428,6 +440,14 @@ function render(){
   document.querySelectorAll('[data-verify]').forEach(el => el.onclick = (e) => {
     e.stopPropagation();
     verified[+el.dataset.verify] = true;
+    delete rejected[+el.dataset.verify];
+    updateBar();
+    render();
+  });
+  document.querySelectorAll('[data-reject]').forEach(el => el.onclick = (e) => {
+    e.stopPropagation();
+    rejected[+el.dataset.reject] = true;
+    delete verified[+el.dataset.reject];
     updateBar();
     render();
   });
