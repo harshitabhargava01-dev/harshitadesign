@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bridging the Perception Gap in Semantic Video Search</title>
+<style>
+  :root {
+    --accent-green: #D6F45C;
+    --ink: #17181A;
+    --ink-soft: #4A4B4D;
+    --paper: #FFFFFF;
+    --border: rgba(23, 24, 26, 0.12);
+    --radius: 6px;
+    --nav-height: 84px;
+    --max-width: 1160px;
+    --side-pad: 40px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrapper {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--side-pad);
+  }
+
+  /* ---------- SECTION 1 : HERO (green) ---------- */
+  .hero {
+    background: var(--accent-green);
+    padding-top: 96px;
+    padding-bottom: 80px;
+  }
+
+  .hero-heading {
+    max-width: 640px;
+    font-size: 40px;
+    line-height: 1.25;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  /* ---------- SECTION 2 : PROTOTYPE MEDIA ---------- */
+  .media-section {
+    padding-top: 40px;
+    padding-bottom: 56px;
+  }
+
+  .media-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9.2;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #F1F1EF;
+    border: 1px dashed rgba(23,24,26,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .media-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .media-placeholder-text {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 14px;
+    padding: 24px;
+  }
+
+  .media-placeholder-text strong {
+    display: block;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    top: -28px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scroll-indicator svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Position the scroll indicator relative to the hero, sitting on the seam
+     between section 1 and section 2, matching the reference layout. */
+  .hero { position: relative; }
+
+  @media (max-width: 720px) {
+    :root { --side-pad: 20px; }
+    .hero-heading { font-size: 28px; }
+    .hero { padding-top: 56px; padding-bottom: 56px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ================= SECTION 1 : NAV + GREEN HERO ================= -->
+  <section class="hero">
+    <div class="wrapper">
+      <h1 class="hero-heading">Bridging the Perception Gap in Semantic Video Search</h1>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 2 : PROTOTYPE / MEDIA ================= -->
+  <section class="media-section">
+    <div class="wrapper">
+      <div class="media-frame" id="prototype">
+        <!--
+          Replace the placeholder below with an iframe, e.g.:
+          <iframe src="https://your-prototype-url.com" title="Interactive prototype" allowfullscreen></iframe>
+        -->
+        <div class="media-placeholder-text">
+          <strong>Interactive Prototype</strong>
+          Embed via &lt;iframe src="..."&gt; here
+        </div>
+
+        <div class="scroll-indicator">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#17181A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 4v16M6 14l6 6 6-6" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
