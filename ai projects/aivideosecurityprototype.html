@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentry — video search</title>
+<style>
+  :root{
+    --bg:#0B0D10;
+    --panel:#131619;
+    --panel-2:#181C20;
+    --border:#242A30;
+    --border-strong:#333B43;
+    --text:#E8EAED;
+    --text-secondary:#9BA3AC;
+    --text-muted:#5F6870;
+    --accent:#4C8DFF;
+    --accent-dim:#1B2A44;
+    --warn:#F2A93B;
+    --warn-dim:#3A2E14;
+    --ok:#3DDC97;
+    --ok-dim:#12302A;
+    --mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    display:flex;
+  }
+  .sidebar{
+    width:64px;
+    background:var(--panel);
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:16px 0;
+    gap:8px;
+  }
+  .sidebar .logo{
+    width:32px; height:32px;
+    background:var(--accent);
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:14px; color:#fff;
+    margin-bottom:24px;
+  }
+  .sidebar .icon{
+    width:40px; height:40px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:8px;
+    color:var(--text-muted);
+    cursor:pointer;
+  }
+  .sidebar .icon.active{ background:var(--accent-dim); color:var(--accent); }
+  .sidebar .icon:hover{ background:var(--panel-2); }
+
+  .main{ flex:1; display:flex; flex-direction:column; min-width:0; }
+
+  .topbar{
+    height:56px;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center;
+    padding:0 24px;
+    gap:16px;
+    background:var(--panel);
+  }
+  .topbar h1{ font-size:15px; font-weight:600; }
+  .topbar .status{
+    margin-left:auto;
+    font-size:12px; color:var(--text-secondary);
+    display:flex; align-items:center; gap:6px;
+  }
+  .dot{ width:6px; height:6px; border-radius:50%; background:var(--ok); }
+
+  .content{ padding:24px 32px; max-width:980px; }
+
+  .search-row{ display:flex; gap:10px; margin-bottom:12px; }
+  .search-box{
+    flex:1; position:relative; display:flex; align-items:center;
+  }
+  .search-box svg{ position:absolute; left:14px; width:16px; height:16px; color:var(--text-muted); }
+  .search-box input{
+    width:100%;
+    background:var(--panel-2);
+    border:1px solid var(--border-strong);
+    border-radius:8px;
+    color:var(--text);
+    font-size:14px;
+    padding:11px 14px 11px 40px;
+    font-family:var(--sans);
+    outline:none;
+  }
+  .search-box input:focus{ border-color:var(--accent); }
+  .search-box input::placeholder{ color:var(--text-muted); }
+
+  .rotating-placeholder{
+    position:absolute;
+    left:40px;
+    right:14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--text-muted);
+    font-size:14px;
+    pointer-events:none;
+    opacity:0;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .rotating-placeholder.visible{
+    opacity:1;
+    transform:translateY(-50%);
+  }
+  .rotating-placeholder.leaving{
+    opacity:0;
+    transform:translateY(-70%);
+  }
+  .rotating-placeholder.entering{
+    opacity:0;
+    transform:translateY(-30%);
+  }
+
+  .search-btn{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:0 20px;
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .search-btn:hover{ background:#3d7ae0; }
+
+  .filter-btn{
+    background:var(--panel-2);
+    color:var(--text-secondary);
+    border:1px solid var(--border-strong);
+    border-radius:8px;
+    padding:0 16px;
+    font-size:14px;
+    font-family:var(--sans);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .filter-btn svg{ width:15px; height:15px; }
+  .filter-btn:hover{ border-color:var(--text-muted); color:var(--text); }
+
+  .banner{
+    display:none;
+    border-radius:8px;
+    padding:11px 16px;
+    margin-bottom:20px;
+    font-size:13px;
+    align-items:center;
+    gap:8px;
+  }
+  .banner.match{ background:var(--accent-dim); color:#A9C6FF; }
+  .banner.warn{ background:var(--warn-dim); color:#F5C877; }
+  .banner svg{ width:15px; height:15px; flex-shrink:0; }
+
+  .banner.zero{ background:var(--panel-2); color:var(--text-secondary); border:1px solid var(--border); flex-direction:column; align-items:flex-start; gap:2px; }
+  .banner.zero .headline{ color:var(--text); font-weight:500; }
+  .banner.zero .subtext{ font-size:12px; color:var(--text-muted); }
+
+  .thinking{
+    display:none;
+    align-items:center;
+    gap:8px;
+    padding:11px 4px;
+    margin-bottom:20px;
+    font-size:13px;
+    color:var(--text-secondary);
+    font-family:var(--sans);
+  }
+  .thinking-dot{
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--accent);
+    animation: pulse 1s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes pulse{
+    0%, 100%{ opacity:0.3; transform:scale(0.85); }
+    50%{ opacity:1; transform:scale(1); }
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:14px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .card .thumb{
+    height:140px;
+    background:var(--panel-2);
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card .thumb svg{ width:60%; height:60%; opacity:0.55; }
+  .card .thumb .timestamp{
+    position:absolute; bottom:8px; left:8px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:#fff;
+    background:rgba(0,0,0,0.55);
+    padding:2px 6px;
+    border-radius:4px;
+  }
+  .card .meta{ padding:10px 12px; }
+  .card .meta .cam{ font-size:13px; font-weight:500; }
+  .card .meta .zone{ font-size:12px; color:var(--text-muted); margin-top:2px; }
+
+  .empty{
+    grid-column:1/-1;
+    text-align:center;
+    padding:48px 0;
+    color:var(--text-muted);
+    font-size:13px;
+  }
+
+  @media (max-width: 700px){
+    .grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .content{ padding:20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">S</div>
+  <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+  <div class="icon active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+  <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+  <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg></div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <h1>Video search</h1>
+    <div class="status"><span class="dot"></span> 96 cameras online</div>
+  </div>
+
+  <div class="content">
+    <div class="search-row">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="q" type="text" />
+        <span class="rotating-placeholder" id="rotatingPlaceholder"></span>
+      </div>
+      <button class="search-btn" id="searchBtn">Search</button>
+      <button class="filter-btn" id="filterBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        Filter
+      </button>
+    </div>
+
+    <div class="thinking" id="thinking">
+      <span class="thinking-dot"></span>
+      <span id="thinkingText"></span>
+    </div>
+
+    <div class="banner" id="banner"></div>
+
+    <div class="grid" id="results"></div>
+  </div>
+</div>
+
+<script>
+  const cams = [
+    { name: 'Gate cam 1', zone: 'North perimeter' },
+    { name: 'Gate cam 2', zone: 'South perimeter' },
+    { name: 'Lobby cam', zone: 'Main entrance' },
+    { name: 'Reception', zone: 'Main entrance' },
+    { name: 'Loading dock north', zone: 'Rear service' },
+    { name: 'Loading dock south', zone: 'Rear service' },
+    { name: 'Parking B1', zone: 'Basement level 1' },
+    { name: 'Parking B2', zone: 'Basement level 2' },
+    { name: 'Corridor 1', zone: 'East wing' },
+    { name: 'Corridor 2', zone: 'East wing' },
+    { name: 'Corridor 3', zone: 'East wing' },
+    { name: 'Stairwell A', zone: 'West wing' },
+    { name: 'Stairwell B', zone: 'West wing' },
+    { name: 'Rooftop cam', zone: 'Roof access' },
+    { name: 'Side gate', zone: 'West perimeter' },
+    { name: 'Delivery bay', zone: 'Rear service' }
+  ];
+
+  const COLOR_MAP = {
+    red:'#E5484D', yellow:'#F2C94C', black:'#4B4F55', white:'#F0F2F4',
+    silver:'#AEB4BA', blue:'#4C8DFF', green:'#34A853', orange:'#F2994A', purple:'#9B6BD6'
+  };
+
+  function personSilhouette(itemGraphic){
+    return `<svg viewBox="0 0 100 100" fill="none">
+      <rect x="30" y="15" width="40" height="72" rx="6" fill="#333B43"/>
+      <circle cx="50" cy="30" r="13" fill="#333B43"/>
+      ${itemGraphic || ''}
+    </svg>`;
+  }
+
+  function vehicleGraphic(color){
+    const fill = color || '#5F6870';
+    return `<svg viewBox="0 0 120 80" fill="none">
+      <rect x="10" y="30" width="100" height="30" rx="8" fill="${fill}" stroke="#20242A" stroke-width="1"/>
+      <rect x="25" y="14" width="70" height="20" rx="6" fill="${fill}" opacity="0.9" stroke="#20242A" stroke-width="1"/>
+      <circle cx="35" cy="62" r="8" fill="#1A1D21"/>
+      <circle cx="85" cy="62" r="8" fill="#1A1D21"/>
+    </svg>`;
+  }
+
+  function attachedItemGraphic(item, colorHex){
+    const fill = colorHex || '#4C8DFF';
+    const stroke = 'stroke="#20242A" stroke-width="1"';
+    const map = {
+      cap: `<path d="M35 18 Q50 6 65 18 L67 24 L33 24 Z" fill="${fill}" ${stroke}/>`,
+      hat: `<rect x="34" y="14" width="32" height="9" rx="4" fill="${fill}" ${stroke}/><ellipse cx="50" cy="23" rx="19" ry="3" fill="${fill}" ${stroke}/>`,
+      helmet: `<path d="M33 24 Q33 8 50 8 Q67 8 67 24 Z" fill="${fill}" ${stroke}/>`,
+      specs: `<rect x="39" y="27" width="9" height="5" rx="2" fill="${fill}"/><rect x="52" y="27" width="9" height="5" rx="2" fill="${fill}"/><rect x="48" y="28" width="4" height="2" fill="${fill}"/>`,
+      glasses: `<rect x="39" y="27" width="9" height="5" rx="2" fill="${fill}"/><rect x="52" y="27" width="9" height="5" rx="2" fill="${fill}"/><rect x="48" y="28" width="4" height="2" fill="${fill}"/>`,
+      mask: `<rect x="41" y="33" width="18" height="9" rx="4" fill="${fill}" ${stroke}/>`,
+      scarf: `<rect x="37" y="39" width="26" height="7" rx="3" fill="${fill}" ${stroke}/>`,
+      jacket: `<rect x="31" y="41" width="38" height="42" rx="5" fill="${fill}" opacity="0.92" ${stroke}/>`,
+      shirt: `<rect x="31" y="41" width="38" height="42" rx="5" fill="${fill}" opacity="0.92" ${stroke}/>`,
+      dress: `<path d="M32 41 L68 41 L74 83 L26 83 Z" fill="${fill}" opacity="0.92" ${stroke}/>`,
+      belt: `<rect x="31" y="74" width="38" height="5" fill="${fill}"/>`,
+      gloves: `<circle cx="27" cy="68" r="6" fill="${fill}" ${stroke}/><circle cx="73" cy="68" r="6" fill="${fill}" ${stroke}/>`,
+      shoes: `<rect x="33" y="84" width="14" height="6" rx="2" fill="${fill}" ${stroke}/><rect x="53" y="84" width="14" height="6" rx="2" fill="${fill}" ${stroke}/>`,
+      watch: `<circle cx="25" cy="60" r="4.5" fill="${fill}" ${stroke}/>`,
+      bag: `<rect x="65" y="48" width="22" height="26" rx="4" fill="${fill}" opacity="0.9" ${stroke}/><path d="M71 48 L71 42 Q76 38 81 42 L81 48" stroke="${fill}" stroke-width="2" fill="none"/>`,
+      backpack: `<rect x="65" y="45" width="22" height="30" rx="5" fill="${fill}" opacity="0.9" ${stroke}/>`,
+      badge: `<rect x="60" y="52" width="10" height="12" rx="2" fill="${fill}" ${stroke}/>`,
+      umbrella: `<path d="M60 50 Q75 38 90 50 L60 50 Z" fill="${fill}" opacity="0.9"/><line x1="75" y1="50" x2="75" y2="78" stroke="${fill}" stroke-width="2"/>`,
+      pen: `<rect x="70" y="52" width="5" height="20" rx="2" fill="${fill}"/>`,
+      phone: `<rect x="68" y="52" width="12" height="20" rx="3" fill="${fill}" ${stroke}/>`
+    };
+    return map[item] || '';
+  }
+
+  function sceneSvg(p, removed){
+    const activeAttribute = (!removed.has('attribute')) ? p.attribute : null;
+    const hasAnchor = !p.defaultsApplied.includes('entity');
+
+    if (activeAttribute && p.attributeType === 'vehicle_direct'){
+      const parts = activeAttribute.split(' ');
+      const colorHex = COLOR_MAP[parts[0]] || null;
+      return vehicleGraphic(colorHex);
+    }
+
+    if (activeAttribute && p.attributeType === 'attached'){
+      const item = p.attachedItem;
+      const parts = activeAttribute.split(' ');
+      const colorHex = parts.length > 1 ? (COLOR_MAP[parts[0]] || null) : null;
+      return personSilhouette(attachedItemGraphic(item, colorHex));
+    }
+
+    if (hasAnchor && p.entity === 'Vehicle'){
+      return vehicleGraphic(null);
+    }
+
+    return personSilhouette('');
+  }
+
+  function card(cam, time, svg){
+    return `<div class="card">
+      <div class="thumb">${svg}<span class="timestamp">${time}</span></div>
+      <div class="meta">
+        <div class="cam">${cam.name}</div>
+        <div class="zone">${cam.zone}</div>
+      </div>
+    </div>`;
+  }
+
+  function iconInfo(){
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>`;
+  }
+  function iconWarn(){
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>`;
+  }
+
+  const CAMERA_ZONES = {
+    'main entrance': { label: 'Main entrance', ids: ['cam_main_entrance_01','cam_main_entrance_02'] },
+    'gate': { label: 'Gate cameras', ids: ['cam_gate_01'] },
+    'loading dock': { label: 'Loading dock', ids: ['cam_loading_dock_north','cam_loading_dock_south'] },
+    'lobby': { label: 'Lobby', ids: ['cam_lobby_01'] },
+    'parking': { label: 'Parking', ids: ['cam_parking_b2'] }
+  };
+
+  function cap(s){ return s.replace(/\b\w/g, c => c.toUpperCase()); }
+
+  const WORN_ITEMS = ['jacket','dress','shirt','cap','hat','specs','glasses','watch','helmet','gloves','shoes','mask','scarf','belt'];
+  const CARRIED_ITEMS = ['pen','bag','backpack','badge','umbrella','phone'];
+  const ATTACHED_ITEMS = [...WORN_ITEMS, ...CARRIED_ITEMS];
+  const attachedItemsPattern = ATTACHED_ITEMS.join('|');
+
+  function attachedPrep(item){
+    return WORN_ITEMS.includes(item) ? 'wearing' : 'carrying';
+  }
+
+  function parseQuery(raw){
+    const q = raw.toLowerCase().trim();
+    const defaultsApplied = [];
+
+    let camera = null;
+    for (const key in CAMERA_ZONES){
+      if (q.includes(key)) { camera = CAMERA_ZONES[key].label; break; }
+    }
+    if (!camera){ camera = 'All cameras'; defaultsApplied.push('camera'); }
+
+    const hasPerson = /\bperson\b/.test(q);
+    const hasVehicle = /\bvehicle\b|\bvan\b|\bcar\b/.test(q);
+    let entity;
+    if (hasPerson && !hasVehicle) entity = 'Person';
+    else if (hasVehicle && !hasPerson) entity = 'Vehicle';
+    else if (hasPerson && hasVehicle) entity = 'Person / Vehicle';
+    else { entity = 'Person / Vehicle'; defaultsApplied.push('entity'); }
+
+    const attachedRegex = new RegExp(`(red|yellow|black|white|silver|blue|green|orange|purple)?\\s*\\b(${attachedItemsPattern})\\b`);
+    const attachedMatch = q.match(attachedRegex);
+    const vehicleColorMatch = q.match(/(red|yellow|black|white|silver|blue|green|orange|purple)\s+\b(van|car)\b/);
+
+    let attribute = null;
+    let attributeType = null;
+    let attachedItem = null;
+
+    if (attachedMatch){
+      attachedItem = attachedMatch[2];
+      attribute = (attachedMatch[1] ? attachedMatch[1] + ' ' : '') + attachedItem;
+      attributeType = 'attached';
+    } else if (vehicleColorMatch){
+      attribute = vehicleColorMatch[0];
+      attributeType = 'vehicle_direct';
+    } else {
+      const stripped = q.replace(/\bperson\b|\bvehicle\b|\bin a\b|\bin\b|\bnear\b|\bafter\b|\bthe\b|\d{1,2}\s*(am|pm)/g,'').trim();
+      const cameraWords = camera.toLowerCase();
+      if (stripped.length > 0 && !cameraWords.includes(stripped)){
+        attribute = stripped;
+        attributeType = 'object';
+      }
+    }
+    if (!attribute){ defaultsApplied.push('attribute'); }
+
+    const timeMatch = q.match(/after\s+(\d{1,2})\s*(am|pm)/);
+    let time, timePhrase;
+    if (timeMatch){
+      let hr = parseInt(timeMatch[1]);
+      timePhrase = `After ${hr} ${timeMatch[2].toUpperCase()}`;
+      if (timeMatch[2] === 'pm' && hr !== 12) hr += 12;
+      time = String(hr).padStart(2,'0') + ':00 – 06:00';
+    } else { time = 'Last 24 hours'; timePhrase = 'Last 24 hours'; defaultsApplied.push('time'); }
+
+    return { camera, entity, attribute, attributeType, attachedItem, time, timePhrase, defaultsApplied };
+  }
+
+  function subjectInfo(p){
+    if (p.attribute && (p.attributeType === 'attached' || p.attributeType === 'vehicle_direct')){
+      return { icon: 'tag', text: cap(p.attribute), searchPhrase: p.attribute };
+    }
+    if (p.attribute && p.attributeType === 'object'){
+      return { icon: 'eye', text: 'Near ' + cap(p.attribute), searchPhrase: 'activity near ' + p.attribute };
+    }
+    if (!p.defaultsApplied.includes('entity') && p.entity !== 'Person / Vehicle'){
+      const plain = p.entity === 'Vehicle' ? 'Vehicles' : 'People';
+      return { icon: p.entity === 'Vehicle' ? 'car' : 'person', text: plain, searchPhrase: plain.toLowerCase() };
+    }
+    return null;
+  }
+
+  function attributePhrase(p, anchorWord){
+    if (p.attributeType === 'attached'){
+      return `${anchorWord} ${attachedPrep(p.attachedItem)} ${p.attribute}`;
+    }
+    if (p.attributeType === 'vehicle_direct'){
+      return p.attribute;
+    }
+    return `${anchorWord} near ${p.attribute}`;
+  }
+
+  function thinkingLine(p){
+    const cameraPhrase = p.camera === 'All cameras' ? 'all cameras' : p.camera.toLowerCase();
+    const hasAnchor = !p.defaultsApplied.includes('entity');
+    const anchorWord = p.entity === 'Vehicle' ? 'vehicle' : (p.entity === 'Person' ? 'person' : 'person or vehicle');
+
+    if (p.attribute && !hasAnchor){
+      return `Searching for "${p.attribute}" near person or vehicle...`;
+    }
+    if (p.attribute && hasAnchor){
+      return `Searching for ${attributePhrase(p, anchorWord)}...`;
+    }
+    if (hasAnchor){
+      return `Searching for ${anchorWord} across ${cameraPhrase}...`;
+    }
+    return `Searching ${cameraPhrase} for activity...`;
+  }
+
+  function generateResults(svg, count){
+    const hours = [9,10,11,12,1,2,3,4,5,6,7,8];
+    let out = '';
+    for (let i = 0; i < count; i++){
+      const cam = cams[i % cams.length];
+      const hr = hours[i % hours.length];
+      const min = String((i * 7) % 60).padStart(2,'0');
+      const ampm = i % 2 === 0 ? 'am' : 'pm';
+      out += card(cam, `${hr}:${min} ${ampm}`, svg);
+    }
+    return out;
+  }
+
+  function bannerLine(p, removed){
+    const cameraPhrase = removed.has('camera') ? 'all cameras' : (p.camera === 'All cameras' ? 'all cameras' : p.camera.toLowerCase());
+    const hasAnchor = !p.defaultsApplied.includes('entity');
+    const anchorWord = p.entity === 'Vehicle' ? 'vehicle' : (p.entity === 'Person' ? 'person' : 'person or vehicle');
+    const attribute = (!removed.has('attribute')) ? p.attribute : null;
+
+    if (attribute && !hasAnchor){
+      return `Showing results for "${attribute}" near person or vehicle`;
+    }
+    if (attribute && hasAnchor){
+      return `Showing results for ${attributePhrase(p, anchorWord)}`;
+    }
+    if (hasAnchor){
+      return `Showing results for ${anchorWord} across ${cameraPhrase}`;
+    }
+    return `Showing activity across ${cameraPhrase}`;
+  }
+
+  const ZERO_RESULT_ATTRIBUTES = ['blue helmet'];
+
+  function renderResults(p, removed){
+    const banner = document.getElementById('banner');
+    const results = document.getElementById('results');
+    banner.style.display = 'flex';
+
+    const subject = (!removed.has('attribute')) ? subjectInfo(p) : null;
+    const line = bannerLine(p, removed);
+    const activeAttribute = (!removed.has('attribute')) ? p.attribute : null;
+
+    if (activeAttribute && ZERO_RESULT_ATTRIBUTES.includes(activeAttribute)){
+      const hasAnchor = !p.defaultsApplied.includes('entity');
+      const isUnambiguous = hasAnchor && (p.attributeType === 'attached' || p.attributeType === 'vehicle_direct');
+      banner.className = 'banner zero';
+      if (isUnambiguous){
+        banner.innerHTML = `<span class="headline">No matches for ${activeAttribute}</span>`;
+      } else {
+        banner.innerHTML = `<span class="headline">No matches for ${activeAttribute}</span><span class="subtext">This only means it wasn't captured within a person or vehicle's crop — not that it didn't happen.</span>`;
+      }
+      results.innerHTML = `<div class="empty">No results</div>`;
+      return;
+    }
+
+    const isBackgroundObject = activeAttribute && p.attributeType === 'object';
+    const resultCount = isBackgroundObject ? 3 : 45;
+    const svg = sceneSvg(p, removed);
+
+    banner.className = 'banner match';
+    banner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><span>${line}</span>`;
+    results.innerHTML = generateResults(svg, resultCount);
+  }
+
+  function runSearch(raw){
+    document.getElementById('q').value = raw;
+    stopRotation();
+
+    document.getElementById('banner').style.display = 'none';
+    document.getElementById('results').innerHTML = '';
+
+    const p = parseQuery(raw);
+    const thinking = document.getElementById('thinking');
+    thinking.style.display = 'flex';
+    document.getElementById('thinkingText').textContent = thinkingLine(p);
+
+    setTimeout(() => {
+      thinking.style.display = 'none';
+      renderResults(p, new Set());
+    }, 5000);
+  }
+
+  document.getElementById('searchBtn').addEventListener('click', () => runSearch(document.getElementById('q').value));
+  document.getElementById('q').addEventListener('keydown', e => { if(e.key === 'Enter') runSearch(e.target.value); });
+
+  const rotatingPhrases = [
+    'Person in a yellow jacket, wearing glasses',
+    'Black delivery van at the gate',
+    'Person in a white dress, near a silver car'
+  ];
+  const placeholderEl = document.getElementById('rotatingPlaceholder');
+  const inputEl = document.getElementById('q');
+  let phraseIndex = 0;
+  let rotateTimer = null;
+
+  function showPhrase(i){
+    placeholderEl.className = 'rotating-placeholder entering';
+    placeholderEl.textContent = rotatingPhrases[i];
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        placeholderEl.className = 'rotating-placeholder visible';
+      });
+    });
+  }
+
+  function rotatePlaceholder(){
+    placeholderEl.className = 'rotating-placeholder leaving';
+    setTimeout(() => {
+      phraseIndex = (phraseIndex + 1) % rotatingPhrases.length;
+      showPhrase(phraseIndex);
+    }, 400);
+  }
+
+  function startRotation(){
+    if (inputEl.value.length > 0) return;
+    showPhrase(phraseIndex);
+    rotateTimer = setInterval(() => {
+      if (inputEl.value.length === 0) rotatePlaceholder();
+    }, 10000);
+  }
+
+  function stopRotation(){
+    clearInterval(rotateTimer);
+    placeholderEl.className = 'rotating-placeholder';
+  }
+
+  inputEl.addEventListener('focus', stopRotation);
+  inputEl.addEventListener('input', () => {
+    if (inputEl.value.length > 0) stopRotation();
+  });
+  inputEl.addEventListener('blur', () => {
+    if (inputEl.value.length === 0) startRotation();
+  });
+
+  startRotation();
+</script>
+
+</body>
+</html>
