@@ -6,19 +6,19 @@
 <title>Bridging the Perception Gap in Semantic Video Search</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&family=Source+Sans+Pro:wght@300;400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <style>
   :root {
     --accent-blue: #4C8DFF;
     --accent-green: #D6F45C;
-    --ink: #17181A;
+    --ink: #000000;
     --ink-soft: #4A4B4D;
     --paper: #F4F4F4;
     --border: rgba(23, 24, 26, 0.12);
     --radius: 6px;
     --nav-height: 84px;
-    --max-width: 1160px;
-    --side-pad: 40px;
+    --max-width: 1440px;
+    --side-pad: 72px;
   }
 
   * { box-sizing: border-box; }
@@ -48,11 +48,11 @@
   .grid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    column-gap: 24px;
+    column-gap: 20px;
   }
 
-  .col-heading { grid-column: 1 / 9; }
-  .col-copy { grid-column: 5 / 13; }
+  .col-heading { grid-column: 1 / 10; }
+  .col-copy { grid-column: 4 / 13; }
 
   /* ---------- SECTION 1 : HERO (green) ---------- */
   .hero {
@@ -62,11 +62,11 @@
   }
 
   .hero-heading {
-    max-width: 760px;
+    max-width: 847px;
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
     font-size: 56px;
-    line-height: 70px;
+    line-height: 1.4;
     letter-spacing: normal;
     margin: 0;
     color: var(--ink);
@@ -119,34 +119,52 @@
 
   .hero { position: relative; }
 
-  @media (max-width: 720px) {
-    :root { --side-pad: 20px; }
+  @media (max-width: 900px) {
+    :root { --side-pad: 24px; }
     .hero-heading { font-size: 28px; }
     .hero { padding-top: 56px; padding-bottom: 56px; }
   }
 
   /* ---------- SECTION 2b : ENGINEERING CONSTRAINT ---------- */
   .constraint {
-    padding-top: 24px;
-    padding-bottom: 24px;
+    padding-top: 80px;
+    padding-bottom: 80px;
   }
 
   .section-heading {
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
-    font-size: 30pt;
-    line-height: 1.25;
+    font-size: 56px;
+    line-height: 1.4;
     color: var(--ink);
     margin: 0 0 40px 0;
   }
 
   .section-copy p {
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 300;
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: 24px;
+    line-height: 1.3;
     color: var(--ink);
     margin: 0 0 20px 0;
+  }
+
+  .section-copy ul {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 0 0 20px 0;
+    padding-left: 20px;
+  }
+
+  .section-copy li { margin-bottom: 10px; }
+
+  .section-copy mark {
+    background: var(--accent-green);
+    color: inherit;
+    padding: 0;
   }
 
   /* ---------- SECTION 3 : SOLUTION POINTERS ---------- */
@@ -158,8 +176,8 @@
   .solution-heading {
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
-    font-size: 30pt;
-    line-height: 1.25;
+    font-size: 56px;
+    line-height: 1.4;
     color: var(--ink);
     margin: 0 0 40px 0;
   }
@@ -172,58 +190,61 @@
   .point-row:first-child { border-top: none; }
 
   .point-num-col {
-    grid-column: 1 / 2;
+    grid-column: 1 / 4;
+    align-self: start;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 10px;
-    padding-top: 4px;
+    padding: 0 20px 0 0;
+    margin-top: 10px;
   }
 
   .point-num {
-    font-family: 'Source Sans Pro', sans-serif;
-    font-weight: 400;
-    font-size: 13px;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
     letter-spacing: 0.05em;
-    color: var(--accent-blue);
+    color: #468FFB;
     white-space: nowrap;
   }
 
   .point-line {
     flex: 1;
     height: 1px;
-    background: var(--accent-blue);
+    background: #468FFB;
     opacity: 0.35;
-    margin-top: 8px;
   }
 
   .point-content {
-    grid-column: 2 / 10;
+    grid-column: 4 / 13;
   }
 
   .point-title {
-    font-family: 'Rubik', sans-serif;
-    font-weight: 400;
-    font-size: 24pt;
-    line-height: 1.3;
+    display: inline-block;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 1.2;
     color: var(--ink);
+    background: var(--accent-green);
     margin: 0 0 20px 0;
   }
 
   .point-content p {
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 300;
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: 24px;
+    line-height: 1.3;
     color: var(--ink);
     margin: 0 0 20px 0;
-    max-width: 560px;
+    max-width: 830px;
   }
 
   .point-content strong { font-weight: 400; }
 
   .point-media {
     margin-top: 24px;
-    max-width: 420px;
+    max-width: 614px;
   }
 
   .point-media img {
@@ -235,16 +256,16 @@
 
   .point-media--row {
     display: flex;
-    gap: 16px;
-    max-width: none;
+    flex-direction: column;
+    gap: 38px;
+    max-width: 614px;
   }
 
   .point-media--row .point-media-item {
-    flex: 1 1 0;
-    max-width: 260px;
+    width: 100%;
   }
 
-  @media (max-width: 720px) {
+  @media (max-width: 900px) {
     .grid { grid-template-columns: 1fr; column-gap: 0; row-gap: 16px; }
     .col-heading, .col-copy { grid-column: 1 / 2; }
     .point-num-col { grid-column: 1 / 2; padding-top: 0; margin-bottom: 8px; }
@@ -271,12 +292,28 @@
     </div>
   </section>
 
+  <!-- ================= SECTION 2a : PERCEPTION GAP ================= -->
+  <section class="constraint">
+    <div class="wrapper grid">
+      <h2 class="section-heading col-heading">Problem:<br>Perception Gap &amp; Business Impact</h2>
+      <div class="section-copy col-copy">
+        <p>Semantic video search promises to let operators search through videos using everyday natural language. Users expect the same behaviour as how they interact with LLMs: you can type anything, and you'll be shown the relevant results.</p>
+        <p>Let's see how this works in AI Video Security. When users start interacting with the search, they see a mismatch in how they understand the feature and how it actually works.</p>
+        <p>This mismatch shows up in two ways:</p>
+        <ul>
+          <li>They don't find what they were looking for, meaning they still have to scroll through long search results manually.</li>
+          <li>Some queries work, some don't, so they start rewording the same search a few times, unsure if the problem is their phrasing or the tool.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= SECTION 2b : ENGINEERING CONSTRAINT ================= -->
   <section class="constraint">
     <div class="wrapper grid">
       <h2 class="section-heading col-heading">Engineering Constraint:<br>How Crop-Frame Search Works</h2>
       <div class="section-copy col-copy">
-        <p>Primarily, what the AI model does is search for indexed identifiers (such as a person or a vehicle). Once these identifiers are found, the model looks for those specific elements and creates a cropped frame based on the search query. This cropped frame also becomes the thumbnail in the search results.</p>
+        <p>Primarily, what the <mark>AI model does is search for indexed identifiers (such as a person or a vehicle).</mark> Once these identifiers are found, the model looks for those specific elements and creates a cropped frame based on the search query. This cropped frame also becomes the thumbnail in the search results.</p>
         <p>For example, if a user searches for "person wearing a red cap", the model's first step is to locate a person and create a cropped frame around them. It then checks for the cap within that cropped area. If the cap fits inside the cropped frame, the result "person wearing red cap" is displayed. In this scenario, there is a high chance of a successful search result because a cap worn by a person stays in direct contact with their body, naturally falling within the crop boundary.</p>
         <p>By contrast, consider a search query like "person watching television". If the television is in close proximity to the person, it will fall within the cropped frame and appear in the results. However, if the television is positioned farther away, it will be excluded from the crop and will not appear in the search results.</p>
       </div>
@@ -286,7 +323,7 @@
   <!-- ================= SECTION 3 : SOLUTION POINTERS ================= -->
   <section class="solution">
     <div class="wrapper">
-      <h2 class="solution-heading">Solution: Guiding the User Across the Search Journey</h2>
+      <h2 class="solution-heading">Solution:<br>Designing Semantic Search Journey</h2>
 
       <div class="point-row grid">
         <div class="point-num-col">
