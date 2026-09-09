@@ -220,7 +220,7 @@
     display: inline-block;
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 600;
-    font-size: 30px;
+    font-size: 26px;
     line-height: 1.2;
     color: var(--ink);
     background: var(--accent-green);
@@ -237,7 +237,7 @@
     max-width: 830px;
   }
 
-  .point-content strong { font-weight: 400; }
+  .point-content strong { font-weight: 400; color: #808080; }
 
   .point-media {
     margin-top: 24px;
@@ -295,7 +295,7 @@
       <h2 class="section-heading col-heading">Problem:<br>Perception Gap &amp; Business Impact</h2>
       <div class="section-copy col-copy">
         <p>Semantic video search promises to let operators search through videos using everyday natural language. Users expect the same behaviour as how they interact with LLMs: you can type anything, and you'll be shown the relevant results.</p>
-        <p>Let's see how this works in AI Video Security. When users start interacting with the search, they see <mark>a mismatch in how they understand the feature and how it actually works.</mark></p>
+        <p>Let's see how this works in AI Video Security. When users start interacting with the search, they see <mark>a&nbsp;mismatch in how they understand the feature and how it actually works.</mark></p>
         <p>This mismatch shows up in two ways:</p>
         <ul>
           <li>They don't find what they were looking for, meaning they still have to scroll through long search results manually.</li>
@@ -329,8 +329,8 @@
         </div>
         <div class="point-content">
           <h3 class="point-title">Before Typing: Search Examples</h3>
-          <p><strong>What is happening:</strong> A rotating placeholder inside the empty search input cycles through valid phrasing patterns (e.g., "person wearing red cap") before the user interacts.</p>
-          <p><strong>How it helps:</strong> Acts as passive, zero-friction onboarding. It nudges operators on how they can form their search query.</p>
+          <p><strong>What is happening:</strong><br>A rotating placeholder inside the empty search input cycles through valid phrasing patterns (e.g., "person wearing red cap") before the user interacts.</p>
+          <p><strong>How it helps:</strong><br>Acts as passive, zero-friction onboarding. It nudges operators on how they can form their search query.</p>
           <div class="point-media">
             <img src="ai%20projects/search_bar_demo.gif" alt="Rotating placeholder text inside the empty search bar cycling through example queries" />
           </div>
@@ -344,8 +344,8 @@
         </div>
         <div class="point-content">
           <h3 class="point-title">During Search: Showing What's Being Searched</h3>
-          <p><strong>What is happening:</strong> As the system processes a query, an inline status message translates the user's sentence into plain system logic. If the query names something attached to a person, like "person wearing red cap," it mirrors that directly: "Searching for person wearing red cap...". If the query names something merely nearby, like "person watching television," it says so plainly: "Searching for person near television..."</p>
-          <p><strong>How it helps:</strong> Shows the operator how the AI is actually thinking about their query, in real time: whether it's treating the object as something confirmed on the person, or something it's only checking for close by. This sets the right expectation for the result before it even loads.</p>
+          <p><strong>What is happening:</strong><br>As the system processes a query, an inline status message translates the user's sentence into plain system logic. If the query names something attached to a person, like "person wearing red cap," it mirrors that directly: "Searching for person wearing red cap...". If the query names something merely nearby, like "person watching television," it says so plainly: "Searching for person near television..."</p>
+          <p><strong>How it helps:</strong><br>Shows the operator how the AI is actually thinking about their query, in real time: whether it's treating the object as something confirmed on the person, or something it's only checking for close by. This sets the right expectation for the result before it even loads.</p>
           <div class="point-media point-media--row">
             <div class="point-media-item">
               <img src="ai%20projects/thinking_anchored.gif" alt="Status message reading Searching for person wearing red cap, for a query anchored directly to a person" />
@@ -364,8 +364,8 @@
         </div>
         <div class="point-content">
           <h3 class="point-title">When There's No Person or Vehicle: Filling the Gap</h3>
-          <p><strong>What is happening:</strong> When a search has no person or vehicle at all (e.g., "television"), the system discloses that it silently added the anchor itself: "Searching for "television" near person or vehicle..."</p>
-          <p><strong>How it helps:</strong> Makes clear the system never searches on its own. It always needs a person or vehicle to attach to, even when the user didn't ask for one.</p>
+          <p><strong>What is happening:</strong><br>When a search has no person or vehicle at all (e.g., "television"), the system discloses that it silently added the anchor itself: "Searching for "television" near person or vehicle..."</p>
+          <p><strong>How it helps:</strong><br>Makes clear the system never searches on its own. It always needs a person or vehicle to attach to, even when the user didn't ask for one.</p>
         </div>
       </div>
     </div>
