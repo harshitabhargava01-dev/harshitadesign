@@ -131,6 +131,10 @@
     padding-bottom: 80px;
   }
 
+  .constraint:first-of-type {
+    padding-top: 160px;
+  }
+
   .section-heading {
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
@@ -293,7 +297,7 @@
     <div class="wrapper grid">
       <h2 class="section-heading col-heading">Problem:<br>Perception Gap &amp; Business Impact</h2>
       <div class="section-copy col-copy">
-        <p>Semantic video search promises to let operators search through videos using everyday natural language. Users expect the same behaviour as how they interact with LLMs: you can type anything, and you'll be shown the relevant results.</p>
+        <p>Semantic video search promises to let operators search through videos using everyday natural language. Users expect the same behaviour as how they interact with LLMs: <mark>you can type anything, and you'll be shown the relevant results.</mark></p>
         <p>Let's see how this works in AI Video Security. When users start interacting with the search, they see <mark>a&nbsp;mismatch in how they understand the feature and how it actually works.</mark></p>
         <p>This mismatch can show as:</p>
         <ul>
@@ -311,7 +315,7 @@
       <div class="section-copy col-copy">
         <p>Primarily, what the <mark>AI model does is search for indexed identifiers (such as a person or a vehicle).</mark> Once these identifiers are found, the model looks for those specific elements and creates a cropped frame based on the search query. This cropped frame also becomes the thumbnail in the search results.</p>
         <p>For example, if a user searches for "person wearing a red cap", the model's first step is to locate a person and create a cropped frame around them. It then checks for the cap within that cropped area. If the cap fits inside the cropped frame, the result "person wearing red cap" is displayed. In this scenario, there is a high chance of a successful search result because a cap worn by a person stays in direct contact with their body, naturally falling within the crop boundary.</p>
-        <p>By contrast, consider a search query like "person watching television". If the television is in close proximity to the person, it will fall within the cropped frame and appear in the results. However, if the television is positioned farther away, it will be excluded from the crop and will not appear in the search results.</p>
+        <p>By contrast, consider a search query like "person watching television". If the television is in close proximity to the person, it will fall within the cropped frame and appear in the results. However, if the television is positioned farther away, <mark>it will be excluded from the crop and will not appear in the search results.</mark></p>
       </div>
     </div>
   </section>
@@ -365,6 +369,9 @@
           <h3 class="point-title">When There's No Person or Vehicle: Filling the Gap</h3>
           <p><strong>What is happening:</strong><br>When a search has no person or vehicle at all (e.g., "television"), the system discloses that it silently added the anchor itself: "Searching for "television" near person or vehicle..."</p>
           <p><strong>How it helps:</strong><br>Makes clear the system never searches on its own. It always needs a person or vehicle to attach to, even when the user didn't ask for one.</p>
+          <div class="point-media">
+            <img src="ai%20projects/results_banner_demo.gif" alt="Status banner reading Searching for television near person or vehicle, disclosing the anchor the system added on its own" />
+          </div>
         </div>
       </div>
     </div>
