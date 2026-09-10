@@ -164,6 +164,19 @@
     margin: 0 0 40px 0;
   }
 
+  .section-heading.tryit-heading {
+    color: #FFFFFF;
+  }
+
+  .section-copy.tryit-copy p {
+    color: #FFFFFF;
+  }
+
+  .media-section .grid {
+    padding-top: 24px;
+    margin-bottom: 40px;
+  }
+
   .section-copy p {
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 300;
@@ -404,16 +417,13 @@
   </section>
 
   <!-- ================= SECTION 4 : TRY IT YOURSELF ================= -->
-  <section class="constraint">
+  <section class="media-section">
     <div class="wrapper grid">
-      <h2 class="section-heading col-heading">Try It Yourself</h2>
-      <div class="section-copy col-copy">
-        <p>Now that you've seen how the system reasons about a query, take it for a spin. Try a search that names something attached to a person, and one that's merely nearby, and watch how the status message responds differently.</p>
+      <h2 class="section-heading col-heading tryit-heading">Try It Yourself</h2>
+      <div class="section-copy col-copy tryit-copy">
+        <p>To showcase specific edge cases of our crop-frame model, this interactive sandbox uses a curated set of preset query paths. Try the suggested queries below to observe how the interface dynamically updates its status messaging based on spatial anchoring.</p>
       </div>
     </div>
-  </section>
-
-  <section class="media-section">
     <div class="wrapper">
       <div class="media-frame">
         <iframe src="ai%20projects/security-search-prototype.html" title="Interactive prototype" allowfullscreen></iframe>
