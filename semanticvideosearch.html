@@ -301,9 +301,17 @@
   @media (max-width: 900px) {
     .grid { grid-template-columns: 1fr; column-gap: 0; row-gap: 16px; }
     .col-heading, .col-copy { grid-column: 1 / 2; }
+    .col-copy, .point-content { transform: none; }
     .point-num-col { grid-column: 1 / 2; padding-top: 0; margin-bottom: 8px; }
     .point-content { grid-column: 1 / 2; }
     .point-line { display: none; }
+
+    .section-heading, .solution-heading { font-size: 32px; }
+    .point-title { font-size: 22px; }
+    .section-copy p, .section-copy ul, .point-content p { font-size: 17px; }
+    .media-frame { aspect-ratio: 4 / 5; }
+    .scroll-indicator { width: 64px; height: 64px; right: 24px; top: -32px; }
+    .scroll-indicator svg { width: 16px; height: 27px; }
   }
 </style>
 </head>
