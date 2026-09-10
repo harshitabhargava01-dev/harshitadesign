@@ -114,6 +114,7 @@
     color:#000000;
     margin:0;
   }
+  .mobile-break{ display:none; }
 
   /* ---------- SECTIONS ---------- */
   section{
@@ -222,6 +223,7 @@
   @media (max-width:900px){
     .hero{height:741px;}
     .hero h1{font-size:34px;line-height:44px;}
+    .mobile-break{ display:block; }
     section, .hero-content{padding:0 24px;}
     .hero-nav{right:24px; top:24px;}
     .section-label{font-size:32px;padding-top:72px;margin-bottom:32px;}
@@ -232,17 +234,6 @@
     .nav-toggle{ display:flex; position:fixed; top:28px; right:24px; z-index:20; }
     .nav-toggle span{ background:#1F1E1E; }
     .nav-toggle.open span{ background:#1F1E1E; }
-
-    .nav-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.4);
-      z-index:9;
-      opacity:0;
-      visibility:hidden;
-      transition:opacity 0.3s ease, visibility 0.3s;
-    }
-    .nav-overlay.open{ opacity:1; visibility:visible; }
 
     .hero-nav .nav-links{
       display:flex;
@@ -289,10 +280,9 @@
         <span></span>
       </button>
     </nav>
-    <div class="nav-overlay" id="navOverlay"></div>
     <div class="hero-content">
       <p class="hero-intro">Hi, I am Harshita Bhargava</p>
-      <h1>Mapping the unseen complexity.<br>Simplified by design.</h1>
+      <h1>Mapping the<br class="mobile-break"> unseen complexity.<br>Simplified by design.</h1>
     </div>
   </div>
 
@@ -376,17 +366,14 @@
     (function(){
       var toggle = document.getElementById('navToggle');
       var links = document.getElementById('navLinks');
-      var overlay = document.getElementById('navOverlay');
       function setOpen(isOpen){
         links.classList.toggle('open', isOpen);
         toggle.classList.toggle('open', isOpen);
-        overlay.classList.toggle('open', isOpen);
         toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       }
       toggle.addEventListener('click', function(){
         setOpen(!links.classList.contains('open'));
       });
-      overlay.addEventListener('click', function(){ setOpen(false); });
       links.querySelectorAll('a').forEach(function(a){
         a.addEventListener('click', function(){ setOpen(false); });
       });
