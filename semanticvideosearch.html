@@ -443,5 +443,12 @@
     </div>
   </section>
 
+  <script>
+    document.querySelector('.scroll-indicator').addEventListener('click', function(e){
+      e.preventDefault();
+      document.getElementById('try-it-yourself').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+
 </body>
 </html>
