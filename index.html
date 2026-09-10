@@ -64,6 +64,16 @@
     text-decoration:none;
   }
   .hero-nav a:hover{ color:#FE4520; }
+  .ai-nav-link{ display:inline-flex; align-items:center; gap:6px; }
+  .ai-sparkle{ color:#4C8DFF; flex-shrink:0; animation:sparkle-pulse 2.4s ease-in-out infinite; transform-origin:center; }
+  .ai-nav-link:hover .ai-sparkle{ color:#FE4520; }
+  @keyframes sparkle-pulse{
+    0%, 100%{ transform:scale(1) rotate(0deg); opacity:0.8; }
+    50%{ transform:scale(1.25) rotate(20deg); opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ai-sparkle{ animation:none; }
+  }
 
   .nav-toggle{
     display:none;
@@ -269,7 +279,12 @@
   <div class="hero">
     <nav class="hero-nav">
       <div class="nav-links" id="navLinks">
-        <a href="#ai-playground">AI PLAYGROUND</a>
+        <a href="#ai-playground" class="ai-nav-link">
+          <svg class="ai-sparkle" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+            <path d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z" fill="currentColor"/>
+          </svg>
+          AI PLAYGROUND
+        </a>
         <a href="#projects">PROJECTS</a>
         <a href="#writings">WRITING</a>
         <a href="about">ABOUT</a>
