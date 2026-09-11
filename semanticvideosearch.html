@@ -371,6 +371,7 @@
         <p>Primarily, what the <mark>AI model does is search for indexed identifiers (such as a person or a vehicle).</mark> Once these identifiers are found, the model looks for those specific elements and creates a cropped frame based on the search query. This cropped frame also becomes the thumbnail in the search results.</p>
         <p>For example, if a user searches for "person wearing a red cap", the model's first step is to locate a person and create a cropped frame around them. It then checks for the cap within that cropped area. If the cap fits inside the cropped frame, the result "person wearing red cap" is displayed. In this scenario, there is a high chance of a successful search result because a cap worn by a person stays in direct contact with their body, naturally falling within the crop boundary.</p>
         <p>By contrast, consider a search query like "person watching television". If the television is in close proximity to the person, it will fall within the cropped frame and appear in the results. However, if the television is positioned farther away, <mark>it will be excluded from the crop and will not appear in the search results.</mark></p>
+        <p>When an object isn't confirmed inside the crop, the system doesn't always return nothing &mdash; it can still surface a smaller set of possible matches, clearly marked as unconfirmed, rather than hiding them.</p>
       </div>
     </div>
   </section>
@@ -422,7 +423,7 @@
         </div>
         <div class="point-content">
           <h3 class="point-title">When There's No Person or Vehicle: Filling the Gap</h3>
-          <p><strong>What is happening:</strong><br>When a search has no person or vehicle at all (e.g., "grapes"), the system discloses that it silently added the anchor itself: "Searching for "grapes" near person or vehicle..."</p>
+          <p><strong>What is happening:</strong><br>When a search has no person or vehicle at all (e.g., "grapes"), the system discloses that it added the anchor on its own: "Searching for grapes near person or vehicle..."</p>
           <p><strong>How it helps:</strong><br>Makes clear the system never searches on its own. It always needs a person or vehicle to attach to, even when the user didn't ask for one.</p>
           <div class="point-media">
             <img src="ai%20projects/grapes_loop_demo.gif" alt="Status banner reading Searching for grapes near person or vehicle, disclosing the anchor the system added on its own" />
