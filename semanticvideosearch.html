@@ -66,7 +66,7 @@
   }
 
   .hero-heading {
-    max-width: 847px;
+    max-width: 1200px;
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
     font-size: 48px;
@@ -203,6 +203,7 @@
   }
 
   .section-copy li { margin-bottom: 10px; }
+  .section-copy strong { font-weight: 600; }
 
   .section-copy mark {
     background: var(--accent-green);
@@ -351,11 +352,12 @@
       <h2 class="section-heading col-heading">Problem:<br>Perception Gap &amp; Business Impact</h2>
       <div class="section-copy col-copy">
         <p>Semantic video search promises to let operators search through videos using everyday natural language. Users expect the same behaviour as how they interact with LLMs: <mark>you can type anything, and you'll be shown the relevant results.</mark></p>
+        <p>However, a massive Perception Gap exists because full-frame vector search is astronomically expensive to compute and store at scale. To remain commercially viable, most enterprise platforms rely on a much cheaper crop-frame metadata approach. This creates a "hit or miss" paradox: simple object queries work flawlessly, but contextual or relational queries fail completely if subjects fall outside an isolated crop boundary. Because the system's inner workings remain a hidden "black box" during search execution, operators are left deeply confused&mdash;unsure if a failed search is due to their phrasing or a limitation of the tool itself.</p>
         <p>Let's see how this works in AI Video Security. When users start interacting with the search, they see <mark>a&nbsp;mismatch in how they understand the feature and how it actually works.</mark></p>
         <p>This mismatch can show as:</p>
         <ul>
-          <li>They don't find what they were looking for, meaning they still have to scroll through long search results manually.</li>
-          <li>Some queries work, some don't, so they start rewording the same search a few times, unsure if the problem is their phrasing or the tool.</li>
+          <li><strong>Manual Scroll Backlog:</strong> Operators don't find what they were looking for, meaning they still have to scroll through long search results manually.</li>
+          <li><strong>The Rewording Loop:</strong> Some queries work, some don't, so they start rewording the same search a few times, unsure if the problem is their phrasing or the tool.</li>
         </ul>
       </div>
     </div>
