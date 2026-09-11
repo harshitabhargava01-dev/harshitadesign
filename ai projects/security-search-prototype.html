@@ -43,10 +43,11 @@
   }
   .sidebar .logo{
     width:32px; height:32px;
-    background:var(--accent);
-    border-radius:8px;
+    background:transparent;
+    border-radius:50%;
+    border:0.5px solid var(--accent);
     display:flex; align-items:center; justify-content:center;
-    font-weight:700; font-size:14px; color:#fff;
+    font-weight:700; font-size:14px; color:var(--accent);
     margin-bottom:24px;
   }
   .sidebar .icon{
@@ -175,16 +176,23 @@
 
   .banner{
     display:none;
-    border-radius:8px;
+    border-radius:0;
     padding:11px 16px;
-    margin-bottom:20px;
-    font-size:13px;
+    font-size:12px;
     align-items:center;
     gap:8px;
   }
-  .banner.match{ background:var(--accent-dim); color:#A9C6FF; font-style:italic; }
+  .banner.match{ background:#374c6d; color:#FFFFFF; font-style:italic; }
   .banner.warn{ background:var(--warn-dim); color:#F5C877; }
   .banner svg{ width:15px; height:15px; flex-shrink:0; }
+
+  .results-wrapper{
+    display:none;
+    margin-top:28px;
+    margin-bottom:20px;
+  }
+  .results-wrapper .banner{ border-radius:0; margin-bottom:20px; }
+  .results-wrapper .grid{ padding:0; margin:0; }
 
   .banner.zero{ background:var(--panel-2); color:var(--text-secondary); border:1px solid var(--border); flex-direction:column; align-items:flex-start; gap:2px; }
   .banner.zero .headline{ color:var(--text); font-weight:500; }
@@ -263,7 +271,7 @@
 <body>
 
 <div class="sidebar">
-  <div class="logo">S</div>
+  <div class="logo">H</div>
   <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
   <div class="icon active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
   <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
@@ -295,9 +303,10 @@
       <span id="thinkingText"></span>
     </div>
 
-    <div class="banner" id="banner"></div>
-
-    <div class="grid" id="results"></div>
+    <div class="results-wrapper" id="resultsWrapper">
+      <div class="banner" id="banner"></div>
+      <div class="grid" id="results"></div>
+    </div>
   </div>
 </div>
 
@@ -641,6 +650,14 @@
     return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>`;
   }
 
+  const CAMERA_ZONES = {
+    'main entrance': { label: 'Main entrance', ids: ['cam_main_entrance_01','cam_main_entrance_02'] },
+    'gate': { label: 'Gate cameras', ids: ['cam_gate_01'] },
+    'loading dock': { label: 'Loading dock', ids: ['cam_loading_dock_north','cam_loading_dock_south'] },
+    'lobby': { label: 'Lobby', ids: ['cam_lobby_01'] },
+    'parking': { label: 'Parking', ids: ['cam_parking_b2'] }
+  };
+
   function cap(s){ return s.replace(/\b\w/g, c => c.toUpperCase()); }
 
   const WORN_ITEMS = ['jacket','dress','shirt','cap','hat','specs','glasses','watch','helmet','gloves','shoes','mask','scarf','belt'];
@@ -771,6 +788,8 @@
   function renderResults(p, removed){
     const banner = document.getElementById('banner');
     const results = document.getElementById('results');
+    const wrapper = document.getElementById('resultsWrapper');
+    wrapper.style.display = 'block';
     banner.style.display = 'flex';
 
     const subject = (!removed.has('attribute')) ? subjectInfo(p) : null;
@@ -802,6 +821,7 @@
     document.getElementById('q').value = raw;
     stopRotation();
 
+    document.getElementById('resultsWrapper').style.display = 'none';
     document.getElementById('banner').style.display = 'none';
     document.getElementById('results').innerHTML = '';
 
