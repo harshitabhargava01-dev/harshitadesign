@@ -352,7 +352,7 @@
       <h2 class="section-heading col-heading">Problem:<br>Perception Gap &amp; Business Impact</h2>
       <div class="section-copy col-copy">
         <p>Semantic video search promises to let operators search through videos using everyday natural language. Users expect the same behaviour as how they interact with LLMs: <mark>you can type anything, and you'll be shown the relevant results.</mark></p>
-        <p>However, a massive Perception Gap exists because full-frame vector search is astronomically expensive to compute and store at scale. To remain commercially viable, most enterprise platforms rely on a much cheaper crop-frame metadata approach. This creates a "hit or miss" paradox: simple object queries work flawlessly, but contextual or relational queries fail completely if subjects fall outside an isolated crop boundary. Because the system's inner workings remain a hidden "black box" during search execution, operators are left deeply confused&mdash;unsure if a failed search is due to their phrasing or a limitation of the tool itself.</p>
+        <p>However, a big problem happens because looking at the whole video perfectly is way too expensive for companies to build and store. To save money, most systems use a more cost-effective method that only looks at a tiny cropped square around an object. <mark>This creates a "hit or miss" problem. Simple searches work perfectly, but complex searches fail completely if the subjects fall outside that isolated crop boundary.</mark></p>
         <p>Let's see how this works in AI Video Security. When users start interacting with the search, they see <mark>a&nbsp;mismatch in how they understand the feature and how it actually works.</mark></p>
         <p>This mismatch can show as:</p>
         <ul>
@@ -402,7 +402,7 @@
         </div>
         <div class="point-content">
           <h3 class="point-title">During Search: Showing What's Being Searched</h3>
-          <p><strong>What is happening:</strong><br>As the system processes a query, an inline status message translates the user's sentence into plain system logic. If the query names something attached to a person, like "person wearing red cap," it mirrors that directly: "Searching for person wearing red cap...". If the query names something merely nearby, like "person watching television," it says so plainly: "Searching for person near television..."</p>
+          <p><strong>What is happening:</strong><br>As the system processes a query, an inline status message translates the user's sentence into plain system logic. If the query names something attached to a person, like "person with a red cap," it mirrors that directly: "Searching for person with red cap...". If the query names something merely nearby, like "person watching television," it says so plainly: "Searching for person near television..."</p>
           <p><strong>How it helps:</strong><br>Shows the operator how the AI is actually thinking about their query, in real time: whether it's treating the object as something confirmed on the person, or something it's only checking for close by. This sets the right expectation for the result before it even loads.</p>
           <div class="point-media point-media--row">
             <div class="point-media-item">
