@@ -180,11 +180,11 @@
 
   .query-list {
     list-style: none;
-    margin: 24px 0 0 0;
+    margin: 20px 0 0 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     max-width: 560px;
   }
 
@@ -192,17 +192,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 8px;
-    padding: 12px 16px;
+    gap: 12px;
+    padding: 6px 0;
   }
 
   .query-text {
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 300;
-    font-size: 16px;
+    font-size: 14px;
     color: #FFFFFF;
   }
 
@@ -211,22 +208,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
   }
 
   .copy-btn:hover {
     color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.1);
   }
 
-  .copy-btn svg { width: 18px; height: 18px; }
+  .copy-btn svg { width: 14px; height: 14px; }
   .copy-btn .icon-check { display: none; }
   .copy-btn.copied .icon-copy { display: none; }
   .copy-btn.copied .icon-check { display: block; }
@@ -509,8 +505,8 @@
             </button>
           </li>
           <li class="query-item">
-            <span class="query-text">Woman carrying a black purse</span>
-            <button class="copy-btn" type="button" data-query="Woman carrying a black purse" aria-label="Copy query">
+            <span class="query-text">Lady carrying a black purse</span>
+            <button class="copy-btn" type="button" data-query="Lady carrying a black purse" aria-label="Copy query">
               <svg class="icon-copy" viewBox="0 0 20 20" fill="none"><rect x="7" y="7" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 13V4.5A1.5 1.5 0 0 1 6 3h8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
               <svg class="icon-check" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
