@@ -6,7 +6,7 @@
 <title>How to know if the product needs a redesign or just better training? - Harshita Bhargava</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;1,300&family=Rubik:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;1,300&family=Rubik:wght@300;400&display=swap" rel="stylesheet">
 <style>
   :root{
     --blue: #72cbff;
@@ -22,20 +22,103 @@
   }
   a{ color:inherit; }
 
-  .top-nav{
-    max-width:760px;
-    margin:0 auto;
-    padding:32px 24px 0 24px;
+  /* ---------- SITE NAV ---------- */
+  .site-nav{
+    background:#fff;
+    border-bottom:1px solid rgba(31,30,30,0.08);
+    position:relative;
+    z-index:20;
   }
-  .top-nav a{
+  .site-nav-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:22px 72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .site-nav-home{
+    font-family:'Rubik', sans-serif;
+    font-weight:400;
+    font-size:14px;
+    color:#1F1E1E;
+    text-decoration:none;
+    letter-spacing:0.5px;
+  }
+  .site-nav-home:hover{ color:#FE4520; }
+  .site-nav-links{
+    display:flex;
+    align-items:center;
+    gap:32px;
+  }
+  .site-nav-links a{
     font-family:'Rubik', sans-serif;
     font-weight:300;
     font-size:14px;
-    text-decoration:none;
-    color:var(--ink);
+    color:#1F1E1E;
     letter-spacing:0.5px;
+    text-decoration:none;
   }
-  .top-nav a:hover{ color:var(--purple); }
+  .site-nav-links a:hover{ color:#FE4520; }
+  .site-nav-links a.active{ font-weight:400; }
+  .site-nav-ai-link{ display:inline-flex; align-items:center; gap:6px; }
+  .site-nav-sparkle{ color:#4C8DFF; flex-shrink:0; animation:site-nav-sparkle-pulse 2.4s ease-in-out infinite; transform-origin:center; }
+  .site-nav-ai-link:hover .site-nav-sparkle{ color:#FE4520; }
+  @keyframes site-nav-sparkle-pulse{
+    0%, 100%{ transform:scale(1) rotate(0deg); opacity:0.8; }
+    50%{ transform:scale(1.25) rotate(20deg); opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .site-nav-sparkle{ animation:none; }
+  }
+  .site-nav-toggle{
+    display:none;
+    width:32px;
+    height:24px;
+    padding:0;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .site-nav-toggle span{
+    display:block;
+    height:2px;
+    width:100%;
+    background:#1F1E1E;
+    border-radius:2px;
+    transition:transform 0.25s ease, opacity 0.25s ease;
+  }
+  .site-nav-toggle.open span:nth-child(1){ transform:translateY(11px) rotate(45deg); }
+  .site-nav-toggle.open span:nth-child(2){ opacity:0; }
+  .site-nav-toggle.open span:nth-child(3){ transform:translateY(-11px) rotate(-45deg); }
+  @media (max-width:900px){
+    .site-nav-inner{ padding:18px 24px; }
+    .site-nav-toggle{ display:flex; }
+    .site-nav-links{
+      display:flex;
+      position:fixed;
+      top:0;
+      right:0;
+      height:100vh;
+      width:min(78vw, 320px);
+      flex-direction:column;
+      align-items:flex-start;
+      gap:28px;
+      background:#fff;
+      padding:100px 32px 32px;
+      box-shadow:-8px 0 32px rgba(0,0,0,0.18);
+      z-index:30;
+      transform:translateX(100%);
+      transition:transform 0.3s ease;
+    }
+    .site-nav-links a{ white-space:nowrap; font-size:16px; }
+    .site-nav-links.open{
+      display:flex;
+      transform:translateX(0);
+    }
+  }
 
   .cover{
     width:100%;
@@ -120,7 +203,25 @@
 </head>
 <body>
 
-  <div class="top-nav"><a href="/">← Harshita Bhargava</a></div>
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-home">Harshita Bhargava</a>
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index.html#ai-playground" class="site-nav-ai-link">
+          <svg class="site-nav-sparkle" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+            <path d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z" fill="currentColor"/>
+          </svg>
+          AI PLAYGROUND
+        </a>
+        <a href="index.html#projects">PROJECTS</a>
+        <a href="index.html#writings" class="active">WRITING</a>
+        <a href="about.html">ABOUT</a>
+      </div>
+      <button class="site-nav-toggle" id="siteNavToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="siteNavLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
 
   <div class="cover">
     <img src="images/writing-2-cover.png" alt="Illustration of two hands pointing at each other, labeled Better Training and Improve Product" />
@@ -151,6 +252,24 @@
   </article>
 
   <footer><a href="/">← Back to home</a></footer>
+
+  <script>
+    (function(){
+      var toggle = document.getElementById('siteNavToggle');
+      var links = document.getElementById('siteNavLinks');
+      function setOpen(isOpen){
+        links.classList.toggle('open', isOpen);
+        toggle.classList.toggle('open', isOpen);
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+      toggle.addEventListener('click', function(){
+        setOpen(!links.classList.contains('open'));
+      });
+      links.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(){ setOpen(false); });
+      });
+    })();
+  </script>
 
 </body>
 </html>
