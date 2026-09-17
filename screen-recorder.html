@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Screen Recorder — Design your recording while you record it</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&family=Source+Sans+Pro:wght@300;400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent-blue: #4C8DFF;
+    --accent-green: #D6F45C;
+    --ink: #000000;
+    --ink-soft: #4A4B4D;
+    --paper: #F4F4F4;
+    --border: rgba(23, 24, 26, 0.12);
+    --radius: 6px;
+    --nav-height: 84px;
+    --max-width: 1440px;
+    --side-pad: 72px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrapper {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--side-pad);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 20px;
+  }
+
+  .col-heading { grid-column: 1 / 10; }
+  .col-copy { grid-column: 4 / 13; }
+
+  /* ---------- TOP NAV ---------- */
+  .top-nav {
+    padding: 24px var(--side-pad) 0;
+  }
+  .top-nav a {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .top-nav a:hover { color: var(--ink); }
+
+  /* ---------- SECTION 1 : HERO (green) ---------- */
+  .hero {
+    background: var(--accent-green);
+    padding-top: 56px;
+    padding-bottom: 80px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.6;
+    margin: 0 0 20px 0;
+  }
+
+  .hero-heading {
+    max-width: 1200px;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 48px;
+    line-height: 1.4;
+    letter-spacing: normal;
+    margin: 0;
+    color: var(--ink);
+  }
+  .hero-heading .line-bold { font-weight: 400; font-style: normal; }
+  .hero-heading .line-italic { font-weight: 300; font-style: italic; }
+
+  @media (max-width: 900px) {
+    :root { --side-pad: 24px; }
+    .hero-heading { font-size: 28px; }
+    .hero { padding-top: 40px; padding-bottom: 56px; }
+  }
+
+  /* ---------- SECTION : COPY BLOCKS ---------- */
+  .constraint {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .constraint:first-of-type {
+    padding-top: 96px;
+  }
+
+  .section-heading {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 56px;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 40px 0;
+  }
+
+  .section-copy p {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.4;
+    color: #242424;
+    margin: 0 0 20px 0;
+  }
+
+  .section-copy strong { font-weight: 600; }
+
+  .section-copy mark {
+    background: var(--accent-green);
+    color: inherit;
+    padding: 0;
+  }
+
+  /* ---------- SECTION : TOOLS USED / STATUS (numbered rows) ---------- */
+  .solution {
+    padding-top: 40px;
+    padding-bottom: 96px;
+  }
+
+  .solution-heading {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 56px;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 40px 0;
+  }
+
+  .point-row {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+  }
+  .point-row:last-child { border-bottom: 1px solid var(--border); }
+
+  .point-num-col {
+    grid-column: 1 / 4;
+    align-self: start;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+  }
+
+  .point-num {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    color: #468FFB;
+    white-space: nowrap;
+  }
+
+  .point-content { grid-column: 4 / 13; }
+
+  .point-title {
+    display: inline-block;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1.2;
+    color: var(--ink);
+    background: var(--accent-green);
+    margin: 0 0 16px 0;
+  }
+
+  .point-content p {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.4;
+    color: #242424;
+    margin: 0;
+    max-width: 780px;
+  }
+
+  /* ---------- SECTION : STATUS (dark) ---------- */
+  .status-section {
+    background: #000000;
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+
+  .status-heading {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+    line-height: 1.4;
+    color: #FFFFFF;
+    margin: 0 0 20px 0;
+  }
+
+  .status-copy p {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.4;
+    color: rgba(255,255,255,0.82);
+    margin: 0 0 12px 0;
+    max-width: 700px;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin-bottom: 24px;
+  }
+
+  .status-pill .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    display: inline-block;
+  }
+
+  footer {
+    padding: 40px var(--side-pad) 64px;
+  }
+  footer a {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  footer a:hover { color: var(--ink); }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; column-gap: 0; row-gap: 16px; }
+    .col-heading, .col-copy { grid-column: 1 / 2; }
+    .point-num-col { grid-column: 1 / 2; padding-top: 0; margin-bottom: 4px; }
+    .point-content { grid-column: 1 / 2; }
+
+    .section-heading, .solution-heading { font-size: 32px; }
+    .section-copy p, .point-content p { font-size: 17px; }
+    .status-heading { font-size: 26px; }
+    .status-copy p { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="top-nav"><a href="index.html">← Harshita Bhargava</a></div>
+
+  <!-- ================= SECTION 1 : HERO ================= -->
+  <section class="hero">
+    <div class="wrapper">
+      <p class="hero-eyebrow">AI Playground · Personal project</p>
+      <h1 class="hero-heading"><span class="line-bold">Screen Recorder</span><br><span class="line-italic">You design your recording while you're recording.</span></h1>
+    </div>
+  </section>
+
+  <!-- ================= SECTION : THE IDEA ================= -->
+  <section class="constraint">
+    <div class="wrapper grid">
+      <h2 class="section-heading col-heading">The Idea</h2>
+      <div class="section-copy col-copy">
+        <p>This started as a personal project. I wanted <mark>smooth zoom-in transitions and basic interactions I could control myself, while recording</mark> &mdash; that's how it started.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION : THE GOAL ================= -->
+  <section class="constraint">
+    <div class="wrapper grid">
+      <h2 class="section-heading col-heading">The Goal</h2>
+      <div class="section-copy col-copy">
+        <p>There are hundreds of screen recording tools out there already. The goal was never to compete with those.</p>
+        <p>The goal was to make the interaction and experience so easy for users that it gives them a final, finished video recording, minimising the decisions they have to make post-recording. <mark>You design your recording while you're recording.</mark></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION : THE CHALLENGE ================= -->
+  <section class="constraint">
+    <div class="wrapper grid">
+      <h2 class="section-heading col-heading">The Challenge</h2>
+      <div class="section-copy col-copy">
+        <p>The actual challenge was designing this inside that small extension window itself &mdash; <mark>without making it complex, but still giving real features.</mark></p>
+        <p>Most screen recording extensions I've seen have a full cloud version behind them; the extension is just there to start recording, pick the mic, and so on. <mark>Not many of them let you actually control everything from inside the extension.</mark></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION : TOOLS USED ================= -->
+  <section class="solution">
+    <div class="wrapper">
+      <h2 class="solution-heading">Tools Used</h2>
+
+      <div class="point-row grid">
+        <div class="point-num-col">
+          <span class="point-num">01</span>
+        </div>
+        <div class="point-content">
+          <h3 class="point-title">Penpot</h3>
+          <p>Screens were designed in Penpot, an open source tool and an alternative to Figma.</p>
+        </div>
+      </div>
+
+      <div class="point-row grid">
+        <div class="point-num-col">
+          <span class="point-num">02</span>
+        </div>
+        <div class="point-content">
+          <h3 class="point-title">Claude + MCP</h3>
+          <p>Claude was used alongside Penpot, connected via MCP, as part of the design and build workflow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION : CURRENT STATUS ================= -->
+  <section class="status-section">
+    <div class="wrapper">
+      <span class="status-pill"><span class="dot"></span>Current status</span>
+      <h2 class="status-heading">Working on the Chrome extension formalities to list it on the Chrome Web Store.</h2>
+    </div>
+  </section>
+
+  <footer><a href="index.html">← Back to home</a></footer>
+
+</body>
+</html>
