@@ -340,21 +340,38 @@
     { name: 'Park cam 2', zone: 'Overhead path' }
   ];
 
-  // Backpack A/B/C/D/E are all crops of the same source photo -> same camera.
+  // "Brown bag" hits for the delivery-guy case -- 3 distinct source photos,
+  // 3 different people/cameras, so each gets its own camera entry.
   const BACKPACK_CAMS = [
-    { name: 'Market street cam', zone: 'North plaza' },
-    { name: 'Market street cam', zone: 'North plaza' },
-    { name: 'Market street cam', zone: 'North plaza' },
-    { name: 'Market street cam', zone: 'North plaza' },
-    { name: 'Market street cam', zone: 'North plaza' }
+    { name: 'CAM 07', zone: 'Turnstile entrance' },
+    { name: 'CAM 04', zone: 'Reception desk' },
+    { name: 'CAM 08', zone: 'Elevator corridor' }
   ];
 
+  // Jacket A/B/C/D are all crops of the same CAM-02 08:33:42 source frame -> same camera.
   const JACKET_CAMS = [
-    { name: 'Cam 03', zone: 'Retail corridor' }
+    { name: 'CAM-02', zone: 'Elevator lobby' },
+    { name: 'CAM-02', zone: 'Elevator lobby' },
+    { name: 'CAM-02', zone: 'Elevator lobby' },
+    { name: 'CAM-02', zone: 'Elevator lobby' },
+    { name: 'CAM-02', zone: 'Elevator lobby' },
+    { name: 'CAM-01', zone: 'Reception lobby' }
   ];
+  // JACKET_CAMS/PHOTOS index 5 (REDTOP_1) is a deliberate false positive:
+  // a woman in a red/pink top, a different source frame from a different
+  // camera. "Red jacket" is matched on color + item class, and color-only
+  // overlap can still slip a wrong-garment, wrong-person hit into an
+  // otherwise confident result set -- an honest limitation to show even in
+  // the "strongest" stage.
 
   const DRESS_CAMS = [
     { name: 'Cam 12', zone: 'Main walkway' }
+  ];
+
+  // Coffee-tray hits reuse the same CAM-02 08:33:42 source frame -> same camera.
+  const COFFEE_CAMS = [
+    { name: 'CAM-02', zone: 'Elevator lobby' },
+    { name: 'CAM-02', zone: 'Elevator lobby' }
   ];
 
   const SILVERCAR_CAMS = [
@@ -398,6 +415,64 @@
     { name: 'Cam 06', zone: 'Alley / perimeter' }
   ];
 
+  // Generic "background object" hits: for a Stage-1-style query like
+  // "person near the reception desk" there is no attached-item or vehicle
+  // signature to match on -- the system falls back to whatever generic person
+  // crops it has near that zone. These are real, unconfirmed matches (not
+  // targeted at "reception desk" specifically), which is the honest weak
+  // result the prototype is meant to show at this stage.
+  const BG_OBJECT_CAMS = [
+    { name: 'CAM-03', zone: 'Elevator lobby' },
+    { name: 'CAM-03', zone: 'Elevator lobby' },
+    { name: 'Reception cam', zone: 'Front lobby' },
+    { name: 'Reception cam', zone: 'Front lobby' }
+  ];
+  const BG_OBJECT_PHOTOS = [
+    'images/NOSIGN_1.jpg',
+    'images/NOSIGN_2.jpg',
+    'images/NOSIGN_3.jpg',
+    'images/NOSIGN_4.jpg'
+  ];
+
+  // Desk-specific weak hits: every real crop we have anywhere near the front
+  // of the building (people captured there, none confirmed to be our
+  // subject). When the query's noun resolves to "desk"/"reception" this casts
+  // a wide, honestly weak net -- lots of plausible-looking but unconfirmed
+  // people, which is the point being demonstrated at this stage.
+  // Grouped by source frame per the crop-frame rule (same source -> same cam):
+  //  - DESK_1/2 are crops of one CAM-03 reception-desk frame.
+  //  - DESK_4/5 are crops of one CAM-03 elevator-lobby frame (diff. capture).
+  //  - DESK_6/7 are crops of one Omnico front-lobby frame.
+  //  - DESK_3, DESK_8, DESK_9 are each their own distinct source frame.
+  const DESK_CAMS = [
+    { name: 'CAM-03', zone: 'Reception desk' },
+    { name: 'CAM-03', zone: 'Reception desk' },
+    { name: 'CAM-02', zone: 'Reception desk' },
+    { name: 'CAM-03', zone: 'Elevator lobby' },
+    { name: 'CAM-03', zone: 'Elevator lobby' },
+    { name: 'Reception cam', zone: 'Front lobby' },
+    { name: 'Reception cam', zone: 'Front lobby' },
+    { name: 'CAM-07', zone: 'Turnstile check-in' },
+    { name: 'CAM-05', zone: 'Turnstile check-in' },
+    { name: 'CAM-02', zone: 'Elevator lobby' }
+  ];
+  const DESK_PHOTOS = [
+    'images/DECOY_1.jpg',
+    'images/DECOY_2.jpg',
+    'images/DECOY_4.jpg',
+    'images/NOSIGN_1.jpg',
+    'images/NOSIGN_2.jpg',
+    'images/NOSIGN_3.jpg',
+    'images/NOSIGN_4.jpg',
+    'images/DECOY_3.jpg',
+    'images/DECOY_5.jpg',
+    'images/JACKET_PHOTOS_4.jpg'
+  ];
+  // DESK_10 (JACKET_PHOTOS_4) is the same CAM-02 08:33:42 source frame as the
+  // confirmed red-jacket photos -- the coffee-tray crop happens to be framed
+  // right at the desk's edge, so it's a real (if unconfirmed-at-this-stage)
+  // weak hit too.
+
   const VAN_CAMS = [
     { name: 'Street cam 4', zone: 'Curbside' },
     { name: 'Street cam 1', zone: 'South approach' },
@@ -429,6 +504,9 @@
       if (item === 'dress') {
         return DRESS_CAMS[index % DRESS_CAMS.length];
       }
+      if (item === 'cup' || item === 'coffee') {
+        return COFFEE_CAMS[index % COFFEE_CAMS.length];
+      }
     }
     if (activeAttribute && p.attributeType === 'vehicle_direct') {
       const parts = activeAttribute.split(' ');
@@ -444,6 +522,13 @@
       if (parts[0] === 'silver' && parts[1] === 'car') {
         return SILVERCAR_CAMS[index % SILVERCAR_CAMS.length];
       }
+    }
+    if (activeAttribute && p.attributeType === 'object') {
+      const noun = objectDisplayNoun(activeAttribute);
+      if (noun === 'desk' || noun === 'reception') {
+        return DESK_CAMS[index % DESK_CAMS.length];
+      }
+      return BG_OBJECT_CAMS[index % BG_OBJECT_CAMS.length];
     }
     return cams[index % cams.length];
   }
@@ -503,11 +588,21 @@
   }
 
   const JACKET_PHOTOS = [
-    'images/JACKET_PHOTOS_1.jpg'
+    'images/JACKET_PHOTOS_1.jpg',
+    'images/JACKET_PHOTOS_2.jpg',
+    'images/JACKET_PHOTOS_3.jpg',
+    'images/JACKET_PHOTOS_4.jpg',
+    'images/JACKET_PHOTOS_5.jpg',
+    'images/REDTOP_1.jpg'
   ];
 
   const DRESS_PHOTOS = [
     'images/DRESS_PHOTOS_1.jpg'
+  ];
+
+  const COFFEE_PHOTOS = [
+    'images/JACKET_PHOTOS_4.jpg',
+    'images/JACKET_PHOTOS_1.jpg'
   ];
 
   const REDCAP_PHOTOS = [
@@ -519,11 +614,9 @@
     'images/REDCAP_PHOTOS_6.jpg'
   ];
   const BACKPACK_PHOTOS = [
-    'images/BACKPACK_PHOTOS_1.jpg',
-    'images/BACKPACK_PHOTOS_2.jpg',
-    'images/BACKPACK_PHOTOS_3.jpg',
-    'images/BACKPACK_PHOTOS_4.jpg',
-    'images/BACKPACK_PHOTOS_5.jpg'
+    'images/BAG_1.jpg',
+    'images/BAG_2.jpg',
+    'images/BAG_3.jpg'
   ];
 
   const SILVERCAR_PHOTOS = [
@@ -621,9 +714,20 @@
       if (item === 'dress') {
         return photoImg(DRESS_PHOTOS[index % DRESS_PHOTOS.length]);
       }
+      if (item === 'cup' || item === 'coffee') {
+        return photoImg(COFFEE_PHOTOS[index % COFFEE_PHOTOS.length]);
+      }
       const parts = activeAttribute.split(' ');
       const colorHex = parts.length > 1 ? (COLOR_MAP[parts[0]] || null) : null;
       return personSilhouette(attachedItemGraphic(item, colorHex));
+    }
+
+    if (activeAttribute && p.attributeType === 'object'){
+      const noun = objectDisplayNoun(activeAttribute);
+      if (noun === 'desk' || noun === 'reception') {
+        return photoImg(DESK_PHOTOS[index % DESK_PHOTOS.length]);
+      }
+      return photoImg(BG_OBJECT_PHOTOS[index % BG_OBJECT_PHOTOS.length]);
     }
 
     if (hasAnchor && p.entity === 'Vehicle'){
@@ -661,7 +765,7 @@
   function cap(s){ return s.replace(/\b\w/g, c => c.toUpperCase()); }
 
   const WORN_ITEMS = ['jacket','dress','shirt','cap','hat','specs','glasses','watch','helmet','gloves','shoes','mask','scarf','belt'];
-  const CARRIED_ITEMS = ['pen','bag','backpack','badge','umbrella','phone','purse'];
+  const CARRIED_ITEMS = ['pen','bag','backpack','badge','umbrella','phone','purse','cup','coffee'];
   const EATEN_ITEMS = ['grape','grapes'];
   const ATTACHED_ITEMS = [...WORN_ITEMS, ...CARRIED_ITEMS, ...EATEN_ITEMS];
   const attachedItemsPattern = ATTACHED_ITEMS.join('|');
@@ -732,6 +836,21 @@
     return null;
   }
 
+  // Object-type queries carry the full leftover phrase internally, but the UI
+  // must never echo that raw phrase back at the operator. A real crop-frame
+  // system can only confirm THAT it found a background object near the anchor,
+  // not describe the object in the operator's own words -- so the display copy
+  // collapses to a short, known noun ("register", "desk", "gate"...), matching
+  // the Anchored/Proximity/System-Added-Anchoring disclosure pattern.
+  const OBJECT_DISPLAY_NOUNS = ['desk','reception','gate','register','entrance','loading dock','dock','lobby','parking','turnstile','television','purse','elevator'];
+
+  function objectDisplayNoun(attribute){
+    for (const noun of OBJECT_DISPLAY_NOUNS){
+      if (attribute.includes(noun)) return noun;
+    }
+    return attribute;
+  }
+
   function attributePhrase(p, anchorWord){
     if (p.attributeType === 'attached'){
       return `${anchorWord} ${attachedPrep(p.attachedItem)} ${p.attribute}`;
@@ -739,7 +858,7 @@
     if (p.attributeType === 'vehicle_direct'){
       return p.attribute;
     }
-    return `${anchorWord} near ${p.attribute}`;
+    return `${anchorWord} near ${objectDisplayNoun(p.attribute)}`;
   }
 
   function thinkingLine(p){
@@ -747,7 +866,7 @@
     const anchorWord = p.entity === 'Vehicle' ? 'vehicle' : (p.entity === 'Person' ? 'person' : 'person or vehicle');
 
     if (p.attribute && !hasAnchor){
-      return `Searching for ${p.attribute} near person or vehicle...`;
+      return `Searching for ${objectDisplayNoun(p.attribute)} near person or vehicle...`;
     }
     if (p.attribute && hasAnchor){
       return `Searching for ${attributePhrase(p, anchorWord)}...`;
@@ -775,7 +894,7 @@
     const attribute = (!removed.has('attribute')) ? p.attribute : null;
 
     if (attribute && !hasAnchor){
-      return `Showing results for ${attribute} near person or vehicle`;
+      return `Showing results for ${objectDisplayNoun(attribute)} near person or vehicle`;
     }
     if (attribute && hasAnchor){
       return `Showing results for ${attributePhrase(p, anchorWord)}`;
@@ -810,7 +929,9 @@
     }
 
     const isBackgroundObject = activeAttribute && p.attributeType === 'object';
-    const resultCount = isBackgroundObject ? 3 : 6;
+    const backgroundNoun = isBackgroundObject ? objectDisplayNoun(activeAttribute) : null;
+    const isDeskQuery = backgroundNoun === 'desk' || backgroundNoun === 'reception';
+    const resultCount = isDeskQuery ? DESK_PHOTOS.length : (isBackgroundObject ? 3 : 6);
 
     banner.className = 'banner match';
     banner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><span>${line}</span>`;
