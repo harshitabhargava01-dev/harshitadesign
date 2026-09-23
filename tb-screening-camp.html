@@ -199,6 +199,16 @@
   }
   .callout strong{ color:var(--purple); }
 
+  mark.hl{
+    background:rgba(114,203,255,0.3);
+    color:inherit;
+    font-weight:400;
+    padding:1px 3px;
+    border-radius:3px;
+    -webkit-box-decoration-break:clone;
+    box-decoration-break:clone;
+  }
+
   figure.shot{ margin:0 0 32px 0; width:80%; }
   figure.shot--small{ width:220px; }
   figure.shot--small img{ width:100%; }
@@ -295,13 +305,13 @@
 
     <section>
       <h2>Background</h2>
-      <p>Qure is a B2B AI healthcare company. Its product, qTrack, is an AI-based chest X-ray screening platform. The application is deployed in health screening camps to identify TB patients. These camps run in low resource, time sensitive environments with poor infrastructure and limited technical support on site, and no internet. Healthcare workers need to connect multiple pieces of hardware and devices together to start the screening process. In this environment, the setup experience must be stable, quick, and ideally plug and play for screening to begin smoothly. When so many components need to be connected in the right sequence, the setup easily becomes confusing and difficult for on ground staff. Any manual step or configuration adds real workload for users who have no technical background.</p>
+      <p>Qure is a B2B AI healthcare company. Its product, qTrack, is an AI-based chest X-ray screening platform. The application is deployed in health screening camps to identify TB patients. These camps run in low resource, time sensitive environments with poor infrastructure and limited technical support on site, and no internet. Healthcare workers need to connect multiple pieces of hardware and devices together to start the screening process. <mark class="hl">In this environment, the setup experience must be stable, quick, and ideally plug and play for screening to begin smoothly.</mark> When so many components need to be connected in the right sequence, the setup easily becomes confusing and difficult for on ground staff. Any manual step or configuration adds real workload for users who have no technical background.</p>
     </section>
 
     <section>
       <h2>Problem</h2>
-      <p>A key feature of registering patients via the qTrack app on modality software was not being adopted by users on the ground. The Customer Success team reported this pattern across multiple deployments, where users were unable to use this feature the way it was expected to work. Instead, the CS team had to train users on an alternative method that was highly manual and technical, with a high chance of error. This amounted to a workaround for completing the task, and it led to users skipping this feature altogether.</p>
-      <p>This feature was the starting point of the product workflow - failure here cascaded into every step after it, reducing adoption of the product's core capabilities overall.</p>
+      <p><mark class="hl">A key feature of registering patients via the qTrack app on modality software was not being adopted by users on the ground.</mark> The Customer Success team reported this pattern across multiple deployments, where users were unable to use this feature the way it was expected to work. Instead, the CS team had to train users on an alternative method that was highly manual and technical, with a high chance of error. This amounted to a workaround for completing the task, and it led to users skipping this feature altogether.</p>
+      <p><mark class="hl">This feature was the starting point of the product workflow - failure here cascaded into every step after it, reducing adoption of the product's core capabilities overall.</mark></p>
     </section>
 
     <section>
@@ -323,12 +333,12 @@
 
       <h3>2. Understanding what enables the capability</h3>
       <p>To understand why the experience kept breaking down, I worked with TechOps to understand what was required to make this feature successful.</p>
-      <p>The investigation revealed that this capability depended on a chain of setup steps spanning both the product and the physical deployment environment - connecting the right hardware accessories, establishing a local network between devices, and preparing the environment correctly before a single patient could be registered. Each step had to happen in the right order; getting one wrong meant the rest wouldn't work either.</p>
+      <p>The investigation revealed that this capability depended on a chain of setup steps spanning both the product and the physical deployment environment - connecting the right hardware accessories, establishing a local network between devices, and preparing the environment correctly before a single patient could be registered. <mark class="hl">Each step had to happen in the right order; getting one wrong meant the rest wouldn't work either.</mark></p>
 
       <h3>3. Mapping the deployment journey</h3>
       <p>To bring these findings together, I mapped the complete deployment journey from initial deployment, through onboarding, to the site going live using a service blueprint.</p>
       <p>Looking at the journey end to end helped identify how different teams contributed to a successful deployment, where responsibilities changed hands, and where users were expected to figure things out on their own.</p>
-      <p>The mapping made it clear: while every team understood their own part of the process, the overall experience was fragmented across touchpoints. Critical on-ground setup and connection workflows were not standardized, and this caused last-minute chaos on the ground.</p>
+      <p>The mapping made it clear: while every team understood their own part of the process, the overall experience was fragmented across touchpoints. <mark class="hl">Critical on-ground setup and connection workflows were not standardized, and this caused last-minute chaos on the ground.</mark></p>
 
       <figure class="shot shot--reduced">
         <img src="images/case-study-1/service-blueprint.png" alt="Service blueprint mapping the customer journey across getting ready for deployment, onsite training, and site going live, split by front stage and backstage teams" />
@@ -351,12 +361,12 @@
       <div class="callout"><strong>Process update:</strong> Add this step as a mandatory check for the TechOps team and CS team on respective Jira boards which they use to track all the client details related to deployment.</div>
 
       <h3>Insight 3: Getting on the product had high friction making users question the product value</h3>
-      <p>Users skipped the remote access feature because using it involved highly technical steps like finding the IP address of the laptop and then typing it in mobile browser. The effort was high and the feature was not stable, whenever they got disconnected they had to repeat the feature. This diluted the value of the feature.</p>
+      <p><mark class="hl">Users skipped the remote access feature because using it involved highly technical steps like finding the IP address of the laptop and then typing it in mobile browser.</mark> The effort was high and the feature was not stable, whenever they got disconnected they had to repeat the feature. This diluted the value of the feature.</p>
       <div class="callout"><strong>Design Opportunity:</strong> Improve onboarding experience by simplifying and reducing the overall connection and process steps especially where hardwares are involved.</div>
 
       <h3>Insight 4: Mismatch in training timeline vs when the users actually start using the product on ground</h3>
       <p>Once the Qure team left (CS, TechOps & third party partners) a site, users were expected to set up and troubleshoot basic issues without enough resources.</p>
-      <p>There's often a months long gap between when a team is trained and when they actually start using the product on camp sites. By the time of real use, people forget the workflow, and new team members who joined in the interim were never trained at all. Since camp sites run at high patient load, any setup/workflow issue doesn't just inconvenience one person - it halts screenings for the whole camp in real time, causing panic and forcing your team into reactive, mid-camp remote fixes rather than calm, scheduled support.</p>
+      <p><mark class="hl">There's often a months long gap between when a team is trained and when they actually start using the product on camp sites.</mark> By the time of real use, people forget the workflow, and new team members who joined in the interim were never trained at all. Since camp sites run at high patient load, any setup/workflow issue doesn't just inconvenience one person - it halts screenings for the whole camp in real time, causing panic and forcing your team into reactive, mid-camp remote fixes rather than calm, scheduled support.</p>
       <div class="callout"><strong>Design Opportunity:</strong> Build guidance into the product itself (in app workflow) so users are not dependent on memory of a one time training done months earlier - reducing ticket spikes and costly in-person retraining.</div>
     </section>
 
@@ -365,21 +375,21 @@
       <p>The investigation and stakeholder alignment together took almost 8-10 months. Most time went in aligning the different stakeholders. The two strong pushbacks that I had to defend -</p>
       <ol>
         <li><strong>From engineering:</strong> The team had limited bandwidth and they challenged the solution by asking why this cannot be fixed through trainings that CS team does on ground, why do we need to add it in the product? Why cannot we solve by doubling down on the trainings.</li>
-        <li><strong>From the product team:</strong> the proposed fix was to add in app videos to help users navigate the setup steps and small snippets for how to use different features. The hypothesis product team had was that users are not understanding how to use the product but the site visits I did showed a different picture. They found the product easy to use and faced no difficulty in navigating the product. The caveat being if product is not installed properly or the qTrack app is not running stably that is where the users struggled the most.</li>
+        <li><strong>From the product team:</strong> the proposed fix was to add in app videos to help users navigate the setup steps and small snippets for how to use different features. The hypothesis product team had was that users are not understanding how to use the product but the site visits I did showed a different picture. <mark class="hl">They found the product easy to use and faced no difficulty in navigating the product.</mark> The caveat being if product is not installed properly or the qTrack app is not running stably that is where the users struggled the most.</li>
       </ol>
-      <p>Both engineering and product saw this problem as a training gap and designing more collaterals (user manuals, one pagers, videos) which will help users understand the process better. But the research revealed this was not true.</p>
+      <p>Both engineering and product saw this problem as a training gap and designing more collaterals (user manuals, one pagers, videos) which will help users understand the process better. <mark class="hl">But the research revealed this was not true.</mark></p>
     </section>
 
     <section>
       <h2>Solution &amp; Design Rationale</h2>
-      <p>Based on the above research and insights, I designed an in app guided onboarding workflow, built directly into the qTrack app, taking users through their specific deployment setup, step by step instead of completely relying on hands on training person which was difficult for users to remember.</p>
+      <p><mark class="hl">Based on the above research and insights, I designed an in app guided onboarding workflow, built directly into the qTrack app, taking users through their specific deployment setup, step by step instead of completely relying on hands on training person which was difficult for users to remember.</mark></p>
       <p>Due to engineering team bandwidth constraint, the version that shipped was a minimum viable one just explaining the steps clearly in a simple way. The more focus was given on how to break it down into smaller chunks which are easy for users to follow through. The goal was to validate this proof of concept as soon as possible. (See section - Validation from Kenya site visit)</p>
 
       <h3>1. Why in app, and not any other channel?</h3>
-      <p>These camps often run with unreliable or no internet. Reaching Customer Success, an on-ground partner, or engineering wasn't always possible when something went wrong. The laptop shipped with qTrack installed had to act as trusted support on the ground the only resource users had access to from Qure's side in these conditions.</p>
+      <p>These camps often run with unreliable or no internet. Reaching Customer Success, an on-ground partner, or engineering wasn't always possible when something went wrong. <mark class="hl">The laptop shipped with qTrack installed had to act as trusted support on the ground the only resource users had access to from Qure's side in these conditions.</mark></p>
       <p>Previous approaches tried were off-product - user manuals, training decks, and short videos, which I designed, both in content and visually. But because they were not part of the product, users had to keep these resources handy and step out of the product to access them, breaking their flow and adding an extra step. The qTrack app, on the other hand, could be opened even before it was connected to the rest of the screening setup - acting as a support resource to complete the setup itself.</p>
       <p>qTrack's core value is to view AI results on imaging X-Ray's and act on them. But Africa being a low resource region - where infrastructure gaps go beyond just internet access, made it very difficult show the real product value of qTrack. High effort was required in setting up the connection workflow even before user could come to the qTrack.</p>
-      <p>Initially, I thought of adding the onboarding workflow in the support section, treating setup as a support help. But as I mentioned above users had tough time in reaching the product's core function without this scaffolding, then getting them there wasn't support it was as central to the experience as the AI results themselves. So it became its own section "Start Screening" mirroring the exact sequence a user moves through on the ground, in the same order, to reduce the uncertainty.</p>
+      <p>Initially, I thought of adding the onboarding workflow in the support section, treating setup as a support help. But as I mentioned above users had tough time in reaching the product's core function without this scaffolding, then getting them there wasn't support it was as central to the experience as the AI results themselves. <mark class="hl">So it became its own section "Start Screening" mirroring the exact sequence a user moves through on the ground, in the same order, to reduce the uncertainty.</mark></p>
 
       <figure class="shot">
         <img src="images/case-study-1/start-screening-onboarding.png" alt="Start Screening onboarding entry point in the qTrack app" style="border:none;" />
@@ -394,7 +404,7 @@
 
       <h3>2. What had to be standardized before hardware and app could feel like a single product experience</h3>
       <p>The next challenge was deciding how to handle deployment variation. Previously, accessory configuration depended on what each site's infrastructure could support (for example, sometimes a site's own local network was used, sometimes Qure's accessories were used to create one instead). This was mostly decided once the team reached the site, since business deal conversations mostly focused on how funders'/health ministry goals could be met through the program. On-ground camp workflow conditions and end-user motivations took a back seat. This gap caused delay and confusion in configuring accessories. It worked at a small scale, where 6-10 sites were present under one program, but became difficult to manage once a single program started having 100+ sites.</p>
-      <p>This shifted the approach: instead of depending on client-side infrastructure that couldn't be known or controlled in advance, the team decided to control the variables that were easy to manage - every deployment would ship with pre configured accessory kits, regardless of site conditions, creating a consistent, controlled setup rather than guessing at what a site could offer. This gave the onboarding workflow two clear configurations to design for: a single laptop running both qTrack and the modality software, or two separate laptops, one for each.</p>
+      <p>This shifted the approach: instead of depending on client-side infrastructure that couldn't be known or controlled in advance, the team decided to control the variables that were easy to manage - every deployment would ship with pre configured accessory kits, regardless of site conditions, creating a consistent, controlled setup rather than guessing at what a site could offer. <mark class="hl">This gave the onboarding workflow two clear configurations to design for: a single laptop running both qTrack and the modality software, or two separate laptops, one for each.</mark></p>
       <p>The hardware and qTrack application have always felt like two different experiences. Once the Qure kit was received, adding clear instructions on how to use it right there in the onboarding workflow, alongside the laptop helped make this feel like one experience instead of two. One cannot exist without the other. It set the right expectations with the user: this is part of the process of getting started with qTrack, bridging the physical and digital into a single, cohesive experience. Since the on-ground team varies by role (TB nurse, radiographer, radiologist, healthcare worker, modality engineer, IT), the goal was to keep this simple enough for non-technical users clearly highlighting, visually, what was needed at each step.</p>
 
       <figure class="shot">
@@ -431,8 +441,8 @@
       <ol>
         <li><strong>Org level changes</strong>
           <ul>
-            <li>The problem got reframed across the organization from "a feature isn't working" to "the deployment and setup experience needs to be designed end to end."</li>
-            <li>Got cross-functional alignment on a standardization rule - accessories are now pre-configured for every deployment, regardless of site, removing last minute guesswork and confusion.</li>
+            <li><mark class="hl">The problem got reframed across the organization from "a feature isn't working" to "the deployment and setup experience needs to be designed end to end."</mark></li>
+            <li><mark class="hl">Got cross-functional alignment on a standardization rule - accessories are now pre-configured for every deployment, regardless of site, removing last minute guesswork and confusion.</mark></li>
           </ul>
         </li>
         <li><strong>Operational workflow for TechOps changed</strong>
@@ -443,7 +453,7 @@
         </li>
         <li><strong>Secondary effects that surfaced downstream</strong>
           <ul>
-            <li>Reduced dependency on a single experienced person being physically present at each site to make deployments succeed.</li>
+            <li><mark class="hl">Reduced dependency on a single experienced person being physically present at each site to make deployments succeed.</mark></li>
             <li>Elevated the Qure Kit's hardware accessories from a fallback option to core infrastructure - since every deployment now depends on them, they were re-benchmarked for reliability. Saving cost, no wastage of accessories, no faulty ones.</li>
           </ul>
         </li>
@@ -457,7 +467,7 @@
       <p>I visited Kenya for the site visit. There we had two on ground partner teams supporting. They have been part of multiple projects. Both teams responsible for specific geographies under that project. These partners act as Qure's local presence, managing sites, installing qTrack software if needed, handling technical issues, and training end users.</p>
       <p>The two teams were quite different in their understanding of technical aspects. Both team comprised of bio medical engineers (3-4 members in each team). Team A picked up TechOps and engineering training quickly and was able retain it well. The other Team B struggled, they understood the process conceptually, but it was difficult for them to do the steps independently.</p>
       <p>I tested the new onboarding workflow, here the users were different - they are expected to be little more tech savvy than end users. But if these on ground partners don't feel confident then how can we expect them to train end users. The workflow helped them.</p>
-      <p>These teams have been part of multiple deployment projects so they had something to compare it with when no in app guidance existed. They were aware about the on ground chaos that happens when there is no structured way to deploy but with this new onboarding workflow they had clear choices A &amp; B to choose from and follow the steps.</p>
+      <p>These teams have been part of multiple deployment projects so they had something to compare it with when no in app guidance existed. <mark class="hl">They were aware about the on ground chaos that happens when there is no structured way to deploy but with this new onboarding workflow they had clear choices A &amp; B to choose from and follow the steps.</mark></p>
       <p>The validation I needed was -</p>
       <ul>
         <li>Can you rely on these steps that are mentioned, is there anything else needed which was getting missed</li>
