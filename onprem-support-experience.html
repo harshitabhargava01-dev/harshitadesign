@@ -237,13 +237,19 @@
 
   figure.shot{ margin:0 0 32px 0; }
   figure.shot--reduced{ width:70%; }
-  figure.shot--reduced img{ width:100%; }
+  figure.shot--reduced img{ width:auto; max-width:100%; }
   figure.shot img{
-    width:100%;
+    width:auto;
+    max-width:100%;
     height:auto;
     display:block;
     border-radius:8px;
     border:1px solid #e6e6e6;
+  }
+  /* Wide UI strips stay readable on phones: scroll sideways instead of shrinking */
+  .shot-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:8px; }
+  @media (max-width:640px){
+    figure.shot .shot-scroll img{ max-width:none; width:720px; }
   }
   figcaption{
     font-size:13px;
@@ -550,7 +556,9 @@
       <p>The bar appears as soon as a user taps "Start Screening" and completes setup. It stays on screen continuously until the user explicitly stops the session at the end of the day.</p>
 
       <figure class="shot">
-        <img src="images/case-studies/onprem-support/screening-bar-status.gif" alt="Animation of the green session bar running across the top of qTrack during an active screening session" />
+        <div class="shot-scroll">
+          <img src="images/case-studies/onprem-support/screening-bar-status.gif" alt="Animation of the green session bar running across the top of qTrack during an active screening session" />
+        </div>
         <figcaption>The green session bar signals an active screening session and enables background checks.</figcaption>
       </figure>
 
