@@ -357,6 +357,112 @@
     text-decoration:none;
     color:var(--purple);
   }
+
+  /* ---------- OVERVIEW CAROUSEL ----------
+     16:9 slides; each block is placed by % of the slide (layout made in the
+     carousel editor), and all sizes scale with the slide's width (cqw). */
+  .deck{ padding-top:32px; }
+  .deck-frame{
+    container-type:inline-size;
+    background:#fff;
+    border:1px solid #e6e6e6;
+    border-radius:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05);
+    overflow:hidden;
+  }
+  .deck-stage{
+    container-type:inline-size;
+    position:relative;
+    aspect-ratio:16 / 9;
+    overflow:hidden;
+    touch-action:pan-y;
+  }
+  .deck-slides{ display:grid; height:100%; }
+  .slide{
+    grid-area:1 / 1;
+    height:100%;
+    padding:4cqw 4.5cqw;
+    opacity:0;
+    visibility:hidden;
+    transform:translateX(1.4cqw);
+    transition:opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    overflow:hidden;
+  }
+  .slide.active{ opacity:1; visibility:visible; transform:none; }
+  .slide-canvas{ position:relative; width:100%; height:100%; }
+  .fblock{ position:absolute; }
+
+  .slide p{ font-size:1.75cqw; line-height:1.55; margin:0; }
+  .slide-kicker{ display:block; font-family:'Rubik', sans-serif; font-size:1.4cqw; letter-spacing:0.12em; text-transform:uppercase; color:#1f1e1e; }
+  .slide .slide-meta{ font-family:'Rubik', sans-serif; font-size:1.3cqw; color:#666; }
+  .slide .slide-big{ font-family:'Rubik', sans-serif; font-weight:300; font-size:8cqw; line-height:1; color:#1f1e1e; }
+  .slide .slide-lead{ font-weight:400; color:#1a1a1a; }
+  .slide .slide-strong{ font-weight:600; }
+  .slide .slide-quote{ font-weight:600; color:#1a1a1a; }
+  .slide-stage{ display:block; font-family:'Rubik', sans-serif; font-size:1.15cqw; letter-spacing:0.1em; text-transform:uppercase; color:#888; }
+  .slide .sol-title{ font-size:1.75cqw; font-weight:600; line-height:1.4; margin:0; color:#1a1a1a; }
+  .slide-card{ background:#fafafa; border:1px solid #ececec; border-radius:1cqw; padding:2.2cqw 2.4cqw; }
+  .slide-card strong{ font-size:1.75cqw; }
+  .slide .slide-card p{ margin:0.8cqw 0 0 0; }
+  .fblock img{ display:block; width:100%; height:auto; border:1px solid #e6e6e6; border-radius:0.8cqw; background:#fff; }
+  .fblock img.zoomable{ cursor:zoom-in; }
+  .slide-gif{ border-radius:0.8cqw; overflow:hidden; }
+
+  .deck-nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:5;
+    width:3.6cqw;
+    height:7cqw;
+    min-width:28px;
+    min-height:44px;
+    padding:0;
+    border:none;
+    background:none;
+    color:#b5b5b5;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .deck-nav--prev{ left:0.6cqw; }
+  .deck-nav--next{ right:0.6cqw; }
+  .deck-nav svg{ width:100%; height:auto; max-width:26px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  .deck-nav:hover:not(:disabled){ color:#1f1e1e; }
+  .deck-nav:disabled{ opacity:0; pointer-events:none; }
+  .deck-nav:focus-visible{ outline:2px solid #1f1e1e; outline-offset:-2px; border-radius:6px; }
+
+  .deck-controls{ display:flex; justify-content:center; padding:0 4.5cqw 2.6cqw; }
+  .deck-dots{ display:flex; gap:8px; }
+  .deck-dots button{
+    width:8px;
+    height:8px;
+    padding:0;
+    border:none;
+    border-radius:999px;
+    background:#d6d6d6;
+    cursor:pointer;
+    transition:width 0.2s ease, background 0.2s ease;
+  }
+  .deck-dots button.active{ width:22px; background:#1f1e1e; }
+
+  /* Phones: 16:9 would make text unreadable, so blocks stack in reading order */
+  @media (max-width:640px){
+    .deck-stage{ aspect-ratio:auto; }
+    .deck-slides{ height:auto; }
+    .slide{ height:auto; padding:22px 30px; }
+    .slide-canvas{ height:auto; }
+    .fblock{ position:static; width:auto !important; margin-bottom:12px; }
+    .slide p, .slide .sol-title, .slide-card strong{ font-size:15px; }
+    .slide span[style*="font-size"]{ font-size:inherit !important; }
+    .slide-kicker{ font-size:12px; }
+    .slide .slide-meta{ font-size:12px; }
+    .slide .slide-big{ font-size:52px; }
+    .slide-stage{ font-size:11px; }
+    .slide-card{ padding:14px 16px; border-radius:8px; }
+    .deck-controls{ padding:0 30px 18px; }
+  }
 </style>
 </head>
 <body>
@@ -390,6 +496,107 @@
   </header>
 
   <article>
+
+    <section class="deck" aria-roledescription="carousel" aria-label="Case study overview">
+      <div class="deck-frame">
+        <div class="deck-stage" id="deckStage">
+          <button type="button" class="deck-nav deck-nav--prev" id="deckPrev" aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
+          <button type="button" class="deck-nav deck-nav--next" id="deckNext" aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
+          <div class="deck-slides">
+          <div class="slide active" aria-roledescription="slide" aria-label="1 of 8">
+            <div class="slide-canvas">
+            <div class="fblock fblock--kicker" style="left:2.0%;top:2.0%;width:96.0%"><span class="slide-kicker">Problem</span></div>
+            <div class="fblock fblock--meta" style="left:2.0%;top:11.0%;width:96.0%"><p class="slide-meta">Sole designer, working with Product, TechOps and CS</p></div>
+            <div class="fblock fblock--text" style="left:2.0%;top:30.3%;width:37.3%"><p><span style="color: rgb(69, 69, 69); font-style: italic;"><span style="font-size:1.52cqw;"><span style="font-size:1.32cqw;">qTrack is an AI-based chest X-ray screening platform used in TB screening camps across low-resource, low-connectivity environments. These camps are run day to day by healthcare workers - radiologists, radiographers, TB nurses and doctors.</span></span></span></p></div>
+            <div class="fblock fblock--stat" style="left:50.0%;top:27.7%;width:33.6%"><p class="slide-big"><span style="font-size:6.96cqw;">45–53%</span></p></div>
+            <div class="fblock fblock--lead" style="left:50.1%;top:47.1%;width:37.1%"><p class="slide-lead"><span style="font-size:1.52cqw;">Every quarter tickets were L1 - basic issues that users could resolve themselves.</span></p></div>
+            <div class="fblock fblock--text" style="left:50.0%;top:65.8%;width:43.6%"><p><span style="font-size:1.52cqw;">Leadership raised concerns about the high number of support tickets being raised by clients. <mark class="hl">A significant share of CS and TechOps bandwidth was going into resolving these issues manually.</mark></span></p></div>
+            </div>
+          </div>
+
+          <div class="slide" aria-roledescription="slide" aria-label="2 of 8">
+            <div class="slide-canvas">
+            <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Problem</span></div>
+            <div class="fblock fblock--lead" style="left:0.0%;top:6.8%;width:100.0%"><p class="slide-lead slide-strong">Product and engineering framed this as a communication and knowledge gap: users did not fully understand how to use qTrack, so this was a training problem, not something going wrong in the product.</p></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:29.1%;width:100.0%"><p>The approaches tried to close this gap:</p></div>
+            <div class="fblock fblock--card" style="left:0.0%;top:40.7%;width:48.8%"><div class="slide-card"><strong>Collaterals</strong><p>User manuals, one-pagers and self-troubleshooting guides. <mark class="hl">They had the right information, but were too complex to actually be followed by end users.</mark></p></div></div>
+            <div class="fblock fblock--card" style="left:51.2%;top:40.6%;width:48.8%"><div class="slide-card"><strong>Rule-based chatbot</strong><p>It sent the same collaterals to users as a DIY solution. <mark class="hl">The success rate of issues being resolved by the bot was very low.</mark></p></div></div>
+            </div>
+          </div>
+
+          <div class="slide" aria-roledescription="slide" aria-label="3 of 8">
+            <div class="slide-canvas">
+            <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Discovery</span></div>
+            <div class="fblock fblock--text" style="left:0.1%;top:13.7%;width:47.8%"><p>The analysis shared by product and engineering did not show the full picture. All the data was technical and quantitative - there was no clear why behind any type of issue.</p></div>
+            <div class="fblock fblock--lead" style="left:0.1%;top:41.6%;width:47.8%"><p class="slide-lead"><mark class="hl">So I started going through the Jira tickets myself, one by one, to understand both the client and internal team perspectives.</mark></p></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:67.2%;width:47.8%"><p>With TechOps, I categorised the issues into a symptom versus cause framework: what the user experienced, versus what was actually going on underneath.</p></div>
+            <div class="fblock fblock--image" style="left:52.2%;top:6.8%;width:40.3%"><img class="zoomable" onclick="openLightbox(this.src)" src="images/case-studies/onprem-support/cause-symptom-framework.png" alt="Table mapping each issue to the symptom the user experienced and its underlying cause"></div>
+            </div>
+          </div>
+
+          <div class="slide" aria-roledescription="slide" aria-label="4 of 8">
+            <div class="slide-canvas">
+            <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Core Insight</span></div>
+            <div class="fblock fblock--quote" style="left:0.0%;top:8.8%;width:100.0%"><p class="slide-quote">“The issues were not happening due to a communication or knowledge gap. Users were not getting any next-step information when something went wrong - qTrack was not communicating when something went wrong, or when an error was about to occur.”</p></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:31.9%;width:100.0%"><p>The end users are frontline healthcare workers. In their day to day, they are not expected to deal with such issues or resolve them.</p></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:46.5%;width:100.0%"><p>These screening camps are high-stress environments. <mark class="hl">If the product stops working, screening has to stop, so users act from panic and immediately report the issue - which is a natural behaviour.</mark></p></div>
+            </div>
+          </div>
+
+          <div class="slide" aria-roledescription="slide" aria-label="5 of 8">
+            <div class="slide-canvas">
+            <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Design solution</span></div>
+            <div class="fblock fblock--lead" style="left:0.0%;top:6.8%;width:100.0%"><p class="slide-lead">There was a need for an environment that supports users in their day-to-day tasks and gives them preventive measures to reduce the chance of errors.</p></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:21.5%;width:100.0%"><p>That is how the 'Start Screening' button was added, to mimic the workflow of on-ground users and guide them. It is divided into two main sections: AI Screening Setup and Start Registering Patients.</p></div>
+            <div class="fblock fblock--image" style="left:15.0%;top:38.0%;width:70.0%"><img class="zoomable" onclick="openLightbox(this.src)" src="images/case-study-2/start-screening-sections.png" alt="The Start Screening button opens two sections: AI Screening Setup and Start Registering Patients" /></div>
+            </div>
+          </div>
+
+          <div class="slide" aria-roledescription="slide" aria-label="6 of 8">
+            <div class="slide-canvas">
+            <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Design solution</span></div>
+            <div class="fblock fblock--stage" style="left:0.0%;top:6.8%;width:48.1%"><span class="slide-stage">Users start with the AI Screening Setup</span></div>
+            <div class="fblock fblock--title" style="left:0.0%;top:11.4%;width:48.1%"><h3 class="sol-title">1. Network name field</h3></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:17.5%;width:48.1%"><p class="sol-desc">Users name the network once, at setup. That name becomes the reference point the connection check compares against.</p></div>
+            <div class="fblock fblock--image" style="left:0.0%;top:37.3%;width:39.7%"><img class="zoomable" onclick="openLightbox(this.src)" src="images/case-studies/onprem-support/network-name-field.png" alt="AI Screening Setup step with an input field to save the network name"></div>
+            <div class="fblock fblock--stage" style="left:51.9%;top:6.8%;width:48.1%"><span class="slide-stage">Users are ready to start registering patients</span></div>
+            <div class="fblock fblock--title" style="left:51.9%;top:11.4%;width:48.1%"><h3 class="sol-title">2. Network connection check</h3></div>
+            <div class="fblock fblock--text" style="left:51.9%;top:17.5%;width:48.1%"><p class="sol-desc"><mark class="hl">The app names exactly which network is missing, rather than a generic "not connected" message.</mark></p></div>
+            <div class="fblock fblock--image" style="left:51.9%;top:37.3%;width:39.8%"><img class="zoomable" onclick="openLightbox(this.src)" src="images/case-studies/onprem-support/network-mismatch.png" alt="Connection check naming the network that isn't connected, with a Check again button"></div>
+            </div>
+          </div>
+
+          <div class="slide" aria-roledescription="slide" aria-label="7 of 8">
+            <div class="slide-canvas">
+            <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Design solution</span></div>
+            <div class="fblock fblock--stage" style="left:0.0%;top:6.8%;width:100.0%"><span class="slide-stage">Camp screening session has started</span></div>
+            <div class="fblock fblock--title" style="left:0.0%;top:11.4%;width:100.0%"><h3 class="sol-title">3. Running session bar</h3></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:17.5%;width:100.0%"><p class="sol-desc">A green bar runs across the top of the screen for as long as a screening session is active. It appears as soon as a user taps "Start Screening" and completes setup, and stays on screen until the user stops the session at the end of the day.</p></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:37.3%;width:100.0%"><p class="sol-desc">Since screening at a camp runs for hours at a stretch, the bar gives users a constant confirmation that they are still "in session". <mark class="hl">It also triggers the background checks - like the session check-in prompt and network monitoring - which only make sense while screening is active.</mark></p></div>
+            <div class="fblock fblock--image" style="left:0.0%;top:57.1%;width:100.0%"><div class="slide-gif"><img src="images/case-studies/onprem-support/screening-bar-status.gif" alt="Green session bar running across the top of qTrack during a screening session"></div></div>
+            </div>
+          </div>
+
+          <div class="slide" aria-roledescription="slide" aria-label="8 of 8">
+            <div class="slide-canvas">
+            <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Design solution</span></div>
+            <div class="fblock fblock--stage" style="left:0.0%;top:8.0%;width:48.1%"><span class="slide-stage">Checking in between the session</span></div>
+            <div class="fblock fblock--title" style="left:0.0%;top:12.7%;width:48.1%"><h3 class="sol-title">4. Session check-in prompt</h3></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:18.8%;width:48.1%"><p class="sol-desc"><mark class="hl">If no scan comes in for 30 minutes straight, a check-in prompt appears for the user.</mark></p></div>
+            <div class="fblock fblock--image" style="left:0.0%;top:38.5%;width:39.7%"><img class="zoomable" onclick="openLightbox(this.src)" src="images/case-studies/onprem-support/session-checkin-prompt.png" alt="Screening still on? prompt after 30 minutes without scans"></div>
+            <div class="fblock fblock--stage" style="left:51.9%;top:8.0%;width:48.1%"><span class="slide-stage">Checking in between the session</span></div>
+            <div class="fblock fblock--title" style="left:51.9%;top:12.7%;width:48.1%"><h3 class="sol-title">5. Mid-session network change</h3></div>
+            <div class="fblock fblock--text" style="left:51.9%;top:18.8%;width:48.1%"><p class="sol-desc">If the network changes while a session is active, qTrack names the change and surfaces it immediately, so users can take action.</p></div>
+            <div class="fblock fblock--image" style="left:51.9%;top:38.5%;width:39.7%"><img class="zoomable" onclick="openLightbox(this.src)" src="images/case-studies/onprem-support/qr-support-prompt.png" alt="Prompt with a QR code to connect with the Qure support team"></div>
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="deck-controls">
+          <div class="deck-dots" id="deckDots"></div>
+        </div>
+      </div>
+    </section>
 
     <section>
       <h2>Background</h2>
@@ -621,6 +828,48 @@
       links.querySelectorAll('a').forEach(function(a){
         a.addEventListener('click', function(){ setOpen(false); });
       });
+    })();
+
+    (function(){
+      var slides = Array.prototype.slice.call(document.querySelectorAll('.deck .slide'));
+      var dotsWrap = document.getElementById('deckDots');
+      var prev = document.getElementById('deckPrev');
+      var next = document.getElementById('deckNext');
+      var stage = document.getElementById('deckStage');
+      var current = 0;
+      var dots = slides.map(function(_, i){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        b.addEventListener('click', function(){ go(i); });
+        dotsWrap.appendChild(b);
+        return b;
+      });
+      function go(i){
+        current = Math.max(0, Math.min(slides.length - 1, i));
+        slides.forEach(function(s, j){ s.classList.toggle('active', j === current); });
+        dots.forEach(function(d, j){ d.classList.toggle('active', j === current); });
+        prev.disabled = current === 0;
+        next.disabled = current === slides.length - 1;
+      }
+      prev.addEventListener('click', function(){ go(current - 1); });
+      next.addEventListener('click', function(){ go(current + 1); });
+      document.addEventListener('keydown', function(e){
+        if(document.getElementById('lightbox').classList.contains('open')) return;
+        var r = stage.getBoundingClientRect();
+        if(r.bottom < 0 || r.top > window.innerHeight) return;
+        if(e.key === 'ArrowRight') go(current + 1);
+        if(e.key === 'ArrowLeft') go(current - 1);
+      });
+      var startX = null;
+      stage.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, { passive:true });
+      stage.addEventListener('touchend', function(e){
+        if(startX === null) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        if(Math.abs(dx) > 40) go(current + (dx < 0 ? 1 : -1));
+        startX = null;
+      });
+      go(0);
     })();
 
     function openLightbox(src){
