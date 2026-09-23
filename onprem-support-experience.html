@@ -199,6 +199,33 @@
   }
   .callout strong{ color:var(--purple); }
 
+  p.stage{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:56px 0 4px 0;
+    font-family:'Rubik', sans-serif;
+    font-weight:400;
+    font-size:13px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--purple);
+  }
+  p.stage::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:rgba(78,62,216,0.2);
+  }
+  p.stage + h3{ margin-top:12px; }
+
+  mark.hl{
+    background:linear-gradient(transparent 58%, rgba(114,203,255,0.45) 58%);
+    color:inherit;
+    font-weight:400;
+    padding:0 2px;
+  }
+
   figure.shot{ margin:0 0 32px 0; }
   figure.shot--reduced{ width:70%; }
   figure.shot--reduced img{ width:100%; }
@@ -339,8 +366,8 @@
   <header class="page-head">
     <h1>Designing support experience for onprem systems with no reliable internet</h1>
     <div class="tags">
+      <span class="tag">UX Design</span>
       <span class="tag">Product Design</span>
-      <span class="tag">UX</span>
     </div>
   </header>
 
@@ -353,8 +380,8 @@
 
     <section>
       <h2>Problem</h2>
-      <p>Leadership raised concerns about the high number of support tickets being raised by clients. It was creating a poor customer experience and client trust on the app, and a significant bandwidth of CS and TechOps was going into resolving these issues manually. Every quarter from 45 - 53% of the tickets were L1 category (basic issues which can be resolved by users themselves).</p>
-      <p>The analysis product and engineering team shared they attributed to client side mistakes rather than product faults. They framed this as a communication and knowledge gap: users did not fully understand how to use the qTrack, so this was a training problem, not something that is going wrong on the product. Whatever wrong is happening because users fully don't understand the product and it is leading to such errors.</p>
+      <p>Leadership raised concerns about the high number of support tickets being raised by clients. It was creating a poor customer experience and client trust on the app, and a significant bandwidth of CS and TechOps was going into resolving these issues manually. <mark class="hl">Every quarter from 45 - 53% of the tickets were L1 category</mark> (basic issues which can be resolved by users themselves).</p>
+      <p>The analysis product and engineering team shared they attributed to client side mistakes rather than product faults. They framed this as a communication and knowledge gap: users did not fully understand how to use the qTrack, <mark class="hl">so this was a training problem, not something that is going wrong on the product</mark>. Whatever wrong is happening because users fully don't understand the product and it is leading to such errors.</p>
       <p>Few approaches initially tried to solve this "communication and knowledge gap" as framed by product and engineering teams were to design collaterals (user manuals, one pagers, self troubleshooting guides) followed by a rule based chatbot.</p>
     </section>
 
@@ -363,7 +390,7 @@
       <h3>1. Learnings from previous approaches</h3>
       <p><strong>Collaterals</strong></p>
       <ul>
-        <li>Had right information, but they were too complex to actually be followed and used by end users. The steps were written the way the team would explain something to each other, not the way a healthcare worker could understand and most sites did not have on site IT teams to ask help if they got stuck or faced any issue.</li>
+        <li>Had right information, but they were <mark class="hl">too complex to actually be followed and used by end users</mark>. The steps were written the way the team would explain something to each other, not the way a healthcare worker could understand and most sites did not have on site IT teams to ask help if they got stuck or faced any issue.</li>
         <li>Next challenge was accessibility - to make sure they are circulated with the users at the right time via WhatsApp groups and then making sure users have them hand when some issue came up.</li>
       </ul>
 
@@ -383,7 +410,7 @@
       <ul>
         <li>The purpose of creating chatbot was to solve the problem to have a dedicated support channel. Customer success teams maintained WhatsApp groups for every project and with scale of deployments increasing it got very difficult to manage these groups. Hence, there was a need for a dedicated support channel which will help users raise issues quicker and a faster response time.</li>
         <li>The chatbot had similar problem of information being too complex because same collaterals were being sent to users through the rule based chatbot workflow as a DIY solution.</li>
-        <li>The success rate of issue getting resolved by the bot was very low.</li>
+        <li><mark class="hl">The success rate of issue getting resolved by the bot was very low.</mark></li>
       </ul>
 
       <figure class="shot">
@@ -392,12 +419,12 @@
       </figure>
 
       <h3>2. Jira ticket analysis</h3>
-      <p>The analysis shared by product and engineering team did not show the full picture. They often shared data from Jira by exporting the relevant fields. All the data was technical and quantitative there was no clear why for any type of issues. So, I started going through the Jira tickets myself one by one to simply understand both client and internal team side perspective.</p>
+      <p>The analysis shared by product and engineering team did not show the full picture. They often shared data from Jira by exporting the relevant fields. All the data was technical and quantitative there was no clear why for any type of issues. So, <mark class="hl">I started going through the Jira tickets myself one by one</mark> to simply understand both client and internal team side perspective.</p>
       <p>I specifically started looking into how the issue was reported by the client, meaning how did they describe (Jira had client conversation SS). Then, how the CS team was describing the issue when raising the ticket in behalf of client and then techops engineering perspective. The techops team identifies the issue and provide RCA which was technically aligned and more accurate.</p>
       <p>They fill the other jira field where they are supposed to categorise the issue level (L1, L2, L3) and issue type - not an issue, client side issue, issue. It further had categories like knowledge gap, communication gap, expected behaviour of product. These fields were little inconsistent throughout the tickets and was subjective to interpretation specially in L1 type issues.</p>
 
       <h3>3. Working with Techops</h3>
-      <p>I collaborated with techops to understand what was the cause of these issues in simpler language. The purpose of this exercise was to break down technical issue in simpler language. I categorised these issues into symptom versus cause framework. What the user reported - what did they experience, versus what was actually going on underneath. Asking "why" for every issue showed different levels of each issue. What could really be understood by a non technical person and where will they need help. This gave a lot of clarity which was not possible to get by just looking at the jira tickets analysis.</p>
+      <p>I collaborated with techops to understand what was the cause of these issues in simpler language. The purpose of this exercise was to break down technical issue in simpler language. I categorised these issues into <mark class="hl">symptom versus cause framework</mark>. What the user reported - what did they experience, versus what was actually going on underneath. Asking "why" for every issue showed different levels of each issue. What could really be understood by a non technical person and where will they need help. This gave a lot of clarity which was not possible to get by just looking at the jira tickets analysis.</p>
 
       <figure class="shot shot--reduced">
         <img src="images/case-studies/onprem-support/cause-symptom-framework.png" alt="Table mapping each issue to the symptom the user experienced and its underlying cause" />
@@ -406,7 +433,7 @@
 
       <p>How issues were added in jira was little open to interpretation the person who is assigned the ticket and resolving that issue.</p>
       <ul>
-        <li><strong>Mislabeled</strong> - The product simply wasn't telling users what was happening, so a normal delay in AI processing or background app not starting looked like a failure. Example - LAN cable unplugged from the laptop</li>
+        <li><strong>Mislabeled</strong> - <mark class="hl">The product simply wasn't telling users what was happening</mark>, so a normal delay in AI processing or background app not starting looked like a failure. Example - LAN cable unplugged from the laptop</li>
         <li><strong>What users could during trainings</strong> - things users could genuinely learn, like not uninstalling a background app the system depended on, how to export CSV (feature in qTrack). Issues related to how to navigate product were also raised but that was rare.</li>
         <li><strong>Out of scope of frontline healthcare workers</strong> - issues like understanding wifi switching between saved networks, which required some understanding infrastructure knowledge that had nothing to do with a healthcare worker's actual job.</li>
       </ul>
@@ -415,7 +442,7 @@
     <section>
       <h2>Core Insight</h2>
       <div class="callout"><strong>The issues raised by end users were not happening due to communication / knowledge gap or poor understanding of the product. For users, they were not getting any next step information if something went wrong. The qTrack was not communicating if something went wrong or if any error was about to occur.</strong></div>
-      <p>The end users of qTrack are front line healthcare workers in their day to day they are not expected to deal with such issues or resolve them. That is not what they do. When something did not work the product stopped working or should some technical message which is not something end users can understand. These screening camps are high stress environments the product not working any way means screening would have to be stopped so in such cases end users act from panic and immediately report the issue, which is a natural behaviour.</p>
+      <p>The end users of qTrack are front line healthcare workers in their day to day they are not expected to deal with such issues or resolve them. That is not what they do. When something did not work the product stopped working or should some technical message which is not something end users can understand. These screening camps are high stress environments the product not working any way means screening would have to be stopped so in such cases <mark class="hl">end users act from panic and immediately report the issue, which is a natural behaviour</mark>.</p>
       <p>And even where training could technically close the gap, it was not a great experience for heath care workers to start learning about engineering errors.</p>
     </section>
 
@@ -429,7 +456,7 @@
           </ul>
         </li>
       </ul>
-      <p>The issues prioritized were technical in nature, but the reason they were prioritized was how often they occurred and how negatively they impacted users, whether they added friction to getting into qTrack, or stopped the on-ground workflow midway. In both cases, the product wasn't signaling anything to the user: not that something had gone wrong, not what to do about it, not even a way to tell if something was wrong at all.</p>
+      <p>The issues prioritized were technical in nature, but the reason they were prioritized was how often they occurred and how negatively they impacted users, whether they added friction to getting into qTrack, or stopped the on-ground workflow midway. In both cases, <mark class="hl">the product wasn't signaling anything to the user</mark>: not that something had gone wrong, not what to do about it, not even a way to tell if something was wrong at all.</p>
 
       <figure class="shot shot--reduced">
         <img src="images/case-studies/onprem-support/issue-priority-quadrant.png" alt="Quadrant chart plotting issues by how often they occur against how much they impact users" />
@@ -442,14 +469,14 @@
     <section>
       <h2>Technical Challenges</h2>
       <ol>
-        <li>No single issue on this list had one clean root cause. "qTrack not opening" could mean five different things underneath, so there was no single fix to jump straight to. Instead, users needed a way to work through possibilities one at a time - ruling things out until the actual cause was clear, with the app guiding them toward the next step at each point, telling the user what was happening, instead of solving the switch itself.</li>
-        <li>The network disconnect or switching between saved network was the starting cause for so many issues. Engineering shared this cannot be automated - detected and fixed directly, without user getting involved. This is where things get complicated its difficult for non technical health care workers understand networking. And it was not even worth it because teaching this to end users was requiring more time than actually getting familiar the product qTrack. Not a great experience if users spend more time in learning about what type of issues can occur than engaging with the product.</li>
+        <li>No single issue on this list had one clean root cause. <mark class="hl">"qTrack not opening" could mean five different things underneath</mark>, so there was no single fix to jump straight to. Instead, users needed a way to work through possibilities one at a time - ruling things out until the actual cause was clear, with the app guiding them toward the next step at each point, telling the user what was happening, instead of solving the switch itself.</li>
+        <li>The network disconnect or switching between saved network was the starting cause for so many issues. <mark class="hl">Engineering shared this cannot be automated</mark> - detected and fixed directly, without user getting involved. This is where things get complicated its difficult for non technical health care workers understand networking. And it was not even worth it because teaching this to end users was requiring more time than actually getting familiar the product qTrack. Not a great experience if users spend more time in learning about what type of issues can occur than engaging with the product.</li>
       </ol>
     </section>
 
     <section>
       <h2>Design solution</h2>
-      <p>With so many uncertainties there was a need of an environment which supports users in their day to day tasks and give them preventive measures to reduce the chances of errors. That is how the 'Start Screening' button was added to mimic the workflow of onground users and guide them. It is divided into 2 main sections -</p>
+      <p>With so many uncertainties there was a need of an environment which supports users in their day to day tasks and <mark class="hl">give them preventive measures to reduce the chances of errors</mark>. That is how the 'Start Screening' button was added to mimic the workflow of onground users and guide them. It is divided into 2 main sections -</p>
       <ol>
         <li><strong>AI Screening Setup</strong></li>
         <li><strong>Start Registering Patients</strong></li>
@@ -463,7 +490,7 @@
       <p><em>Note: This case study covers "start registering patients" in more detail. To understand how section one was created, see the companion case study - <a href="tb-screening-camp.html">Redesigning the Screening Camp Deployment and Setup Experience</a>.</em></p>
 
       <h3>How workflow looks for the onground users</h3>
-      <p><strong>Users start with the AI screening Setup</strong></p>
+      <p class="stage">Users start with the AI screening Setup</p>
       <p>While connecting their equipment during onboarding, the user names the network they're on, directly in the app. It's a small addition to a step they're already doing, not a separate task. That name gets saved, and becomes the reference point for everything that follows.</p>
       <p><em>(Note: This onboarding flow, AI Screening Setup, is covered in full detail in the other case study. The network name field is the one addition made here, for this project.)</em></p>
 
@@ -473,17 +500,17 @@
       <p><strong>How it works</strong></p>
       <p>Users name the network once, at setup. That name becomes the reference point the setup connection check compares against before a session starts, confirming the user is still on the network they originally intended before they move on to registering patients. Users can edit it any time something changes.</p>
 
-      <p><strong>Users are ready to start registering patients</strong></p>
+      <p class="stage">Users are ready to start registering patients</p>
       <h3>2. Network Connection Check &amp; Best practices reminder</h3>
       <p><em>(Addresses: Network disconnect between different machines/devices)</em></p>
       <p>The next section in the Start Screening flow is "Start Registering Patients." This runs a few last minute checks before the user begins, and surfaces best practices for a smoother session.</p>
       <p>Two states:</p>
       <ul>
         <li>Both connected - user sees both saved network names confirmed, and can move on.</li>
-        <li>Mismatch in connection - the app names exactly which network is missing, rather than a generic "not connected" message, so the user knows what to check. A retry button lets them recheck without restarting the whole setup.</li>
+        <li>Mismatch in connection - <mark class="hl">the app names exactly which network is missing</mark>, rather than a generic "not connected" message, so the user knows what to check. A retry button lets them recheck without restarting the whole setup.</li>
       </ul>
       <p><strong>How it works</strong></p>
-      <p>Once the user has named their networks, the app checks their current connection status against those names once, at setup, before they start registering patients. This catches a mismatch upfront, before the TB screening camp begins, rather than letting it surface later as a "scans not visible" issue mid-session.</p>
+      <p>Once the user has named their networks, the app checks their current connection status against those names once, at setup, before they start registering patients. <mark class="hl">This catches a mismatch upfront, before the TB screening camp begins</mark>, rather than letting it surface later as a "scans not visible" issue mid-session.</p>
 
       <div class="shot-row">
         <figure class="shot">
@@ -495,7 +522,7 @@
       </div>
       <figcaption style="margin-top:-16px; margin-bottom:32px;">Both-connected state next to the mismatch state - the app names exactly what's missing.</figcaption>
 
-      <p><strong>Camp Screening session has started</strong></p>
+      <p class="stage">Camp Screening session has started</p>
       <h3>3. Running Session Bar</h3>
       <p><em>(Enables: background monitoring during a session)</em></p>
       <p>A green bar runs across the top of the screen, just below the nav bar, for as long as a screening session is active. It does two things:</p>
@@ -511,7 +538,7 @@
         <figcaption>The green session bar signals an active screening session and enables background checks.</figcaption>
       </figure>
 
-      <p><strong>Checking in between the session</strong></p>
+      <p class="stage">Checking in between the session</p>
       <h3>4. Session check in prompt</h3>
       <p><em>(Addresses: Scans not visible on qTrack or any on ground issues)</em></p>
       <p>Scans not appearing on qTrack once pushed from the X-Ray Viewing software is a common issue and can happen for various reasons. With this check, we check -</p>
@@ -521,7 +548,7 @@
       </ul>
       <p><strong>How it works</strong></p>
       <ul>
-        <li>Once a user has started the screening session, the backend runs a check in the background for when the last scan was received on qTrack. If no scan comes in for 30 minutes straight, this check-in prompt appears for the user.</li>
+        <li>Once a user has started the screening session, the backend runs a check in the background for when the last scan was received on qTrack. <mark class="hl">If no scan comes in for 30 minutes straight</mark>, this check-in prompt appears for the user.</li>
       </ul>
 
       <figure class="shot">
@@ -533,7 +560,7 @@
       <p><em>(Addresses: Network disconnect between different machines/devices)</em></p>
       <p>If the network changes while a session is already active, qTrack names the change directly and surfaces it immediately so users can take action.</p>
       <p><strong>How it works</strong></p>
-      <p>Once a session is active, the app continues watching the network against the name saved at setup. If it detects a change, it alerts the user right away.</p>
+      <p>Once a session is active, the app continues watching the network against the name saved at setup. <mark class="hl">If it detects a change, it alerts the user right away.</mark></p>
 
       <figure class="shot">
         <img src="images/case-studies/onprem-support/qr-support-prompt.png" alt="Choose Setup prompt showing a QR code to connect with the Qure support team" />
