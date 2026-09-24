@@ -440,24 +440,6 @@
   }
   .deck-dots button.active{ width:14px; background:#a8a8a8; }
 
-  /* Phones: 16:9 would make text unreadable, so blocks stack in reading order */
-  @media (max-width:640px){
-    .deck-stage{ aspect-ratio:auto; }
-    .deck-slides{ height:auto; }
-    .slide{ height:auto; padding:22px 30px; }
-    .slide-canvas{ height:auto; }
-    .fblock{ position:static; width:auto !important; margin-bottom:12px; }
-    .slide p, .slide .sol-title, .slide-card strong{ font-size:15px; }
-    .slide span[style*="font-size"]{ font-size:inherit !important; }
-    .slide-kicker{ font-size:12px; }
-    .slide .slide-meta{ font-size:12px; }
-    .deck-controls{ grid-template-columns:1fr; row-gap:10px; }
-    .deck-dots{ grid-column:1; justify-self:center; }
-    .slide .slide-big{ font-size:52px; }
-    .slide-stage{ font-size:11px; }
-    .slide-card{ padding:14px 16px; border-radius:8px; }
-    .deck-controls{ padding:0 30px 18px; }
-  }
 
   /* Teal band behind the heading and carousel */
   .hero-band{ background:#1A9C9C; padding-bottom:96px; }
