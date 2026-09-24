@@ -299,7 +299,8 @@
   .deck-dots button.active{ width:14px; background:#a8a8a8; }
   .deck mark.hl{ background:#1A9C9C; color:#fff; font-weight:400; padding:1px 3px; border-radius:3px; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
   .deck .slide-canvas{ cursor:pointer; }
-  .slide--cover{ padding:0; background:#c1dec1; }
+  .slide--cover{ padding:0; }
+  .project-art--support .slide--cover{ background:#c1dec1; }
   .slide--cover img{ display:block; width:100%; height:100%; object-fit:contain; }
 
   /* Support case study row: the thumbnail spot holds the overview carousel */
@@ -308,7 +309,17 @@
   .project-art--deck{ aspect-ratio:auto; overflow:visible; display:flex; flex-direction:column; justify-content:center; }
   .project-art--deck .deck-controls{ padding:0 4.5cqw 3cqw; }
   .project-art--deck .deck-frame{ transition:background 0.3s ease; }
-  .project-art--deck .deck-frame.is-cover{ background:#c1dec1; }
+  .project-art--support .deck-frame.is-cover{ background:#c1dec1; }
+
+  /* TB case study row: same overview carousel, opening on its thumbnail */
+  .project-art--tb .slide--cover{ background:#1A9C9C; }
+  .project-art--tb .deck-frame.is-cover{ background:#1A9C9C; }
+  .project-art--tb .slide .slide-context{ font-size:1.52cqw; font-style:italic; color:#454545; }
+  .project-art--tb .slide ul{ margin:0; padding-left:1.2em; }
+  .project-art--tb .slide li{ font-size:1.75cqw; font-weight:300; line-height:1.55; color:#2a2a2a; margin:0 0 0.6cqw 0; }
+  .project-art--tb .slide .slide-card p + p{ margin-top:1cqw; }
+  .project-art--tb .slide .slide-card p.card-note{ margin-top:1.4cqw; padding-top:1.2cqw; border-top:1px solid #e6e6e6; }
+  .project-art--tb .slide .slide-card p.card-note strong{ font-weight:600; }
 
   /* ---------- WRITING CARDS ---------- */
   .cards{
@@ -436,11 +447,114 @@
   <section id="projects">
     <p class="section-label">PROJECTS</p>
     <div class="project-list">
-      <a class="project-row" href="tb-screening-camp">
-        <div class="project-art">
-          <img src="images/case-study-1/case-study-1-thumbnail.png" alt="Case study cover: hardware kit and qTrack digital product screens for the TB Screening Camp project" />
+      <div class="project-row">
+        <div class="project-art project-art--deck project-art--tb deck" aria-roledescription="carousel" aria-label="TB screening camp case study overview">
+    <div class="deck-frame">
+            <div class="deck-stage" id="homeTbDeckStage">
+              <button type="button" class="deck-nav deck-nav--prev" id="homeTbDeckPrev" aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
+              <button type="button" class="deck-nav deck-nav--next" id="homeTbDeckNext" aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
+              <div class="deck-slides">
+              <div class="slide slide--cover active" aria-roledescription="slide" aria-label="Cover">
+                <div class="slide-canvas"><img src="images/case-study-1/case-study-1-thumbnail.png" alt="Case study cover: hardware kit and qTrack digital product screens for the TB Screening Camp project" /></div>
+              </div>
+              <div class="slide" aria-roledescription="slide" aria-label="1 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Problem</span></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:24.0%;width:40.0%"><p class="slide-context">qTrack is an AI-based chest X-ray screening platform, deployed in health screening camps to identify TB patients. These camps run in low resource, time sensitive environments with poor infrastructure, limited technical support on site, and no internet.</p></div>
+                <div class="fblock fblock--lead" style="left:50.0%;top:10.0%;width:46.0%"><p class="slide-lead slide-strong">A key feature of registering patients via the qTrack app on modality software was not being adopted by users on the ground.</p></div>
+                <div class="fblock fblock--text" style="left:50.0%;top:35.0%;width:46.0%"><p>The Customer Success team reported this pattern across multiple deployments, where users were unable to use this feature the way it was expected to work.</p></div>
+                <div class="fblock fblock--text" style="left:50.0%;top:62.0%;width:46.0%"><p><mark class="hl">This feature was the starting point of the product workflow - failure here cascaded into every step after it, reducing adoption of the product's core capabilities overall.</mark></p></div>
+                </div>
+              </div>
+
+              <div class="slide" aria-roledescription="slide" aria-label="2 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Discovery</span></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:9.0%;width:100.0%"><p>I collaborated with the Customer Success team to map the full customer journey, from deployment, through onboarding, to the site going live.</p></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:25.0%;width:100.0%"><p>To validate this, we looked back at the previous 6-7 deployments and found a consistent pattern:</p></div>
+                <div class="fblock fblock--list" style="left:0.0%;top:38.0%;width:100.0%"><ul><li>On site confusion about the right way to connect accessories and hardware, a disconnect between CS and TechOps team</li><li>Accessories frequently failed to detect</li><li>Every deployment following a different connection and setup approach, with no repeatable steps</li></ul></div>
+                </div>
+              </div>
+
+              <div class="slide" aria-roledescription="slide" aria-label="3 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Discovery</span></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:9.0%;width:100.0%"><p>I worked with TechOps to understand what was required to make this feature successful. It depended on a chain of setup steps spanning both the product and the physical deployment environment.</p></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:25.0%;width:100.0%"><p><mark class="hl">Each step had to happen in the right order; getting one wrong meant the rest wouldn't work either.</mark></p></div>
+                <div class="fblock fblock--lead" style="left:0.0%;top:37.0%;width:100.0%"><p class="slide-lead">Mapping the deployment journey in a service blueprint made it clear: critical on-ground setup and connection workflows were not standardized, and this caused last-minute chaos on the ground.</p></div>
+                </div>
+              </div>
+
+              <div class="slide" aria-roledescription="slide" aria-label="4 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Core Insight</span></div>
+                <div class="fblock fblock--quote" style="left:0.0%;top:9.0%;width:100.0%"><p class="slide-quote">“The feature was not failing, users were struggling to assemble the setup required to make it work.”</p></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:26.0%;width:100.0%"><p>The feature's UX worked as designed; it was surfacing gaps in everything that had to happen around it before a user could ever reach it successfully.</p></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:43.0%;width:100.0%"><p><mark class="hl">Fixing the feature alone wouldn't have helped. The real problem was everything users had to set up before they could reach it, so that's what I designed for.</mark></p></div>
+                </div>
+              </div>
+
+              <div class="slide" aria-roledescription="slide" aria-label="5 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Connecting the dots</span></div>
+                <div class="fblock fblock--lead" style="left:0.0%;top:8.0%;width:100.0%"><p class="slide-lead">The blueprint surfaced four insights, each pointing to a specific gap the design needed to close.</p></div>
+                <div class="fblock fblock--card" style="left:0.0%;top:22.0%;width:48.8%"><div class="slide-card"><strong>1. With scale, custom workflow became impossible to manage</strong><p>Every deployment used a custom workflow, which worked well when scale was small (6-10 systems for one project), but it became difficult to manage 100+ systems for one project.</p><p class="card-note"><strong>Decision:</strong> Stop depending on the client side infra, start using the qTrack kits shipped along with the laptop, and standardize the steps.</p></div></div>
+                <div class="fblock fblock--card" style="left:51.2%;top:22.0%;width:48.8%"><div class="slide-card"><strong>2. Standardization alone will not help until accountability for pre configuration is clearly defined</strong><p>TechOps owned accessory pre configuration in the kit, but with so much uncertainty this step often got missed and was left to be figured out on site.</p><p class="card-note"><strong>Process update:</strong> Add this step as a mandatory check for the TechOps and CS teams on their Jira boards.</p></div></div>
+                </div>
+              </div>
+
+              <div class="slide" aria-roledescription="slide" aria-label="6 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Connecting the dots</span></div>
+                <div class="fblock fblock--card" style="left:0.0%;top:8.0%;width:48.8%"><div class="slide-card"><strong>3. Getting on the product had high friction, making users question the product value</strong><p><mark class="hl">Users skipped the remote access feature because using it involved highly technical steps like finding the IP address of the laptop and then typing it in a mobile browser.</mark></p><p class="card-note"><strong>Design opportunity:</strong> Improve the onboarding experience by simplifying and reducing the overall connection and process steps, especially where hardware is involved.</p></div></div>
+                <div class="fblock fblock--card" style="left:51.2%;top:8.0%;width:48.8%"><div class="slide-card"><strong>4. Mismatch in training timeline vs when users actually start using the product on ground</strong><p><mark class="hl">There's often a months long gap between when a team is trained and when they actually start using the product on camp sites.</mark></p><p class="card-note"><strong>Design opportunity:</strong> Build guidance into the product itself, so users are not dependent on memory of a one time training done months earlier.</p></div></div>
+                </div>
+              </div>
+
+              <div class="slide" aria-roledescription="slide" aria-label="7 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Design solution</span></div>
+                <div class="fblock fblock--lead" style="left:0.0%;top:8.0%;width:100.0%"><p class="slide-lead"><mark class="hl">I designed an in app guided onboarding workflow, built directly into the qTrack app, taking users through their specific deployment setup, step by step.</mark></p></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:24.0%;width:100.0%"><p>These camps often run with unreliable or no internet. The laptop shipped with qTrack installed had to act as trusted support on the ground.</p></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:38.0%;width:100.0%"><p>So it became its own section, "Start Screening", mirroring the exact sequence a user moves through on the ground, in the same order, to reduce the uncertainty.</p></div>
+                </div>
+              </div>
+
+              <div class="slide" aria-roledescription="slide" aria-label="8 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Design solution</span></div>
+                <div class="fblock fblock--title" style="left:0.0%;top:8.0%;width:47.0%"><h3 class="sol-title">Standardizing so hardware and app feel like a single product experience</h3></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:21.0%;width:47.0%"><p><mark class="hl">This gave the onboarding workflow two clear configurations to design for: a single laptop running both qTrack and the modality software, or two separate laptops, one for each.</mark></p></div>
+                <div class="fblock fblock--title" style="left:53.0%;top:8.0%;width:47.0%"><h3 class="sol-title">Simplifying technical steps into plain questions non technical users can answer</h3></div>
+                <div class="fblock fblock--text" style="left:53.0%;top:21.0%;width:47.0%"><p>Narrowing every deployment down to two configurations meant the setup could be written as fixed, simple questions, so reading a question felt like guidance on the next action.</p></div>
+                </div>
+              </div>
+
+              <div class="slide" aria-roledescription="slide" aria-label="9 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Impact</span></div>
+                <div class="fblock fblock--card" style="left:0.0%;top:8.0%;width:48.8%"><div class="slide-card"><strong>Org level changes</strong><p><mark class="hl">The problem got reframed across the organization from "a feature isn't working" to "the deployment and setup experience needs to be designed end to end."</mark></p><p><mark class="hl">Accessories are now pre-configured for every deployment, regardless of site, removing last minute guesswork and confusion.</mark></p></div></div>
+                <div class="fblock fblock--card" style="left:51.2%;top:8.0%;width:48.8%"><div class="slide-card"><strong>Operational workflow for TechOps changed</strong><p>Deployment workflow got streamlined, leaving only two fixed configurations to choose from (one-system or two-system) based on the user's environment.</p><p><mark class="hl">Reduced dependency on a single experienced person being physically present at each site to make deployments succeed.</mark></p></div></div>
+                </div>
+              </div>
+
+              <div class="slide" aria-roledescription="slide" aria-label="10 of 10">
+                <div class="slide-canvas">
+                <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Validation</span></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:9.0%;width:100.0%"><p>I visited Kenya and tested the new onboarding workflow with two on ground partner teams. They act as Qure's local presence: managing sites, installing qTrack, handling technical issues, and training end users.</p></div>
+                <div class="fblock fblock--lead" style="left:0.0%;top:30.0%;width:100.0%"><p class="slide-lead"><mark class="hl">They were aware of the on ground chaos that happens when there is no structured way to deploy, but with this new onboarding workflow they had clear choices A &amp; B to choose from and follow the steps.</mark></p></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:52.0%;width:100.0%"><p>The validation I needed was:</p></div>
+                <div class="fblock fblock--list" style="left:0.0%;top:61.0%;width:100.0%"><ul><li>Can you rely on these steps, is there anything else needed which was getting missed?</li><li>Is it following the same workflow as on ground or not?</li></ul></div>
+                </div>
+              </div>
+              </div>
+            </div>
+            <div class="deck-controls">
+              <div class="deck-dots" id="homeTbDeckDots"></div>
+            </div>
+          </div>
         </div>
-        <div class="project-info">
+        <a class="project-info" href="tb-screening-camp">
           <p class="project-title">Redesigning the Screening Camp Deployment and Setup Experience</p>
           <p class="project-summary">A crucial entry point feature was being skipped by the users because they found hardware setup too complicated to follow. I solved it by redesigning the experience to bring hardware and app together as one cohesive product and not two separate things.</p>
           <div class="tags">
@@ -448,10 +562,10 @@
             <span class="tag">Product Design</span>
             <span class="tag">Design Research</span>
           </div>
-        </div>
-      </a>
+        </a>
+      </div>
       <div class="project-row">
-        <div class="project-art project-art--deck deck" aria-roledescription="carousel" aria-label="Support experience case study overview">
+        <div class="project-art project-art--deck project-art--support deck" aria-roledescription="carousel" aria-label="Support experience case study overview">
           <div class="deck-frame">
             <div class="deck-stage" id="homeDeckStage">
               <button type="button" class="deck-nav deck-nav--prev" id="homeDeckPrev" aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
@@ -609,7 +723,7 @@
     })();
 
     (function(){
-      var deck = document.querySelector('.project-art--deck');
+      var deck = document.querySelector('.project-art--support');
       if(!deck) return;
       var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
       var dotsWrap = document.getElementById('homeDeckDots');
@@ -638,6 +752,48 @@
       next.addEventListener('click', function(){ go(current + 1); });
       deck.querySelectorAll('.slide-canvas').forEach(function(c){
         c.addEventListener('click', function(){ window.location.href = 'onprem-support-experience'; });
+      });
+      var startX = null;
+      stage.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, { passive:true });
+      stage.addEventListener('touchend', function(e){
+        if(startX === null) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        if(Math.abs(dx) > 40) go(current + (dx < 0 ? 1 : -1));
+        startX = null;
+      });
+      go(0);
+    })();
+
+    (function(){
+      var deck = document.querySelector('.project-art--tb');
+      if(!deck) return;
+      var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+      var dotsWrap = document.getElementById('homeTbDeckDots');
+      var prev = document.getElementById('homeTbDeckPrev');
+      var next = document.getElementById('homeTbDeckNext');
+      var stage = document.getElementById('homeTbDeckStage');
+      var frame = deck.querySelector('.deck-frame');
+      var current = 0;
+      var dots = slides.map(function(_, i){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        b.addEventListener('click', function(){ go(i); });
+        dotsWrap.appendChild(b);
+        return b;
+      });
+      function go(i){
+        current = Math.max(0, Math.min(slides.length - 1, i));
+        slides.forEach(function(s, j){ s.classList.toggle('active', j === current); });
+        dots.forEach(function(d, j){ d.classList.toggle('active', j === current); });
+        prev.disabled = current === 0;
+        next.disabled = current === slides.length - 1;
+        frame.classList.toggle('is-cover', current === 0);
+      }
+      prev.addEventListener('click', function(){ go(current - 1); });
+      next.addEventListener('click', function(){ go(current + 1); });
+      deck.querySelectorAll('.slide-canvas').forEach(function(c){
+        c.addEventListener('click', function(){ window.location.href = 'tb-screening-camp'; });
       });
       var startX = null;
       stage.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, { passive:true });
