@@ -75,9 +75,11 @@
   }
   .site-nav-toggle{
     display:none;
-    width:32px;
-    height:24px;
-    padding:0;
+    width:22px;
+    height:15px;
+    padding:10px;
+    margin:-10px;
+    box-sizing:content-box;
     border:none;
     background:transparent;
     cursor:pointer;
@@ -86,15 +88,15 @@
   }
   .site-nav-toggle span{
     display:block;
-    height:2px;
+    height:1.5px;
     width:100%;
     background:#1F1E1E;
     border-radius:2px;
     transition:transform 0.25s ease, opacity 0.25s ease;
   }
-  .site-nav-toggle.open span:nth-child(1){ transform:translateY(11px) rotate(45deg); }
+  .site-nav-toggle.open span:nth-child(1){ transform:translateY(6.75px) rotate(45deg); }
   .site-nav-toggle.open span:nth-child(2){ opacity:0; }
-  .site-nav-toggle.open span:nth-child(3){ transform:translateY(-11px) rotate(-45deg); }
+  .site-nav-toggle.open span:nth-child(3){ transform:translateY(-6.75px) rotate(-45deg); }
   @media (max-width:900px){
     .site-nav-inner{ padding:18px 24px; }
     .site-nav-toggle{ display:flex; }
