@@ -376,6 +376,17 @@
     .hero-band{ padding-bottom:64px; }
     .hero-deck{ padding:0 24px; }
   }
+  .anim-embed{ position:relative; width:100%; aspect-ratio:1000 / 400; }
+  .anim-embed iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .slide-bp{ margin:0; position:relative; cursor:zoom-in; }
+  .fblock .slide-bp img{ border:1px solid #e6e6e6; border-radius:.6cqw; }
+  .bp-tag{ position:absolute; right:1cqw; bottom:1.2cqw; background:#1f1e1e; color:#fff; font:500 1.05cqw 'Inter', sans-serif; padding:.45cqw .9cqw; border-radius:.5cqw; }
+  .slide-bp:hover .bp-tag{ background:#1A9C9C; }
+  .lightbox{ display:none; position:fixed; inset:0; background:rgba(20,20,20,0.9); z-index:100; align-items:center; justify-content:center; padding:40px 24px; overflow:auto; }
+  .lightbox.open{ display:flex; }
+  .lightbox img{ max-width:100%; max-height:100%; border-radius:6px; display:block; background:#fff; }
+  .lightbox-close{ position:absolute; top:24px; right:24px; width:40px; height:40px; border-radius:999px; border:none; background:rgba(255,255,255,0.15); color:#fff; font-size:20px; line-height:1; cursor:pointer; }
+  .lightbox-close:hover{ background:rgba(255,255,255,0.28); }
   .slide .slide-context{ font-size:1.52cqw; font-style:italic; color:#454545; }
   .slide ul{ margin:0; padding-left:1.2em; }
   .slide li{ font-size:1.75cqw; font-weight:300; line-height:1.55; color:#2a2a2a; margin:0 0 0.6cqw 0; }
@@ -423,7 +434,7 @@
           <button type="button" class="deck-nav deck-nav--prev" id="deckPrev" aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
           <button type="button" class="deck-nav deck-nav--next" id="deckNext" aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
           <div class="deck-slides">
-          <div class="slide active" aria-roledescription="slide" aria-label="1 of 10">
+          <div class="slide active" aria-roledescription="slide" aria-label="1 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Problem</span></div>
             <div class="fblock fblock--text" style="left:0.0%;top:10.0%;width:40.0%"><p class="slide-context">qTrack is an AI-based chest X-ray screening platform, deployed in health screening camps to identify TB patients. These camps run in low resource, time sensitive environments with poor infrastructure, limited technical support on site, and no internet.</p></div>
@@ -434,7 +445,7 @@
             </div>
           </div>
 
-          <div class="slide" aria-roledescription="slide" aria-label="2 of 10">
+          <div class="slide" aria-roledescription="slide" aria-label="2 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Discovery</span></div>
             <div class="fblock fblock--text" style="left:0.0%;top:9.0%;width:100.0%"><p>I collaborated with the Customer Success team to map the full customer journey, from deployment, through onboarding, to the site going live.</p></div>
@@ -443,16 +454,17 @@
             </div>
           </div>
 
-          <div class="slide" aria-roledescription="slide" aria-label="3 of 10">
+          <div class="slide" aria-roledescription="slide" aria-label="3 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Discovery</span></div>
             <div class="fblock fblock--text" style="left:0.0%;top:9.0%;width:100.0%"><p>I worked with TechOps to understand what was required to make this feature successful. It depended on a chain of setup steps spanning both the product and the physical deployment environment.</p></div>
-            <div class="fblock fblock--text" style="left:0.0%;top:25.0%;width:100.0%"><p><mark class="hl">Each step had to happen in the right order; getting one wrong meant the rest wouldn't work either.</mark></p></div>
-            <div class="fblock fblock--lead" style="left:0.0%;top:37.0%;width:100.0%"><p class="slide-lead">Mapping the deployment journey in a service blueprint made it clear: critical on-ground setup and connection workflows were not standardized, and this caused last-minute chaos on the ground.</p></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:24.0%;width:100.0%"><p><mark class="hl">Each step had to happen in the right order; getting one wrong meant the rest wouldn't work either.</mark></p></div>
+            <div class="fblock fblock--lead" style="left:0.0%;top:34.0%;width:100.0%"><p class="slide-lead">Mapping the deployment journey in a service blueprint made it clear: critical on-ground setup and connection workflows were not standardized, and this caused last-minute chaos on the ground.</p></div>
+            <div class="fblock fblock--fig" style="left:0.0%;top:50.0%;width:64.0%"><figure class="slide-bp" onclick="openLightbox('images/case-study-1/service-blueprint.png')" title="View the full service blueprint"><img src="images/case-study-1/service-blueprint-strip.jpg" alt="Part of the service blueprint: stages, customer journey and front stage actions"><span class="bp-tag">View full blueprint &#8599;</span></figure></div>
             </div>
           </div>
 
-          <div class="slide" aria-roledescription="slide" aria-label="4 of 10">
+          <div class="slide" aria-roledescription="slide" aria-label="4 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Core Insight</span></div>
             <div class="fblock fblock--quote" style="left:0.0%;top:9.0%;width:100.0%"><p class="slide-quote">“The feature was not failing, users were struggling to assemble the setup required to make it work.”</p></div>
@@ -461,7 +473,7 @@
             </div>
           </div>
 
-          <div class="slide" aria-roledescription="slide" aria-label="5 of 10">
+          <div class="slide" aria-roledescription="slide" aria-label="5 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Connecting the dots</span></div>
             <div class="fblock fblock--lead" style="left:0.0%;top:8.0%;width:100.0%"><p class="slide-lead">The blueprint surfaced four insights, each pointing to a specific gap the design needed to close.</p></div>
@@ -470,7 +482,7 @@
             </div>
           </div>
 
-          <div class="slide" aria-roledescription="slide" aria-label="6 of 10">
+          <div class="slide" aria-roledescription="slide" aria-label="6 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Connecting the dots</span></div>
             <div class="fblock fblock--card" style="left:0.0%;top:8.0%;width:48.8%"><div class="slide-card"><strong>3. Getting on the product had high friction, making users question the product value</strong><p><mark class="hl">Users skipped the remote access feature because using it involved highly technical steps like finding the IP address of the laptop and then typing it in a mobile browser.</mark></p><p class="card-note"><strong>Design opportunity:</strong> Improve the onboarding experience by simplifying and reducing the overall connection and process steps, especially where hardware is involved.</p></div></div>
@@ -478,7 +490,7 @@
             </div>
           </div>
 
-          <div class="slide" aria-roledescription="slide" aria-label="7 of 10">
+          <div class="slide" aria-roledescription="slide" aria-label="7 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Design solution</span></div>
             <div class="fblock fblock--lead" style="left:0.0%;top:8.0%;width:47.0%"><p class="slide-lead"><mark class="hl">I designed an in app guided onboarding workflow, built directly into the qTrack app, taking users through their specific deployment setup, step by step.</mark></p></div>
@@ -489,7 +501,14 @@
             </div>
           </div>
 
-          <div class="slide" aria-roledescription="slide" aria-label="8 of 10">
+          <div class="slide" aria-roledescription="slide" aria-label="8 of 11">
+            <div class="slide-canvas">
+            <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Design solution</span></div>
+            <div class="fblock fblock--fig" style="left:0.0%;top:12.0%;width:100.0%"><div class="anim-embed"><iframe src="tb-setup-animation.html" title="Animation: the Qure Kit is unpacked and the setup connects step by step, ending with the phone ready to register patients" loading="lazy"></iframe></div></div>
+            </div>
+          </div>
+
+          <div class="slide" aria-roledescription="slide" aria-label="9 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Design solution</span></div>
             <div class="fblock fblock--title" style="left:0.0%;top:8.0%;width:47.0%"><h3 class="sol-title">Standardizing so hardware and app feel like a single product experience</h3></div>
@@ -501,7 +520,7 @@
             </div>
           </div>
 
-          <div class="slide" aria-roledescription="slide" aria-label="9 of 10">
+          <div class="slide" aria-roledescription="slide" aria-label="10 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Impact</span></div>
             <div class="fblock fblock--card" style="left:0.0%;top:8.0%;width:48.8%"><div class="slide-card"><strong>Org level changes</strong><p><mark class="hl">The problem got reframed across the organization from "a feature isn't working" to "the deployment and setup experience needs to be designed end to end."</mark></p><p><mark class="hl">Accessories are now pre-configured for every deployment, regardless of site, removing last minute guesswork and confusion.</mark></p></div></div>
@@ -509,13 +528,14 @@
             </div>
           </div>
 
-          <div class="slide" aria-roledescription="slide" aria-label="10 of 10">
+          <div class="slide" aria-roledescription="slide" aria-label="11 of 11">
             <div class="slide-canvas">
             <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Validation</span></div>
-            <div class="fblock fblock--text" style="left:0.0%;top:9.0%;width:100.0%"><p>I visited Kenya and tested the new onboarding workflow with two on ground partner teams. They act as Qure's local presence: managing sites, installing qTrack, handling technical issues, and training end users.</p></div>
-            <div class="fblock fblock--lead" style="left:0.0%;top:30.0%;width:100.0%"><p class="slide-lead"><mark class="hl">They were aware of the on ground chaos that happens when there is no structured way to deploy, but with this new onboarding workflow they had clear choices A &amp; B to choose from and follow the steps.</mark></p></div>
-            <div class="fblock fblock--text" style="left:0.0%;top:52.0%;width:100.0%"><p>The validation I needed was:</p></div>
-            <div class="fblock fblock--list" style="left:0.0%;top:61.0%;width:100.0%"><ul><li>Can you rely on these steps, is there anything else needed which was getting missed?</li><li>Is it following the same workflow as on ground or not?</li></ul></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:9.0%;width:58.0%"><p>I visited Kenya and tested the new onboarding workflow with two on ground partner teams. They act as Qure's local presence: managing sites, installing qTrack, handling technical issues, and training end users.</p></div>
+            <div class="fblock fblock--lead" style="left:0.0%;top:34.0%;width:58.0%"><p class="slide-lead"><mark class="hl">They were aware of the on ground chaos that happens when there is no structured way to deploy, but with this new onboarding workflow they had clear choices A &amp; B to choose from and follow the steps.</mark></p></div>
+            <div class="fblock fblock--text" style="left:0.0%;top:59.0%;width:58.0%"><p>The validation I needed was:</p></div>
+            <div class="fblock fblock--list" style="left:0.0%;top:66.0%;width:58.0%"><ul><li>Can you rely on these steps, is there anything else needed which was getting missed?</li><li>Is it following the same workflow as on ground or not?</li></ul></div>
+            <div class="fblock fblock--fig" style="left:61.0%;top:9.0%;width:39.0%"><figure class="slide-photo"><img src="images/case-study-1/kenya-site-visit-1.jpg" alt="Harshita at a site in Kenya, walking a partner through the qTrack setup next to the X-ray machine"><figcaption>On site in Kenya</figcaption></figure></div>
             </div>
           </div>
           </div>
@@ -706,7 +726,26 @@
   </article>
 
 
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <button type="button" class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close">&times;</button>
+    <img id="lightbox-img" src="" alt="Full view" />
+  </div>
+
   <script>
+    function openLightbox(src){
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox(e){
+      if(e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')){
+        document.getElementById('lightbox').classList.remove('open');
+        document.getElementById('lightbox-img').src = '';
+      }
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){ document.getElementById('lightbox').classList.remove('open'); document.getElementById('lightbox-img').src = ''; }
+    });
+
     (function(){
       var toggle = document.getElementById('siteNavToggle');
       var links = document.getElementById('siteNavLinks');

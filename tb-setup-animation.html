@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setup Animation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Rubik:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#1A9C9C;
+    --line:#F5A524;
+    --label:#555;
+    --net:#9b2c5a;
+  }
+  html, body{ margin:0; background:#fff; }
+  body{ font-family:'Inter', sans-serif; }
+
+  /* The scene is a 1000 x 400 grid. Every position is that grid in %,
+     so the whole animation scales with its container.
+     Left: the open Qure Kit box. Right: the setup coming together. */
+  .scene{
+    container-type:inline-size;
+    position:relative;
+    width:100%;
+    aspect-ratio:1000 / 400;
+    overflow:hidden;
+  }
+
+  .step-label{
+    position:absolute; left:0; top:0;
+    font-family:'Rubik', sans-serif; font-size:2.2cqw; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--teal);
+  }
+  .step-dots{ position:absolute; right:0; top:.7cqw; display:flex; gap:.8cqw; }
+  .step-dots span{ width:1.1cqw; height:1.1cqw; border-radius:50%; background:#e0e0e0; transition:background .3s ease; }
+  .step-dots span.on{ background:var(--teal); }
+
+  /* ---- the kit box: the real Qure Kit photo, with the travelling pieces taken out ---- */
+  .box{ position:absolute; left:2%; top:31%; width:20%; }
+  .box img{ display:block; width:100%; height:auto; border-radius:.3cqw; }
+  .box-label{ position:absolute; left:15.75%; top:70%; transform:translateX(-50%); font-size:1cqw; color:var(--label); white-space:nowrap; }
+  .divider{ position:absolute; left:31.5%; top:18%; bottom:10%; border-left:1px dashed #d9d9d9; }
+
+  /* ---- pieces and devices ---- */
+  .el{ position:absolute; }
+  .el img{ display:block; width:100%; height:auto; }
+  .kit-item{ z-index:1; }
+  .kit-item.lan{ z-index:4; }   /* lies on top of the laptop's edge and the charger */
+  .piece{
+    z-index:3;
+    transition:left 1s cubic-bezier(.45,0,.2,1), top 1s cubic-bezier(.45,0,.2,1), width 1s cubic-bezier(.45,0,.2,1), filter .3s ease;
+    filter:drop-shadow(0 .3cqw .4cqw rgba(0,0,0,.25));
+  }
+  .piece.moving{ z-index:5; filter:drop-shadow(0 1cqw 1.2cqw rgba(0,0,0,.3)); }
+  .piece.placed{ filter:none; }
+  /* the laptop and hub hand over to the diagram laptop once they land */
+  .piece.morph{ transition:left 1s cubic-bezier(.45,0,.2,1), top 1s cubic-bezier(.45,0,.2,1), width 1s cubic-bezier(.45,0,.2,1), opacity .45s ease, filter .3s ease; }
+  .piece.morph.placed{ opacity:0; }
+  .device.late.on{ transition-delay:.85s; }
+  .piece img{ transition:transform .5s ease; }
+  .piece:not(.placed):not(.moving){ filter:none; }
+
+  /* plugged-in accessories sit under the laptops: only the USB tip or the capped end peeks out */
+  .device{ z-index:2; }
+  .piece.placed{ z-index:1; }
+  /* the whole setup waits in light grey and comes alive as each piece is plugged in */
+  .device{ filter:grayscale(1) opacity(.28); transition:filter .6s ease; }
+  .device.on{ filter:none; }
+
+  .detector{
+    background:#1d2024; border-radius:.4cqw;
+    box-shadow:inset 0 0 0 .25cqw #2c3036;
+  }
+  .detector::after{
+    content:""; position:absolute; right:8%; top:6%; width:12%; height:8%;
+    border:.15cqw solid #6b7078; border-radius:.2cqw;
+  }
+
+  .label{
+    position:absolute; transform:translateX(-50%);
+    font-size:1cqw; line-height:1.25; color:var(--label); text-align:center; white-space:nowrap;
+    color:#c6c6c6; transition:color .5s ease;
+  }
+  .label.on{ color:var(--label); }
+
+  svg.wires{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; z-index:2; }
+  .wire{
+    fill:none; stroke:var(--line); stroke-width:.5; stroke-linecap:round;
+    stroke-dasharray:1; stroke-dashoffset:1;
+    transition:stroke-dashoffset .9s ease;
+  }
+  .wire.on{ stroke-dashoffset:0; }
+  .head{ fill:var(--line); opacity:0; transition:opacity .25s ease .75s; }
+  .head.on{ opacity:1; }
+  .tick{ opacity:0; transform-box:fill-box; transform-origin:center; transform:scale(.2); transition:opacity .3s ease, transform .4s cubic-bezier(.2,1.6,.4,1); }
+  .tick.on{ opacity:1; transform:scale(.55); }
+  .tick circle{ fill:var(--teal); }
+  .tick path{ fill:none; stroke:#fff; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; }
+
+  .wifi path, .wifi circle{ transition:stroke .4s ease, fill .4s ease; }
+  .wifi:not(.on) path{ stroke:#d8d8d8; }
+  .wifi:not(.on) circle{ fill:#d8d8d8; }
+  .wifi path{ fill:none; stroke:var(--net); stroke-width:2.6; stroke-linecap:round; }
+  .wifi circle{ fill:var(--net); }
+  .wifi.on .arc{ animation:pulse 1.4s ease-in-out infinite; }
+  .wifi.on .arc2{ animation-delay:.15s; }
+  @keyframes pulse{ 0%,100%{ opacity:.25; } 50%{ opacity:1; } }
+  .ghost{ fill:none; stroke:#dedede; stroke-width:.5; }
+  .ghost.ghost-dot{ stroke-dasharray:2 2.5; }
+  .ghost-head{ fill:#dedede; }
+  .ghost-slot{ z-index:1; filter:grayscale(1) opacity(.3); }
+  .dot{ fill:none; stroke:var(--line); stroke-width:.5; stroke-dasharray:2 2.5; opacity:0; transition:opacity .5s ease .15s; }
+  .dot.on{ opacity:1; }
+
+  .ant path, .ant line, .ant circle{ fill:none; stroke:var(--net); stroke-width:1.9; stroke-linecap:round; transition:stroke .4s ease; }
+  .ant:not(.on) path, .ant:not(.on) line, .ant:not(.on) circle{ stroke:#d8d8d8; }
+  .ant.late-in.on path, .ant.late-in.on line, .ant.late-in.on circle{ transition-delay:1s; }
+  .late-in.on{ transition-delay:1s; }
+  .dothead{ transition:opacity .3s ease .5s; }
+  .late-in.dothead.on{ transition-delay:1.4s; }
+  .svg-label{ font-family:'Inter', sans-serif; font-size:10px; transition:fill .4s ease; }
+  .svg-label:not(.on){ fill:#cfcfcf !important; }
+  .svg-label.net-text{ font-size:8px; }
+
+  /* final step: the screen opens from the qTrack laptop, the setup steps back */
+  .screen{
+    position:absolute; left:44%; top:4%; width:41%; z-index:8;
+    opacity:0; transform:scale(.3); transform-origin:83% 60%;
+    transition:opacity .45s ease, transform .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .screen.on{ opacity:1; transform:none; }
+  .screen-bezel{ background:#1d1f22; border-radius:1cqw 1cqw .3cqw .3cqw; padding:1cqw 1cqw 1.2cqw; box-shadow:0 1.2cqw 3cqw rgba(0,0,0,.18); }
+  .screen-bezel img{ display:block; width:100%; height:auto; border-radius:.2cqw; }
+  .screen-base{ height:1.3cqw; margin:0 -3%; background:#4a4c50; border-radius:0 0 1cqw 1cqw; }
+  .screen-caption{ margin-top:1.4cqw; text-align:center; font-family:'Rubik', sans-serif; font-size:1.45cqw; letter-spacing:.06em; color:var(--teal); }
+  /* the end: the kit has done its job and fades away; the mobile is highlighted, ready to register patients */
+  .box, .box-label, .kit-item{ transition:opacity .6s ease; }
+  .scene.final .box, .scene.final .box-label, .scene.final .kit-item{ opacity:0; }
+  /* looping: the frame fades to white, resets instantly behind it, then fades back in */
+  .whiteout{ position:absolute; inset:0; background:#fff; z-index:30; opacity:0; pointer-events:none; transition:opacity .7s ease; }
+  .whiteout.on{ opacity:1; }
+  .scene.instant, .scene.instant *{ transition:none !important; }
+  /* the end: the phone lights up, then its screen grows into a readable card */
+  .phone-on{ z-index:3; opacity:0; transition:opacity .5s ease 1.9s; }
+  .phone-on.on{ opacity:1; }
+  /* once connected, the whole setup slides to the centre */
+  .setup{ position:absolute; inset:0; transition:transform 1s cubic-bezier(.45,0,.2,1) .3s; }
+  .scene.final .setup{ transform:translateX(-16%); }
+  .hl-box{ fill:none; stroke:var(--teal); stroke-width:1.1; stroke-dasharray:1; stroke-dashoffset:1; transition:stroke-dashoffset .9s ease 1.4s; }
+  .hl-box.on{ stroke-dashoffset:0; }
+  .hl-text{ font-family:'Inter', sans-serif; font-size:8px; font-weight:600; fill:var(--teal); opacity:0; transition:opacity .4s ease 2.2s; }
+  .hl-text.on{ opacity:1; }
+  .scene.resetting .hl-box, .scene.resetting .hl-text{ opacity:0 !important; transition:opacity .3s ease; }
+  .scene.resetting .screen{ opacity:0; }
+  .scene.resetting .tick, .scene.resetting .head, .scene.resetting .dot{ opacity:0 !important; }
+  .scene.resetting .wire{ opacity:0; transition:opacity .4s ease; }
+
+  @media (prefers-reduced-motion: reduce){
+    .piece, .device, .label, .wire, .head, .tick, .wifi, .svg-label{ transition:none !important; }
+    .wifi.on .arc{ animation:none; opacity:1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scene" id="scene" aria-label="Animation: taking the accessories out of the Qure Kit and connecting the qTrack setup, step by step">
+
+  <!-- Left: the kit -->
+  <div class="box"><img src="images/case-study-1/setup-anim/kit-box-empty.png" alt="The open Qure Kit box"></div>
+  <div class="box-label" style="left:12%;top:65%">Qure Kit</div>
+
+  <!-- stays in the kit: USB hub, LAN cable, charger -->
+  <div class="el kit-item lan" style="left:9.2%;top:38.5%;width:4.9%"><img src="images/case-study-1/setup-anim/kit-lan-cable.png" alt=""></div>
+  <div class="el kit-item" style="left:6.69%;top:33.07%;width:4.67%"><img src="images/case-study-1/setup-anim/kit-charger.png" alt=""></div>
+  <div class="el kit-item" style="left:16.32%;top:31.98%;width:3.20%"><img src="images/case-study-1/setup-anim/usb-hub.png" alt=""></div>
+  <div class="whiteout" id="whiteout"></div>
+  <div class="setup" id="setup">
+  <!-- Right: the setup (site devices appear as each step needs them) -->
+  <div class="el device detector" data-in="1" style="left:33%;top:42%;width:7.5%;height:21%"></div>
+  <div class="el device" data-in="1" style="left:44.5%;top:41%;width:14%"><img src="images/case-study-1/setup-anim/xray-laptop.png" alt=""></div>
+  <div class="el device late" data-in="2" style="left:71%;top:41%;width:14%"><img src="images/case-study-1/setup-anim/qtrack-laptop.png" alt=""></div>
+  <div class="el device" data-in="4" style="left:92.4%;top:38.5%;width:5.4%"><img src="images/case-study-1/setup-anim/mobile-blank.png" alt=""></div>
+    <div class="el phone-on" data-in="6" style="left:92.4%;top:38.5%;width:5.4%"><img src="images/case-study-1/setup-anim/mobile-on.png" alt="The phone showing Add patient and scans, ready to register patients"></div>
+  <div class="el device late" data-in="5" style="left:88.6%;top:5%;width:2.2%"><img src="images/case-study-1/setup-anim/cloud-sync.png" alt=""></div>
+
+  <div class="label" data-in="1" style="left:36.75%;top:70%">Detector<br>panel</div>
+  <div class="label" data-in="1" style="left:51.5%;top:70%">X-Ray viewing<br>laptop</div>
+  <div class="label" data-in="2" style="left:78%;top:70%">qTrack AI<br>laptop</div>
+  <div class="label" data-in="4" style="left:95.1%;top:70%">Mobile</div>
+  <div class="label" data-in="5" style="left:91.2%;top:5.9%;transform:none;text-align:left;font-size:.8cqw">Cloud<br>sync</div>
+
+  <!-- Pieces: start inside the box, fly to where they plug in at their step.
+       data-to = left,top,width (in % of the scene) of the plugged-in spot -->
+  <!-- used in the setup: the qTrack AI laptop (closed) lifts out, lands on the right and opens -->
+  <div class="el piece morph" data-step="2" data-to="71,41,14" style="left:9.51%;top:35.49%;width:11.86%"><img src="images/case-study-1/setup-anim/qtrack-laptop-closed.png" alt=""></div>
+  <div class="el piece" data-step="3" data-to="56.38,52.2,3.2" style="left:6.91%;top:45.88%;width:2.24%"><img src="images/case-study-1/setup-anim/adapter-1.png" alt=""></div>
+  <div class="el piece" data-step="5" data-to="82.88,52.2,3.2" style="left:6.91%;top:48.82%;width:2.24%"><img src="images/case-study-1/setup-anim/adapter-2.png" alt=""></div>
+  <div class="el piece" data-step="2" data-delay="1100" data-to="68,52,5.8" style="left:6.69%;top:52.26%;width:3.65%"><img src="images/case-study-1/setup-anim/qure-dongle.png" alt=""></div>
+
+
+  <svg class="wires" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
+    <!-- Wi-Fi links (dotted), as in the connection diagram -->
+    <!-- A: X-ray laptop's inbuilt receiver joins the detector panel's network -->
+    <g class="ant" data-in="1" transform="translate(515 142) scale(.46)"><path d="M-9 -10 Q-14 -3 -9 4"/><path d="M-5 -7 Q-8 -3 -5 1"/><path d="M9 -10 Q14 -3 9 4"/><path d="M5 -7 Q8 -3 5 1"/><circle cy="-3" r="2.4"/><line x1="0" y1="0" x2="0" y2="13"/></g>
+    <text class="svg-label net-text" data-in="1" x="515" y="129" text-anchor="middle" style="fill:var(--net)">Inbuilt Wi-Fi receiver</text>
+    <path class="dot" data-in="1" d="M509 140 L417 140 L417 192 L409.4 192"/>
+    <polygon class="head dothead" data-in="1" points="406,192 410.2,189.6 410.2,194.4"/>
+
+    <!-- B: the dongle creates qureoffline; the qTrack laptop's inbuilt receiver joins it -->
+    <g class="wifi" data-in="2" transform="translate(662 203) scale(.5)">
+      <path class="arc arc2" d="M-17 -12 A21 21 0 0 1 17 -12"/>
+      <path class="arc" d="M-10 -6 A12 12 0 0 1 10 -6"/>
+      <circle cx="0" cy="0" r="3.2"/>
+    </g>
+    <text class="svg-label net-text" data-in="2" x="662" y="176" text-anchor="middle" style="fill:var(--net)">qureoffline</text>
+    <text class="svg-label net-text" data-in="2" x="662" y="185" text-anchor="middle" style="fill:var(--net)">network</text>
+    <g class="ant" data-in="2" transform="translate(780 142) scale(.46)"><path d="M-9 -10 Q-14 -3 -9 4"/><path d="M-5 -7 Q-8 -3 -5 1"/><path d="M9 -10 Q14 -3 9 4"/><path d="M5 -7 Q8 -3 5 1"/><circle cy="-3" r="2.4"/><line x1="0" y1="0" x2="0" y2="13"/></g>
+    <text class="svg-label net-text" data-in="2" x="780" y="129" text-anchor="middle" style="fill:var(--net)">Inbuilt Wi-Fi receiver</text>
+    <path class="dot" data-in="2" d="M774 140 L662 140 L662 163.6"/>
+    <polygon class="head dothead" data-in="2" points="662,167 659.6,162.8 664.4,162.8"/>
+
+    <!-- C: X-ray laptop's network adapter joins qureoffline; laptops talk to each other -->
+    <g class="ant late-in" data-in="3" transform="translate(584 196) scale(.46)"><path d="M-9 -10 Q-14 -3 -9 4"/><path d="M-5 -7 Q-8 -3 -5 1"/><path d="M9 -10 Q14 -3 9 4"/><path d="M5 -7 Q8 -3 5 1"/><circle cy="-3" r="2.4"/><line x1="0" y1="0" x2="0" y2="13"/></g>
+    <path class="dot late-in" data-in="3" d="M592 193 L639.6 193"/>
+    <polygon class="head dothead late-in" data-in="3" points="643,193 638.8,190.6 638.8,195.4"/>
+    <path class="wire" data-in="3" pathLength="1" d="M578.6 245 L719.4 245"/>
+    <polygon class="head" data-in="3" points="724,245 718.6,242 718.6,248"/>
+    <polygon class="head" data-in="3" points="574,245 579.4,242 579.4,248"/>
+
+    <!-- A (solid): detector -> X-ray laptop -->
+    <path class="wire" data-in="1" pathLength="1" d="M409 212 L454.4 212"/>
+    <polygon class="head" data-in="1" points="459,212 453.6,209 453.6,215"/>
+
+    <!-- D: mobile joins qureoffline and connects to the qTrack laptop -->
+    <path class="dot" data-in="4" d="M951 298 L951 318 L662 318 L662 212.4"/>
+    <polygon class="head dothead" data-in="4" points="662,209 659.6,213.2 664.4,213.2"/>
+    <path class="wire" data-in="4" pathLength="1" d="M924 245 L843.6 245"/>
+    <polygon class="head" data-in="4" points="839,245 844.4,242 844.4,248"/>
+
+    <!-- all connected: the qTrack laptop's network adapter reaches the internet and syncs to the cloud -->
+    <g class="ant late-in" data-in="5" transform="translate(849 196) scale(.46)"><path d="M-9 -10 Q-14 -3 -9 4"/><path d="M-5 -7 Q-8 -3 -5 1"/><path d="M9 -10 Q14 -3 9 4"/><path d="M5 -7 Q8 -3 5 1"/><circle cy="-3" r="2.4"/><line x1="0" y1="0" x2="0" y2="13"/></g>
+    <path class="dot late-in" data-in="5" d="M849 188 L849 108.4"/>
+    <polygon class="head dothead late-in" data-in="5" points="849,105 846.6,109.2 851.4,109.2"/>
+    <text class="svg-label late-in" data-in="5" x="849" y="98" text-anchor="middle" style="fill:#555">Internet</text>
+    <path class="dot late-in" data-in="5" d="M849 86 L849 30 L877.6 30"/>
+    <polygon class="head dothead late-in" data-in="5" points="881,30 876.8,27.6 876.8,32.4"/>
+
+    <!-- the end: highlight the mobile, where registering patients starts -->
+    <rect class="hl-box" data-in="6" pathLength="1" x="913" y="145" width="76" height="126" rx="8"/>
+    <text class="hl-text" data-in="6" x="951" y="129" text-anchor="middle">Start registering</text>
+    <text class="hl-text" data-in="6" x="951" y="139" text-anchor="middle">patients</text>
+
+    <g class="tick" data-in="5"><circle cx="433" cy="212" r="9"/><path d="M428.5 212 l3 3 l6 -6.5"/></g>
+    <g class="tick" data-in="5"><circle cx="649" cy="245" r="9"/><path d="M644.5 245 l3 3 l6 -6.5"/></g>
+    <g class="tick" data-in="5"><circle cx="884" cy="245" r="9"/><path d="M879.5 245 l3 3 l6 -6.5"/></g>
+    <g class="tick" data-in="5"><circle cx="849" cy="58" r="9"/><path d="M844.5 58 l3 3 l6 -6.5"/></g>
+  </svg>
+  </div>
+</div>
+
+<script>
+(function(){
+  var STEPS = [
+    { label: "Unbox qTrack Kit", ms: 2200 },
+    { label: "A. Connect laptop & detector", ms: 2600 },
+    { label: "B. Create offline local network", ms: 3000 },
+    { label: "C. Connect X-Ray viewing laptop", ms: 2800 },
+    { label: "D. Connect mobile", ms: 2400 },
+    { label: "All connected", ms: 3200 },
+    { label: "Start registering patients", ms: 6500 }
+  ];
+  var scene = document.getElementById("scene");
+  var shown = scene.querySelectorAll("[data-in]");
+  var pieces = Array.prototype.slice.call(scene.querySelectorAll(".piece"));
+  var whiteout = document.getElementById("whiteout");
+
+  // grey copies: every line and arrowhead, and a faint spot where each accessory will plug in
+  var svg = scene.querySelector("svg.wires");
+  var ghostLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  svg.insertBefore(ghostLayer, svg.firstChild);
+  svg.querySelectorAll(".wire, .dot, polygon.head").forEach(function(el){
+    var g = el.cloneNode(false);
+    g.removeAttribute("data-in"); g.removeAttribute("pathLength");
+    g.setAttribute("class", el.tagName === "polygon" ? "ghost-head" : ("ghost" + (el.classList.contains("dot") ? " ghost-dot" : "")));
+    ghostLayer.appendChild(g);
+  });
+  scene.querySelectorAll(".piece[data-to]:not(.morph)").forEach(function(p){
+    var to = p.getAttribute("data-to").split(",").map(parseFloat);
+    var g = document.createElement("div");
+    g.className = "el ghost-slot";
+    g.style.left = to[0] + "%"; g.style.top = to[1] + "%"; g.style.width = to[2] + "%";
+    g.innerHTML = p.innerHTML;
+    document.getElementById("setup").appendChild(g);
+  });
+  shown = scene.querySelectorAll("[data-in]");
+
+  // remember where each piece sits in the box
+  pieces.forEach(function(p){ p._home = { l: p.style.left, t: p.style.top, w: p.style.width }; });
+
+  function place(p, on, animate){
+    if(on){
+      var to = p.getAttribute("data-to").split(",").map(parseFloat);
+      if(animate){
+        p.classList.add("moving");
+        setTimeout(function(){ p.classList.remove("moving"); p.classList.add("placed"); }, 1000);
+      }else{
+        p.classList.add("placed");
+      }
+      p.style.left = to[0] + "%"; p.style.top = to[1] + "%"; p.style.width = to[2] + "%";
+    }else{
+      p.classList.remove("placed", "moving");
+      p.style.left = p._home.l; p.style.top = p._home.t; p.style.width = p._home.w;
+    }
+  }
+
+  function show(n, animate){
+    shown.forEach(function(el){ el.classList.toggle("on", n >= +el.getAttribute("data-in")); });
+    scene.classList.toggle("final", n >= 6);
+    pieces.forEach(function(p){
+      var s = +p.getAttribute("data-step");
+      var should = s >= 0 && n >= s;
+      var isOut = p.classList.contains("placed") || p.classList.contains("moving");
+      if(should !== isOut){
+        var delay = animate && should ? +(p.getAttribute("data-delay") || 0) : 0;
+        if(delay) setTimeout(function(){ place(p, true, true); }, delay); else place(p, should, animate);
+      }
+    });
+  }
+
+  // #step=N freezes the scene on one step (handy for screenshots)
+  var m = location.hash.match(/step=(\d)/);
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(m){ show(+m[1], false); return; }
+  if(reduce){ show(STEPS.length - 1, false); return; }
+
+  var i = 0;
+  function next(){
+    show(i, true);
+    setTimeout(function(){
+      i++;
+      if(i < STEPS.length){ next(); return; }
+      // fade to white, reset everything behind it in one go, then fade back in on the first frame
+      whiteout.classList.add("on");
+      setTimeout(function(){
+        scene.classList.add("instant");
+        scene.classList.remove("final");
+        shown.forEach(function(el){ el.classList.remove("on"); });
+        pieces.forEach(function(p){ place(p, false); });
+        void scene.offsetWidth;                 // apply the reset before transitions come back
+        scene.classList.remove("instant");
+        i = 0;
+        setTimeout(function(){
+          whiteout.classList.remove("on");
+          setTimeout(next, 700);
+        }, 80);
+      }, 800);
+    }, STEPS[i].ms);
+  }
+  next();
+})();
+</script>
+</body>
+</html>
