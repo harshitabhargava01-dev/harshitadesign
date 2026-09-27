@@ -389,7 +389,7 @@
   .lightbox-close:hover{ background:rgba(255,255,255,0.28); }
   .slide-card.card-eq{ box-sizing:border-box; min-height:34.3cqw; display:flex; flex-direction:column; }
   .slide .slide-card.card-eq p.card-note{ margin-top:auto; }
-  .slide .slide-context{ font-size:1.52cqw; font-style:italic; color:#454545; }
+  .slide .slide-context{ font-size:1.333cqw; font-style:italic; color:#454545; }
   .slide ul{ margin:0; padding-left:1.2em; }
   .slide li{ font-size:1.75cqw; font-weight:300; line-height:1.55; color:#2a2a2a; margin:0 0 0.6cqw 0; }
   .slide .slide-card p + p{ margin-top:1cqw; }
@@ -412,6 +412,10 @@
   .full-cs:not(.open){ display:none; }
   .full-cs h2{ scroll-margin-top:40px; }
   .cs-cta.hidden{ display:none; }
+  @media (max-width:640px){
+    .cs-cta{ margin-top:20px; }
+    .cs-cta-btn{ height:36px; padding:0 14px; gap:6px; font-size:13px; border-radius:6px; box-shadow:0 3px 10px rgba(0,0,0,0.10); }
+  }
 </style>
 </head>
 <body>
@@ -459,7 +463,7 @@
             <div class="fblock fblock--lead" style="left:50.0%;top:10.0%;width:46.0%"><p class="slide-lead slide-strong">A key feature of registering patients via the qTrack app on modality software was not being adopted by users on the ground.</p></div>
             <div class="fblock fblock--text" style="left:50.0%;top:35.0%;width:46.0%"><p>The Customer Success team reported this pattern across multiple deployments, where users were unable to use this feature the way it was expected to work.</p></div>
             <div class="fblock fblock--text" style="left:50.0%;top:62.0%;width:46.0%"><p><mark class="hl">This feature was the starting point of the product workflow - failure here cascaded into every step after it, reducing adoption of the product's core capabilities overall.</mark></p></div>
-            <div class="fblock fblock--image" style="left:0.0%;top:40.0%;width:40.0%"><img src="images/case-study-1/kit-and-app.png" alt="The qTrack hardware kit next to the qTrack app"></div>
+            <div class="fblock fblock--image" style="left:0.0%;top:35.5%;width:40.0%"><img src="images/case-study-1/kit-and-app.png" alt="The qTrack hardware kit next to the qTrack app"></div>
             </div>
           </div>
 
