@@ -1,0 +1,3407 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Oval Recorder Popup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<script>
+if (/[?&]docked\b/.test(location.search)) {
+  document.documentElement.classList.add("docked");
+  // tell the case study page how tall the popup is, so its frame can fit it
+  window.addEventListener("DOMContentLoaded", function () {
+    var shell = document.querySelector(".popup-shell");
+    if (!shell || window.parent === window) return;
+    var report = function () { window.parent.postMessage({ ovalPopupHeight: Math.ceil(shell.getBoundingClientRect().height) }, "*"); };
+    report();
+    new ResizeObserver(report).observe(shell);
+  });
+}
+</script>
+<style>
+  :root { color-scheme: dark; }
+  html, body { background: #000000; }
+  .popup-stage {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-inline: 16px;
+    padding-block: 48px;
+    box-sizing: border-box;
+  }
+  .popup-shell {
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(212, 240, 255, 0.12), 0 20px 50px rgba(0, 0, 0, 0.45);
+  }
+  .popup-shell button:focus-visible { outline: 2px solid #27b2ff; outline-offset: 2px; }
+  /* ?docked: rendered as just the popup, for the case study's docked extension */
+  html.docked { color-scheme: light; }
+  html.docked, html.docked body { background: transparent; }
+  html.docked .popup-stage { min-height: 0; padding: 0; justify-content: flex-start; }
+  html.docked .popup-shell { box-shadow: none; }
+  .popup-shell {
+    color-scheme: dark;
+    /* Every value below was pulled directly from the connected Penpot
+       "Oval Recorder" file's real shape properties (fills/strokes/corner
+       radii/font metrics), not eyeballed off a screenshot — see the
+       shapeIds referenced in comments for where to re-verify each one.
+       The popup's own page background is black, with a white rounded
+       card floating in the middle; the header and the bottom Start
+       Recording row sit OUTSIDE that card, directly on the black page. */
+    --page-bg: #0a2d41;
+    --card-bg: #ffffff;
+    --card-radius: 8px; /* "Base color" path, e8c2d37c...d32e */
+    --text: #000000;
+    --text-on-dark: #ffffff;
+    --muted: #797d7f;
+    --accent: #27b2ff;
+    --accent-light: #6ebeea;
+    --accent-dark: #0b71a9; /* toggle-on track fill */
+    --toggle-off: #a6b8c2; /* toggle-off track fill */
+    --danger: #ff4757;
+    --warn: #f5a623;
+    --border: #dbe6f3;
+    --panel-border: #00bbff; /* pill + styling-panel stroke color */
+  }
+
+  * { box-sizing: border-box; }
+
+  .popup-shell {
+    scrollbar-width: thin;
+    scrollbar-color: #276588 transparent;
+  }
+
+  .popup-shell {
+    width: 300px;
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--text-on-dark);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Chrome/Chromium ignores scrollbar-width/-color — this popup only
+     ever runs there, so the ::-webkit-scrollbar path is what actually
+     applies. Thinnest width that still renders reliably (browsers tend
+     to floor very small values to the same handful of px anyway).
+     Targets html, not body — body has no explicit height/overflow set,
+     so html is the element that actually scrolls; styling body's
+     scrollbar was a no-op, which is why no change was visible. */
+  .popup-shell::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .popup-shell::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .popup-shell::-webkit-scrollbar-thumb {
+    background: #276588;
+    border-radius: 2px;
+  }
+
+  /* Logo sits at (15,17) in the design, and the card starts at y=59 —
+     bottom padding is 59 - (17+23) = 19px, not the 10px this had. */
+  /* Bottom padding is 4px (was 19px, stale from the old design where
+     the card started right after the header) — Penpot's real gap from
+     the logo's bottom to the Start Recording button's top is 27.71px;
+     with .status's own 14px min-height plus main's 10px flex gap
+     already accounting for 24px of that, the header only needs 4px
+     more, not 19px. */
+  .popup-shell header {
+    padding: 17px 15px 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Native size straight off the design (Group 220, e8c2d37c...d330:
+     x15 y17 w54 h23 in the 300px-wide board) — was shrunk to 19px wide
+     before, which is why it read as tiny. */
+  .popup-shell header .logo {
+    width: 54px;
+    height: 23px;
+    flex: none;
+    color: #fff;
+  }
+
+  .popup-shell main {
+    padding: 0 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+
+  /* The pill row (Source/Aspect Ratio dropdowns) is hidden now — Source
+     is covered by the top-row Full Screen/Region button, and Aspect
+     Ratio has no visible control for now (removed per request, not
+     replaced yet). .preview-box carries its own dashed frame directly
+     (matching the new design's "VIDEO FRAM BORDER"), so this wrapper no
+     longer needs its own border/padding — just positions the preview. */
+  .frame-section {
+    /* 16px on all four sides — checked against real Penpot data: the
+       dashed preview border, the icon toolbar ("Tool bar bg"), the
+       "Animation" section label, and the Auto Zoom row content are ALL
+       at the same x (panel-edge + 16px) on left/right, so top/bottom
+       now match that same 16px instead of the uneven 15px/21px this
+       had before. */
+    margin: 16px 16px 0;
+    padding: 0 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+
+  /* --- Top bar: Source + Aspect Ratio pills -------------------------
+     Each pill rounds only its OUTER top corner (2px) — a deliberate
+     asymmetric detail confirmed on the real shapes (e8c2d37c...d361 /
+     ...d373: borderRadiusTopLeft/TopRight only, other 3 corners 0).
+     Widths sum exactly to the frame's own width (126+125=251) — the
+     pills touch with no gap between them, not the 8px I'd assumed. */
+  .pill-row[hidden] {
+    display: none;
+  }
+
+  .pill-row {
+    display: flex;
+    gap: 0;
+  }
+
+  .pill-select-wrap {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    border: 0.5px solid var(--panel-border);
+    background: #fff;
+    padding: 4px 10px;
+    gap: 6px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .pill-select-wrap:first-child {
+    border-top-left-radius: 2px;
+    margin-right: -0.5px; /* collapses the doubled-up touching borders */
+  }
+
+  .pill-select-wrap:last-child {
+    border-top-right-radius: 2px;
+  }
+
+  .pill-select-wrap svg {
+    flex: none;
+    width: 12px;
+    height: 11px;
+    color: #444444;
+  }
+
+  .pill-select-wrap select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: none;
+    font-size: 10px;
+    font-weight: 300;
+    color: #000;
+    flex: 1;
+    padding: 0 12px 0 0;
+    cursor: pointer;
+  }
+
+  .pill-select-wrap::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid var(--accent);
+    border-bottom: 1.5px solid var(--accent);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .pill-select-wrap select:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  p.hint {
+    margin: 0;
+    font-size: 9px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* --- Static preview swatch -----------------------------------------
+     Exact geometry off "VIDEO FRAM BORDER" (5e527851...348a3, 228x181)
+     and its descendants — a dashed outline frame with an inset colored
+     content box inside it (.preview-content, 179x144), which in turn
+     insets the white card (was previously a single flat box; the new
+     design added this extra frame layer around it).
+
+     Live preview — shape, background treatment, and region-select look
+     all driven off the actual Source/Aspect Ratio/Background selections
+     (see updateDependentUI() in popup.js), matching the exact reference
+     states pulled from Penpot's "Aspect Ratio Preview Thumbnails",
+     "Aspect Ratio - No Background Row", and "Source Type Preview
+     Thumbnails" — background ON = inset colored card w/ shadow (default
+     179x144 content box shown here, JS sets aspect-ratio directly);
+     background OFF = white card fills the content box edge-to-edge;
+     Source=Region = dashed gray content box + solid-blue-bordered
+     selection card w/ corner handles.
+
+     The content box's own footprint is always 179x144 — it never grows
+     or shrinks with the Aspect Ratio selection (a tall 9:16 pick used to
+     stretch the box's own height, growing the whole popup). Instead the
+     inner .preview-card is letterboxed to the chosen ratio *within* that
+     fixed footprint (updateDependentUI() computes its left/top/width/
+     height inline), the same way a video player letterboxes a portrait
+     clip inside a landscape frame rather than resizing the player. */
+  /* CSS's border-style:dashed can't express an exact dash/gap length —
+     it's browser-default proportions, no way to match Penpot's real
+     stroke-dasharray. Pulled directly from generateMarkup() on the
+     "VIDEO FRAM BORDER" shape: stroke #a0a0a0, width 0.512, dasharray
+     10.256/10.256 (equal dash and gap), rx 2.05 — rendered as an SVG
+     background instead of a CSS border so the pattern matches exactly. */
+  .preview-box {
+    position: relative;
+    width: 228px;
+    /* 186px, up from 181px — the real mockups grew the border to fit
+       the new caption row ("Screen Recording Preview" etc.) at the top. */
+    height: 186px;
+    max-width: 100%;
+    margin: 0 auto;
+    background: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='228' height='186'%3E%3Crect x='0.256' y='0.256' width='227.488' height='185.488' rx='2.05' fill='none' stroke='%23a0a0a0' stroke-width='0.512' stroke-dasharray='10.256,10.256'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    border-radius: 2.05px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+
+  /* --- 3-tile carousel: caption, nav arrows, slides -------------------- */
+  .preview-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 15px;
+    margin: 0;
+    text-align: center;
+    font-size: 8px;
+    font-weight: 300;
+    color: #5c5c5c;
+    pointer-events: none;
+    /* Explicit stacking, same reasoning as .preview-nav's z-index:3 —
+       needs to stay above .preview-mockup-frame regardless of DOM
+       order once a mockup image is layered on top of the slides. */
+    z-index: 3;
+  }
+
+  /* Mockup frame overlay — hidden by default (no mockup selected);
+     see applyMockupToPreview() in popup.js. Sits above the recording
+     content but below the nav arrows/caption (z-index:3 each). */
+  .preview-mockup-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .preview-mockup-frame[hidden] { display: none; }
+
+  /* The dashed placeholder border reads as "empty canvas" — once a
+     real mockup photo covers the whole box, that border just looks
+     like a stray outline around the photo, so hide it. */
+  .preview-box.mockup-active {
+    background-image: none;
+  }
+
+  .preview-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    appearance: none;
+    border: none;
+    background: none;
+    padding: 4px;
+    color: #5c5c5c;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preview-nav svg {
+    width: 8px;
+    height: 14px;
+  }
+
+  .preview-nav-left {
+    left: 6px;
+  }
+
+  .preview-nav-right {
+    right: 6px;
+  }
+
+  .preview-nav[hidden] {
+    display: none;
+  }
+
+  .preview-slides {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .preview-slide {
+    position: absolute;
+    inset: 0;
+  }
+
+  .preview-slide[hidden] {
+    display: none;
+  }
+
+  /* Intro/outro title-card slides — same background-fill logic as the
+     real render (paintTitleCard() in offscreen.js: solid or top-to-
+     bottom gradient off the Add Background colors, always, regardless
+     of whether that toggle itself is on — "a title card always gets a
+     deliberate fill, never a bare black frame"), heading centered. */
+  .preview-titlecard {
+    position: absolute;
+    left: 13.8%;
+    top: 18.3%;
+    width: 72.4%;
+    height: 71.5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    box-sizing: border-box;
+    overflow: hidden;
+    /* Clicking jumps to this slide's own text input — see
+       wireTitleCardJump() in popup.js. */
+    cursor: pointer;
+  }
+
+  .preview-titlecard-text {
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  /* Shown instead of the real heading when its input is empty (see
+     renderTitleCardPreviewText()) — muted/italic so it clearly reads
+     as a hint, not real content, regardless of the chosen background
+     color (a fixed white-ish tone rather than the user's own text
+     color, which is meant for the real heading). */
+  .preview-titlecard-text.is-placeholder {
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* Always a fixed 179x144 footprint, same idea as the outer box below —
+     only the .preview-card inside it (and its background/border here)
+     changes per state, so the aspect-ratio letterboxing math in
+     updateDependentUI() (which sizes .preview-card against this fixed
+     box) stays valid across all three states. */
+  /* 13.8%/18.3%/72.4%/71.5% — off the real captioned mockup (content
+     165x133 inside a 228x186 border, offset 34px from its top). Was
+     11%/11.3%/78.6%/79.8%, sized for the border before the caption row
+     existed — too shallow a top offset, so the content box's own top
+     edge collided with the caption text sitting right above it. */
+  .preview-box .preview-content {
+    position: absolute;
+    left: 13.8%;
+    top: 18.3%;
+    width: 72.4%;
+    height: 71.5%;
+    background: #c3fbc0;
+  }
+
+  .preview-box.bg-off .preview-content {
+    background: none;
+  }
+
+  .preview-box.region-mode .preview-content {
+    background: #f4f6f8;
+    border: 1.2px dashed #c7ccd4;
+  }
+
+  /* Exact percentages off Penpot's real "Thumbnail Original WithBG"
+     reference (e8c2d37c...3531): white card is 7.2%/12% inset from the
+     green content box, 85.6% x 76% of it — not the 9.6/12/80.8/76 I'd
+     estimated before. */
+  .preview-box .preview-card {
+    position: absolute;
+    left: 7.2%;
+    top: 12%;
+    width: 85.6%;
+    height: 76%;
+    background: #fff;
+    border-radius: 3px;
+  }
+
+  /* "Thumbnail Original NoBG" (e8c2d37c...3530): a bordered white card
+     (1px solid #d8dbe0, 4px radius) filling the content box — not the
+     edge-to-edge/box-shadow look this had before. */
+  .preview-box.bg-off .preview-card {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #d8dbe0;
+    border-radius: 4px;
+    box-shadow: none;
+  }
+
+  .preview-box.region-mode .preview-card {
+    left: 25%;
+    top: 20%;
+    width: 50%;
+    height: 60%;
+    border: 1.5px solid #3fb6ea;
+    border-radius: 0;
+  }
+
+  .preview-handle {
+    display: none;
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.4px solid #3fb6ea;
+    transform: translate(-50%, -50%);
+  }
+
+  .preview-box.region-mode .preview-handle { display: block; }
+  .preview-handle-nw { left: 0; top: 0; }
+  .preview-handle-ne { left: 100%; top: 0; }
+  .preview-handle-sw { left: 0; top: 100%; }
+  .preview-handle-se { left: 100%; top: 100%; }
+
+  .preview-box .preview-highlight {
+    position: absolute;
+    left: 49px;
+    top: 63px;
+    width: 25px;
+    height: 9px;
+    border: 1px solid #239c1c;
+    border-radius: 1px;
+    transition: opacity 0.15s ease;
+    cursor: pointer;
+  }
+
+  /* Live demo of the "Pulse" motion style, same idea as the ripple
+     preview — only runs when Bounding Box is on AND Pulse (not Solid)
+     is picked (see updateDependentUI()'s previewHighlight.classList
+     .toggle('is-pulsing', ...)). Solid stays static, matching its own
+     description ("holds steady. No movement"). */
+  .preview-highlight.is-pulsing {
+    animation: preview-highlight-pulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes preview-highlight-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(1.15); }
+  }
+
+  .preview-box .preview-cursor {
+    position: absolute;
+    left: 78px;
+    top: 67px;
+    width: 11px;
+    height: 16px;
+    color: #ffb300;
+    cursor: pointer;
+  }
+
+  .preview-box .preview-ripple {
+    position: absolute;
+    left: 62%;
+    top: 48%;
+    width: 18px;
+    height: 18px;
+    color: #4f7cff;
+    transition: opacity 0.15s ease;
+    cursor: pointer;
+  }
+
+  /* Live demo of the actual effect (a click ripple) instead of a
+     static frozen ring, matching the same "show what the option does"
+     idea as the Motion Style preview — only runs while the Ripple
+     toggle is on (see previewRipple.classList.toggle('is-active', ...)
+     in updateDependentUI()). */
+  .preview-ripple.is-active .preview-ripple-ring {
+    animation: preview-ripple-ping 1.4s ease-out infinite;
+  }
+
+  @keyframes preview-ripple-ping {
+    0% { r: 3.5; opacity: 0.6; }
+    100% { r: 10; opacity: 0; }
+  }
+
+  /* Custom hover tooltip for the preview's interactive elements (the
+     background frame, cursor, highlight, ripple) — shows the same icon
+     that section uses in the toolbar, cloned in via JS, plus a label,
+     instead of a plain-text native title tooltip. */
+  /* Learned this the hard way earlier — [hidden]'s UA display:none
+     loses to this rule's own display:flex on specificity, so it needs
+     an explicit override or the tooltip never actually hides. */
+  .preview-tooltip[hidden] {
+    display: none;
+  }
+
+  .preview-tooltip {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: var(--page-bg);
+    color: #fff;
+    border-radius: 0;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, -100%);
+  }
+
+  /* White, not the toolbar's own accent-blue icon color — the icon
+     SVGs (cloned from the toolbar) fill with currentColor, so this
+     color is what turns them white. */
+  .preview-tooltip-icon {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    color: #fff;
+  }
+
+  .preview-tooltip-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .preview-tooltip-label {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Exact off Penpot's real reference (e8c2d37c...354b/f-3551): 3px
+     dots, 1.5px gap, inset 5px/4px from the white card's own top-left
+     (not the box directly) — was 5px dots with a 2.5px gap before,
+     eyeballed rather than measured. Gap rounded 1.5px → 2px: at 1x
+     density the half pixel snaps unevenly (measured 2px then 1px
+     between the dots), so it has to be a whole pixel to look equal. */
+  .preview-box .preview-dot {
+    position: absolute;
+    top: 26px;
+    left: 21px;
+    display: flex;
+    gap: 2px;
+    z-index: 1;
+  }
+
+  .preview-box .preview-dot span {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #b1b2b5;
+  }
+
+  .preview-box.bg-off .preview-dot span,
+  .preview-box.region-mode .preview-dot span {
+    background: #c7ccd4;
+  }
+
+  /* --- Interactions & Styling panel -----------------------------------
+     "Border" (e8c2d37c...d33e): 0.5px solid #00bbff, 4px radius. The
+     white base lives here now (not on an outer wrapper) — the header's
+     own opaque navy/blue gradient covers it when collapsed, so no white
+     shows until the body (preview, toolbar, settings rows) expands. */
+  .styling-panel {
+    /* Same 4px horizontal inset as .action-row/.top-divider above it
+       (all end up flush at main's 10px + 4px = 14px from the viewport
+       edge) — this panel had no inset of its own before, so its
+       border/edges sat 4px further out than everything above it.
+       margin-top: 10px stacks on top of main's own 10px gap to make
+       20px total — confirmed against Penpot directly (divider bottom
+       to header top = exactly 20px there). Used to read right only
+       because a whole mic-picker row used to sit in between, before
+       that got folded into the mic icon itself. */
+    margin: 10px 4px 0;
+    /* Native form widgets inside (the Solid/Gradient radio buttons in
+       particular) need this — see the removed .card rule's old note:
+       without it they render with dark-mode default styling since the
+       root page is color-scheme: dark. */
+    color-scheme: light;
+    background: var(--card-bg);
+    border-radius: 4px;
+    color: var(--text);
+    /* Not a full 4-side border — just one accent line on the left,
+       spanning the whole block (collapsed header-only or expanded with
+       the body), same idea as the header's own left line. The
+       "Border" shape (e8c2d37c...d33e) I'd gone off before was a full
+       border from a different/older reference, not this block. */
+    border-left: 2px solid var(--accent);
+    overflow: hidden;
+  }
+
+  .styling-header {
+    appearance: none;
+    border: none;
+    width: 100%;
+    background: linear-gradient(90deg, var(--page-bg) 0%, var(--accent) 99%);
+    color: #fff;
+    /* 16px — matches the dashed preview border/toolbar/row rhythm.
+       Penpot's raw header measurement was slightly off from that
+       (~13.7-14.75px, not even symmetric with itself), which reads as
+       manual-placement slack in that mockup rather than an intentionally
+       different value — so the header aligns to the same 16px as
+       everything else instead of keeping its own near-miss number. */
+    padding: 9px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 400;
+    font-family: inherit;
+  }
+
+  .styling-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .styling-body[hidden] {
+    display: none;
+  }
+
+  /* Icon toolbar — replaces the old text-tab row. Sits directly under
+     the preview area, same navy as the page background. */
+  .tabs {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    /* 16px — matches the dashed preview border and the settings rows
+       below it (see .frame-section's note); this is the panel body's
+       real alignment rhythm, confirmed against Penpot's "Tool bar bg". */
+    /* Bottom margin owns the gap below the toolbar now (moved here from
+       .tab-panel's old top padding) so the gap is identical whether a
+       panel is open or the toolbar sits closed with nothing below it. */
+    margin: 0 16px 16.5px;
+    /* Fixed 36px, matching "Tool bar bg" exactly — was padding-driven
+       (8px top/bottom + the 16px icons), which added up to 48px. */
+    height: 36px;
+    background: var(--page-bg);
+  }
+
+  .tab-btn {
+    appearance: none;
+    background: none;
+    border: none;
+    border-radius: 0;
+    /* Fixed 32px box (was 8px padding around a 16px icon) — the icons
+       now render at their own natural sizes, so the box is pinned
+       instead of padding-driven to keep every active highlight the
+       same size regardless of which icon is inside it. */
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .tab-btn svg {
+    display: block;
+  }
+
+  /* Selected: icon turns accent blue over the 20% accent highlight. */
+  .tab-btn.active {
+    background: color-mix(in srgb, var(--accent) 20%, transparent);
+    color: var(--accent);
+  }
+
+  .tab-panel {
+    /* 16px sides — same rhythm as .frame-section/.tabs (see their
+       notes); the Auto Zoom row content in Penpot sits at this same x.
+       Gap is 12px per your call — Penpot's real "Interaction Rows"
+       board measures rowGap:8, but you said the old design used 12 and
+       to keep it. Top padding used to live here (16.5px, the gap
+       between the toolbar's bottom edge and the section heading's top
+       in Penpot) but that vanished whenever no tab was active, leaving
+       zero space below the toolbar. Moved to .tabs' own margin-bottom
+       so the gap is consistent whether the toolbar is open or closed. */
+    padding: 0 16px 12px;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .tab-panel.active { display: flex; }
+
+  /* Section heading shown under the toolbar for the active icon (e.g.
+     "Animation") — off Penpot's real text + underline shapes
+     (5e527851...348b0/348b2): 12px/600-weight/#0a2d41 text, a 1px solid
+     black underline hugging the text's own width (not the full row). */
+  .section-heading {
+    align-self: flex-start;
+    margin: 0;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #000;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0a2d41;
+  }
+
+
+  /* --- Setting Row ----------------------------------------------------- */
+  .setting-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+  }
+
+  /* Briefly highlights a row after jumping to it from a clicked preview
+     element (the cursor arrow, the highlight box) — see
+     wireJumpToSetting() in popup.js. */
+  .setting-row.jump-flash {
+    background-color: color-mix(in srgb, var(--accent-light) 25%, transparent);
+  }
+
+  /* Same flash, for wireTitleCardJump()'s target — a text input
+     instead of a whole row, so it needs its own border tint too (a
+     background tint alone barely reads against an already-white,
+     already-bordered field). */
+  .title-card-text-input.jump-flash {
+    background-color: color-mix(in srgb, var(--accent-light) 25%, transparent);
+    border-color: var(--accent);
+  }
+
+  .setting-row .left { flex: 1; min-width: 0; }
+
+  .setting-row .title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .setting-row .title-row span.field-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: #000;
+  }
+
+  /* "Hot Key" badge — exact style off Penpot's real "Hot Key" component
+     (e8c2d37c...9a1214e0336f, in the "Setting Row - Variants" board):
+     12x12, flat #6ebeea fill, 1px radius, black text/icon — no gradient
+     border. (That component's own content is a generic plus/cross icon;
+     shown here as the real key letter/symbol instead, since a badge
+     whose whole job is telling you which key to press needs to actually
+     show the key — but the box style itself now matches exactly.) */
+  .hotkey-badge {
+    width: 12px;
+    height: 12px;
+    border-radius: 1px;
+    background: #6ebeea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    font-size: 8px;
+    font-weight: 400;
+    color: #000;
+    line-height: 1;
+  }
+
+  /* Multi-key hotkeys (Auto Zoom's +/−, Directional Wipe's arrows) —
+     one real keycap box per key, like an actual keyboard, instead of
+     cramming every character into one wide badge. */
+  .hotkey-group {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  /* +/− and the 4 arrows are drawn as SVG rather than text glyphs —
+     Unicode arrows/minus render at wildly different visual sizes than
+     a letter at the same font-size (a minus is a 1px-tall line; an
+     up/down arrow is as tall as a letter; a left/right arrow is short
+     and wide) — no font-size value makes those look uniform. Drawing
+     them with one shared stroke-width fixes it directly. */
+  .hotkey-icon {
+    width: 8px;
+    height: 8px;
+    overflow: visible;
+  }
+
+  .hotkey-icon path {
+    fill: none;
+    stroke: #000;
+    stroke-width: 1.4px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .hotkey-icon-rotate-90 { transform: rotate(90deg); }
+  .hotkey-icon-rotate-n90 { transform: rotate(-90deg); }
+  .hotkey-icon-rotate-180 { transform: rotate(180deg); }
+
+  .setting-row p.hint { margin-top: 2px; }
+
+  .setting-row .right {
+    /* Penpot's real "Right Column" component (e8c2d37c...9a1210993a20)
+       uses alignItems: center, not flex-end — so the color swatch on
+       rows that have one sits centered under the toggle switch instead
+       of right-edge-aligned to it. */
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* --- Toggle switch ---------------------------------------------------
+     A single SVG path per state (track + knob cut out of one shape via
+     the path's own winding, not a separate white circle) — exact
+     geometry exported from e8c2d37c...ab71b4 (on) / ...15ebe0c (off).
+     Colors driven by currentColor so one markup serves both states. */
+  .switch {
+    position: relative;
+    display: inline-flex;
+    width: 25px;
+    height: 13px;
+    flex: none;
+    cursor: pointer;
+  }
+
+  .switch input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .switch svg {
+    width: 100%;
+    height: 100%;
+    color: var(--toggle-off);
+    pointer-events: none;
+  }
+
+  .switch input:checked ~ svg { color: var(--accent-dark); }
+  .switch input:disabled ~ svg { opacity: 0.5; }
+
+  /* --- Color swatch, incl. the locked "dim when off" decision --- */
+  .popup-shell input[type="color"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+    flex: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .popup-shell input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+  .popup-shell input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; }
+  .popup-shell input[type="color"]:disabled { opacity: 1; cursor: not-allowed; }
+
+  /* Every other color swatch in this popup defaults to a color that
+     reads fine borderless — this one defaults to #ffffff sitting on
+     the panel's own white background, so without its own border it's
+     genuinely invisible (not just low-contrast — same exact color as
+     what's behind it), not a styling nicety. */
+  #title-card-color-input::-webkit-color-swatch {
+    /* var(--border) (#dbe6f3) turned out to be too pale to actually
+       read against white once rendered — needs real contrast, not the
+       subtle hairline tone used elsewhere. */
+    border: 1px solid var(--muted);
+  }
+
+  /* Locked design decision: opacity reduction on the swatch element
+     itself when its row's toggle is off — never on the stored
+     fillColor/fillOpacity, so the real hex value stays intact. */
+  .popup-shell input[type="color"].mc-swatch-off { opacity: 0.35; }
+
+  /* --- Directional Wipe color: White/Black preset picker ---------------
+     A plain <input type="color"> was replaced with this — an open-ended
+     picker was overkill for a full-screen flash, where white/black cover
+     the actual use cases (a bright vs. dark scene-transition cue). */
+  .wipe-color-options {
+    display: flex;
+    gap: 6px;
+    transition: opacity 0.15s ease;
+  }
+
+  .wipe-color-options.mc-swatch-off { opacity: 0.35; }
+
+  .wipe-color-option {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+  }
+
+  .wipe-color-option input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .wipe-color-option input:disabled { cursor: not-allowed; }
+
+  .wipe-color-swatch {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+  }
+
+  .wipe-color-option input:checked + .wipe-color-swatch {
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  /* --- Title Card (intro/outro slate) ---------------------------------
+     No single master switch — "Show at Start"/"Show at End" below ARE
+     the on/off controls, one per placement, matching the "front and last
+     page" framing directly rather than needing a redundant top-level
+     enable toggle on top of them. */
+  .title-card-body {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .title-card-text-input {
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+    color: #000;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 12px;
+    font-family: inherit;
+  }
+
+  .title-card-text-input:disabled { opacity: 0.6; }
+  .title-card-text-input:focus { outline: none; border-color: var(--accent); }
+  /* The longer placeholder ("...Product Walkthrough") was getting
+     clipped by ~1 character at the input's actual width/padding — a
+     dedicated, slightly smaller placeholder size fixes it without
+     touching the real typed-text size or the input's own width. */
+  .title-card-text-input::placeholder { font-size: 11px; }
+
+  /* Each placement (Start/End) is now its own block — a toggle+label
+     row, then its own text input right below, instead of one shared
+     input for both placements. */
+  .title-card-placement {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .title-card-placement-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .title-card-placement span {
+    font-size: 12px;
+    color: #000;
+  }
+
+  /* --- Motion Style / Solid-Gradient radio sub-option --- */
+  .sub-option-group {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 2px;
+    padding-left: 2px;
+  }
+
+  .sub-option-group.visible { display: flex; }
+
+  /* --- Mockup section (lives under the Background tab) --- */
+  .mockup-section {
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Wider than the panel on purpose once there are enough thumbnails —
+     overflow-x:auto is what makes the row horizontally scrollable
+     instead of wrapping or squeezing every thumbnail down. */
+  .mockup-scroll-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #b7c3cd transparent;
+  }
+
+  .mockup-scroll-row[hidden] { display: none; }
+
+  .mockup-thumb {
+    flex: none;
+    width: 72px;
+    height: 48px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: #b8bcc0;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .mockup-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Plain gray placeholders — not real mockups yet, just here to
+     preview the horizontal-scroll layout with a fuller row. */
+  .mockup-thumb-placeholder {
+    cursor: default;
+  }
+
+  .mockup-thumb.selected {
+    border: 2px solid var(--accent-dark);
+  }
+
+  .sub-option-group .sub-title {
+    font-size: 11px;
+    font-weight: 400;
+    color: #000;
+  }
+
+  /* Bounding Box's "Choose Motion Style" is itself a small dropdown —
+     collapsed by default, the triangle rotates to indicate open/closed. */
+  .sub-title-toggle {
+    appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .sub-title-triangle {
+    font-size: 8px;
+    color: var(--muted);
+    transition: transform 0.15s ease;
+    transform: rotate(-90deg);
+  }
+
+  .sub-title-toggle[aria-expanded="true"] .sub-title-triangle {
+    transform: rotate(0deg);
+  }
+
+  .sub-option-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .sub-option-list[hidden] { display: none; }
+
+  /* flex-start, not center — this class is shared by the Background
+     tab's Solid/Gradient options (single-line label, looks the same
+     either way) AND Motion Style's Solid/Pulse options (label + a
+     wrapping description below it), where the radio needs to sit at
+     the top of that taller text block, not centered against it. */
+  .sub-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    cursor: pointer;
+  }
+
+  .sub-option input[type="radio"] {
+    margin-top: 2px;
+    accent-color: var(--accent-dark);
+    flex: none;
+  }
+
+  .sub-option .sub-option-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #000;
+  }
+
+  /* Restored — this got deleted while simplifying the Background tab's
+     Solid/Gradient options (which dropped their own description text),
+     but Motion Style's Solid/Pulse options still use this same class
+     for their description and were left completely unstyled. */
+  .sub-option .sub-option-desc {
+    font-size: 10.5px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+
+  /* Live color preview — solid fill for "Solid color", a start-to-end
+     gradient for "Gradient" — updated live off the actual color pickers
+     in updateDependentUI(). Sits inside .sub-option-swatch-wrap now,
+     which does the right-alignment (margin-left: auto) instead of this
+     span itself, since the real <input type="color"> shares that same
+     box. */
+  .sub-option-swatch {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+  }
+
+  /* The real, functional color input — invisibly overlaid exactly on
+     top of the decorative swatch above, so clicking the pretty circle
+     opens the native picker directly. Previously this was a separate,
+     unstyled input sitting in its own row below both radio options —
+     functional but visually a stray leftover; this removes that
+     duplicate control entirely. */
+  .sub-option-swatch-wrap {
+    position: relative;
+    flex: none;
+    width: 14px;
+    height: 14px;
+    margin-left: auto;
+  }
+
+  .sub-option-swatch-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .sub-option-swatch-input[hidden] { display: none; }
+
+  /* --- Mic control: the mute toggle and the device-picker trigger now
+     live together as one split button (same footprint/border/bg the
+     mic icon used to own alone), instead of a separate text link
+     floating below the action row — mirrors the Full Screen/Region
+     .source-popover split right next to it. */
+  .mic-popover {
+    position: relative;
+    display: flex;
+    flex: 62.44 1 0;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    background: #e0f4ff;
+  }
+
+  .mic-popover-trigger {
+    appearance: none;
+    flex: none;
+    width: 16px;
+    background: none;
+    border: none;
+    border-left: 1px solid var(--accent);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .mic-popover-trigger:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .mic-popover-trigger::after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 3.5px solid var(--accent-dark);
+    pointer-events: none;
+  }
+
+  .mic-popover-panel {
+    position: absolute;
+    left: auto;
+    right: 0;
+    width: 190px;
+    top: calc(100% + 6px);
+    background: var(--card-bg);
+    color: var(--text);
+    /* Matches the actual button-radius standard already used everywhere
+       (record-btn/mic-icon-btn/source-toggle-btn are all 6px) — this
+       panel was at 10px, visibly rounder than the buttons that open it. */
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 5;
+  }
+
+  .mic-popover-panel[hidden] { display: none; }
+
+  .mic-select-row { display: flex; gap: 6px; }
+  .mic-select-row select { flex: 1; }
+
+  .popup-shell select {
+    background: #fff;
+    color: #000;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .popup-shell select:disabled { opacity: 0.6; }
+
+  .mic-select-row button {
+    flex: none;
+    width: 28px;
+    background: #fff;
+    color: #000;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .mic-select-row button:hover { border-color: var(--accent); }
+
+  .mic-permission-banner { display: flex; flex-direction: column; gap: 8px; }
+  .mic-permission-banner p { margin: 0; font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .mic-permission-banner button {
+    background: var(--accent-dark);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* --- Top action row: Start Recording (6-state) + Mic toggle + Full
+     Screen/Region toggle — sits OUTSIDE the white base, directly on the
+     page background, right below the header (moved here from the
+     bottom of the popup to match the new design). --- */
+  .action-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+    padding: 0 4px;
+  }
+
+  .status {
+    text-align: center;
+    font-size: 11px;
+    color: #9aa0a6;
+    min-height: 14px;
+  }
+
+  /* Start Recording button (5e527851...348ee): fill #27b2ff, 6px
+     radius, plus a 3px diagonal gradient stroke (top-right vivid blue
+     fading to transparent at bottom-left) — the padding-box/border-box
+     double-background trick, since a real gradient border needs it. */
+  .record-btn {
+    /* Ratio matches Penpot exactly: Start Recording 108.5 : each side
+       button 62.44 (5e527851...348ed vs 348a5/348e7) — flex-grow with a
+       zero basis so the three buttons always split the row in that same
+       proportion, regardless of popup width. */
+    flex: 108.5 1 0;
+    padding: 11px;
+    border: 3px solid transparent;
+    border-radius: 6px;
+    background:
+      linear-gradient(var(--accent), var(--accent)) padding-box,
+      linear-gradient(200deg, #1f99de 7%, rgba(4, 65, 134, 0.53) 42%, rgba(255, 255, 255, 0) 89%) border-box;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .record-btn:hover:not(:disabled) {
+    background:
+      linear-gradient(var(--accent-dark), var(--accent-dark)) padding-box,
+      linear-gradient(200deg, #1f99de 7%, rgba(4, 65, 134, 0.53) 42%, rgba(255, 255, 255, 0) 89%) border-box;
+  }
+  .record-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .record-btn.recording {
+    background: linear-gradient(var(--danger), var(--danger)) padding-box, var(--danger) border-box;
+    border-color: var(--danger);
+  }
+  .record-btn.processing {
+    background: linear-gradient(#9ca3af, #9ca3af) padding-box, #9ca3af border-box;
+    border-color: #9ca3af;
+  }
+  /* Clickable now (relabeled "Cancel Processing" — see setProcessingUI())
+     so it needs its own hover, or :hover:not(:disabled) above would flip
+     it to the blue "start" accent color instead of staying in the grey
+     family a cancel action should read as. */
+  .record-btn.processing:hover:not(:disabled) {
+    background: linear-gradient(#7c8591, #7c8591) padding-box, #7c8591 border-box;
+  }
+  /* Paused — reflects a recording paused from the on-page toolbar (the
+     popup itself has no Pause control; it's rarely open during a
+     recording at all, since Start closes it immediately). */
+  .record-btn.paused {
+    background: linear-gradient(var(--warn), var(--warn)) padding-box, var(--warn) border-box;
+    border-color: var(--warn);
+  }
+
+  .record-btn .rec-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #fff;
+    animation: mc-rec-dot-pulse 1.2s ease-in-out infinite;
+  }
+
+  .record-btn:not(.recording) .rec-dot { display: none; }
+
+  @keyframes mc-rec-dot-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  /* Mic icon button (5e527851...348a5): box styling (#e0f4ff bg, 1px
+     #27b2ff border, 6px radius) stays constant between on/off — only
+     the icon glyph swaps (solid mic vs. faded mic + slash), confirmed
+     against both real component variants. Now the left half of the
+     .mic-popover split button — the wrapper owns the shared border/bg,
+     this is just the flexible toggle half of it. */
+  .mic-icon-btn {
+    flex: 1;
+    border: none;
+    background: none;
+    color: var(--accent-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mic-icon-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .mic-icon-btn svg { width: 15px; height: 15px; }
+  .mic-icon-btn .mic-icon-off { display: none; }
+  .mic-icon-btn[aria-pressed="false"] .mic-icon-on { display: none; }
+  .mic-icon-btn[aria-pressed="false"] .mic-icon-off { display: block; }
+
+  /* Full Screen / Region toggle (5e527851...348e7): outlined only —
+     transparent background, 0.5px white border, 6px radius, same
+     footprint as the mic toggle. */
+  .source-popover {
+    position: relative;
+    flex: 62.44 1 0;
+  }
+
+  .source-toggle-btn {
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    border: 0.5px solid #fff;
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .source-toggle-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* Sits right next to the icon (same row, same vertical center) rather
+     than floating in a corner — matches the established dropdown
+     pattern already used elsewhere (the Source/Aspect Ratio pills'
+     own chevron sits beside their icon+text the same way). Penpot's
+     original button art has no triangle of its own (checked: mic2/
+     "Full Screen" icon is just the screen+stand shape, nothing else),
+     so there's no exact shape to match — this follows that pattern
+     instead of a plain corner badge. */
+  .source-toggle-btn::after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 3.5px solid #fff;
+    pointer-events: none;
+  }
+
+  #source-toggle-icon {
+    display: flex;
+  }
+
+  .source-toggle-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .source-popover-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    width: 150px;
+    background: var(--card-bg);
+    color: var(--text);
+    /* Same 6px button-radius standard as .mic-popover-panel above. */
+    border-radius: 6px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 5;
+  }
+
+  .source-popover-panel[hidden] {
+    display: none;
+  }
+
+  /* Hex-code popover — built entirely in JS (wireColorHexPopover() in
+     popup.js), attached to whichever element already happens to be a
+     color input's parent, so it never changes any row's own layout. */
+  .color-hex-panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: var(--card-bg);
+    border-radius: 6px;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 6;
+    white-space: nowrap;
+  }
+
+  .color-hex-panel[hidden] { display: none; }
+
+  .color-hex-input {
+    width: 64px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    background: #fff;
+    color: #000;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 5px;
+  }
+
+  .color-hex-input:focus { outline: none; border-color: var(--accent); }
+
+  /* Briefly flashed when a typed/pasted value isn't a valid hex color
+     (e.g. pasted the wrong thing entirely) — the field reverts to the
+     actual current color right after, so this is the only feedback
+     that the paste didn't take. */
+  .color-hex-input.invalid { border-color: var(--danger); }
+
+  .copy-hex-btn {
+    appearance: none;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .copy-hex-btn svg { width: 10px; height: 10px; }
+  .copy-hex-btn:hover { border-color: var(--accent); }
+  .copy-hex-btn.copied { border-color: #4caf6a; color: #4caf6a; }
+
+  .source-option {
+    appearance: none;
+    background: none;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-family: inherit;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .source-option svg {
+    flex: none;
+    width: 15px;
+    height: 15px;
+    color: var(--muted);
+  }
+
+  .source-option:hover {
+    background: #f2f5f8;
+  }
+
+  .source-option[aria-selected="true"] {
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+
+  .source-option[aria-selected="true"] svg {
+    color: var(--accent-dark);
+  }
+
+  /* Divider (5e527851...348f1): 0.5px white hairline between the top
+     action row and the panel below. */
+  .top-divider {
+    border: none;
+    /* Already as thin a width as a browser will actually render
+       (0.25px rounds to the same single device pixel either way) —
+       opacity is the only lever left for "lighter weight" from here. */
+    border-top: 0.25px solid rgba(255, 255, 255, 0.45);
+    /* margin-top: 10px stacks on main's own 10px gap to make 20px above
+       the divider, matching the 20px already below it (.styling-panel's
+       own margin-top) — confirmed against Penpot: action-row bottom to
+       divider is ~20px there too, same as divider to header. Centers
+       the divider between the two rows instead of sitting closer to
+       the top row. */
+    margin: 10px 4px 0;
+  }
+
+</style>
+<div class="popup-stage">
+  <div class="popup-shell">
+  <header>
+    <!-- Exact "Owl" logo mark, e8c2d37c...d330 — 3 white paths, pulled
+         verbatim via penpot.generateMarkup(), not a generic icon. -->
+    <svg class="logo" viewBox="-8375 3028 54 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="currentColor" d="M-8359.140625,3028.2197265625C-8358.70703125,3028.2197265625,-8358.298828125,3028.3076171875,-8357.9169921875,3028.4833984375C-8357.525390625,3028.6494140625,-8357.18359375,3028.87744140625,-8356.89453125,3029.1669921875C-8356.6064453125,3029.44677734375,-8356.37890625,3029.78369140625,-8356.2138671875,3030.1767578125C-8356.048828125,3030.56005859375,-8355.9658203125,3030.96923828125,-8355.9658203125,3031.404296875L-8355.9658203125,3047.3095703125C-8355.9658203125,3047.744140625,-8356.048828125,3048.15869140625,-8356.2138671875,3048.55224609375C-8356.37890625,3048.935546875,-8356.6064453125,3049.271484375,-8356.89453125,3049.5615234375C-8357.1845703125,3049.8515625,-8357.525390625,3050.07958984375,-8357.9169921875,3050.2451171875C-8358.298828125,3050.4111328125,-8358.70703125,3050.494140625,-8359.140625,3050.494140625L-8371.82421875,3050.494140625C-8372.2578125,3050.494140625,-8372.671875,3050.4111328125,-8373.064453125,3050.2451171875C-8373.4462890625,3050.07958984375,-8373.78125,3049.8515625,-8374.0703125,3049.5615234375C-8374.359375,3049.271484375,-8374.5869140625,3048.935546875,-8374.751953125,3048.55224609375C-8374.9169921875,3048.15869140625,-8375,3047.744140625,-8375,3047.3095703125L-8375,3031.404296875C-8375,3030.96923828125,-8374.9169921875,3030.56005859375,-8374.751953125,3030.1767578125C-8374.5869140625,3029.78369140625,-8374.359375,3029.44677734375,-8374.0703125,3029.1669921875C-8373.78125,3028.87744140625,-8373.4462890625,3028.6494140625,-8373.064453125,3028.4833984375C-8372.671875,3028.3076171875,-8372.2578125,3028.2197265625,-8371.82421875,3028.2197265625L-8359.140625,3028.2197265625ZM-8367.9140625,3029.96533203125C-8369.6767578125,3029.96533203125,-8371.1064453125,3031.408203125,-8371.1064453125,3033.1884765625L-8371.1064453125,3045.5224609375C-8371.1064453125,3047.302734375,-8369.6767578125,3048.74560546875,-8367.9140625,3048.74560546875L-8363.0517578125,3048.74560546875C-8361.2890625,3048.74560546875,-8359.859375,3047.302734375,-8359.859375,3045.5224609375L-8359.859375,3033.1884765625C-8359.859375,3031.408203125,-8361.2890625,3029.96533203125,-8363.0517578125,3029.96533203125L-8367.9140625,3029.96533203125Z" />
+      <path fill="currentColor" d="M-8337.3779296875,3036.35498046875C-8336.60546875,3035.2763671875,-8335.001953125,3035.2763671875,-8334.2294921875,3036.35498046875L-8334.1552734375,3036.46630859375L-8326.8994140625,3047.7001953125C-8326.0849609375,3049.0087890625,-8327.017578125,3050.7099609375,-8328.5478515625,3050.7099609375L-8333.8203125,3050.7099609375L-8333.8203125,3047.65283203125L-8330.5029296875,3047.65283203125L-8335.8046875,3039.564453125L-8342.1943359375,3049.841796875C-8342.95703125,3051.06884765625,-8344.728515625,3051.06884765625,-8345.4921875,3049.841796875L-8354.236328125,3035.642578125L-8350.7421875,3035.642578125L-8343.84375,3046.7431640625L-8337.453125,3036.46630859375L-8337.3779296875,3036.35498046875Z" />
+      <path fill="currentColor" d="M-8324.169921875,3029.5283203125C-8324.169921875,3028.6845703125,-8323.4921875,3028,-8322.65625,3028C-8321.8203125,3028,-8321.1416015625,3028.6845703125,-8321.1416015625,3029.5283203125L-8321.1416015625,3050.4921875L-8324.169921875,3050.4921875L-8324.169921875,3029.5283203125Z" />
+    </svg>
+  </header>
+
+  <main>
+    <div class="status" id="status">Ready</div>
+
+    <div class="action-row">
+      <button id="start-stop-btn" class="record-btn">
+        <span class="rec-dot"></span>
+        <span class="btn-label">Start Recording</span>
+      </button>
+      <!-- Mic control: mute toggle + device-picker trigger, merged into
+           one split button (e8c2d37c...d336 box styling still constant
+           between on/off; only the glyph swaps) so the device list is
+           reachable straight from the mic icon instead of a separate
+           link elsewhere. -->
+      <div class="mic-popover">
+        <button id="mic-toggle-btn" class="mic-icon-btn" type="button" aria-pressed="true" title="Toggle microphone">
+          <svg class="mic-icon-on" viewBox="-4450 2215 15 21" fill="currentColor">
+            <path d="M-4442.5,2230.75C-4440.017578125,2230.75,-4438,2228.732421875,-4438,2226.25L-4438,2219.5C-4438,2217.017578125,-4440.017578125,2215,-4442.5,2215C-4444.982421875,2215,-4447,2217.017578125,-4447,2219.5L-4447,2226.25C-4447,2228.732421875,-4444.982421875,2230.75,-4442.5,2230.75ZM-4445.5,2219.5C-4445.5,2217.8427734375,-4444.158203125,2216.5,-4442.5,2216.5C-4440.841796875,2216.5,-4439.5,2217.8427734375,-4439.5,2219.5L-4439.5,2226.25C-4439.5,2227.9072265625,-4440.841796875,2229.25,-4442.5,2229.25C-4444.158203125,2229.25,-4445.5,2227.9072265625,-4445.5,2226.25L-4445.5,2219.5Z" />
+            <path d="M-4449.25,2223.25C-4449.662109375,2223.25,-4450,2223.5869140625,-4450,2224L-4450,2226.25C-4450,2230.134765625,-4447.0380859375,2233.337890625,-4443.25,2233.7119140625L-4443.25,2235.25C-4443.25,2235.662109375,-4442.912109375,2236,-4442.5,2236C-4442.087890625,2236,-4441.75,2235.662109375,-4441.75,2235.25L-4441.75,2233.7119140625C-4437.9619140625,2233.337890625,-4435,2230.134765625,-4435,2226.25L-4435,2224C-4435,2223.5869140625,-4435.337890625,2223.25,-4435.75,2223.25C-4436.162109375,2223.25,-4436.5,2223.5869140625,-4436.5,2224L-4436.5,2226.25C-4436.5,2229.5576171875,-4439.1923828125,2232.25,-4442.5,2232.25C-4445.8076171875,2232.25,-4448.5,2229.5576171875,-4448.5,2226.25L-4448.5,2224C-4448.5,2223.5869140625,-4448.837890625,2223.25,-4449.25,2223.25Z" />
+          </svg>
+          <svg class="mic-icon-off" viewBox="-8149 3656.5 25 25" fill="currentColor">
+            <path opacity="0.4" d="M-8136.5,3673.75C-8134.017578125,3673.75,-8132,3671.732421875,-8132,3669.25L-8132,3662.5C-8132,3660.017578125,-8134.017578125,3658,-8136.5,3658C-8138.982421875,3658,-8141,3660.017578125,-8141,3662.5L-8141,3669.25C-8141,3671.732421875,-8138.982421875,3673.75,-8136.5,3673.75ZM-8139.5,3662.5C-8139.5,3660.8427734375,-8138.158203125,3659.5,-8136.5,3659.5C-8134.841796875,3659.5,-8133.5,3660.8427734375,-8133.5,3662.5L-8133.5,3669.25C-8133.5,3670.9072265625,-8134.841796875,3672.25,-8136.5,3672.25C-8138.158203125,3672.25,-8139.5,3670.9072265625,-8139.5,3669.25L-8139.5,3662.5Z" />
+            <path opacity="0.4" d="M-8143.25,3666.25C-8143.662109375,3666.25,-8144,3666.5869140625,-8144,3667L-8144,3669.25C-8144,3673.134765625,-8141.0380859375,3676.337890625,-8137.25,3676.7119140625L-8137.25,3678.25C-8137.25,3678.662109375,-8136.912109375,3679,-8136.5,3679C-8136.087890625,3679,-8135.75,3678.662109375,-8135.75,3678.25L-8135.75,3676.7119140625C-8131.9619140625,3676.337890625,-8129,3673.134765625,-8129,3669.25L-8129,3667C-8129,3666.5869140625,-8129.337890625,3666.25,-8129.75,3666.25C-8130.162109375,3666.25,-8130.5,3666.5869140625,-8130.5,3667L-8130.5,3669.25C-8130.5,3672.5576171875,-8133.1923828125,3675.25,-8136.5,3675.25C-8139.8076171875,3675.25,-8142.5,3672.5576171875,-8142.5,3669.25L-8142.5,3667C-8142.5,3666.5869140625,-8142.837890625,3666.25,-8143.25,3666.25Z" />
+            <path stroke="#425f84" stroke-width="1" d="M-8127,3659.5L-8146,3678.5" />
+          </svg>
+        </button>
+        <button type="button" class="mic-popover-trigger" id="mic-popover-trigger" aria-haspopup="listbox" aria-expanded="false" title="Choose microphone"></button>
+        <div class="mic-popover-panel" id="mic-popover-panel" hidden>
+          <div id="mic-permission-banner" class="mic-permission-banner" hidden>
+            <p>Grant microphone access to see and choose your connected devices.</p>
+            <button id="grant-mic-btn" type="button">Enable Microphone Access</button>
+          </div>
+
+          <div id="mic-select-row" class="mic-select-row" hidden>
+            <select id="mic-select">
+              <option value="default">Default Microphone</option>
+            </select>
+            <button id="refresh-mic-btn" type="button" title="Refresh device list">&#8635;</button>
+          </div>
+        </div>
+      </div>
+      <!-- Full Screen / Region dropdown (e8c2d37c/5e527851...348e6-348ec):
+           outlined button (transparent, 0.5px white border) with a
+           screen+stand icon pulled verbatim from Penpot — this is the
+           third top-row button; NOT mic-related despite living next to
+           the mic toggle. Opens a small option list for #source-select's
+           two values, same open/close pattern as the mic popover. -->
+      <div class="source-popover">
+        <button type="button" id="source-toggle-btn" class="source-toggle-btn" aria-haspopup="listbox" aria-expanded="false" title="Choose what to record">
+          <!-- Wrapping span (not the svg itself) carries the id — the
+               Full Screen/Region icons have different viewBoxes, so
+               updateDependentUI() swaps this span's whole innerHTML
+               (including a fresh <svg viewBox>), not just the paths. -->
+          <span id="source-toggle-icon">
+            <svg viewBox="-6779.62 5375.06 17.40 15.11" fill="none" stroke="#fff" stroke-width="1.2">
+              <rect x="-6779.62" y="5375.06" width="17.40" height="12.29" rx="1.5" fill="#fff" stroke="none"></rect>
+              <path d="M-6770.93,5386.58L-6770.93,5389.66"></path>
+              <path d="M-6766.32,5390.16L-6775.53,5390.16"></path>
+            </svg>
+          </span>
+        </button>
+        <div class="source-popover-panel" id="source-popover-panel" hidden role="listbox">
+          <button type="button" class="source-option" id="source-option-full-screen" data-value="full-screen" role="option" aria-selected="true">
+            <svg viewBox="0 0 16 14" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="0.6" y="0.6" width="14.8" height="10.5" rx="1.3" /><path d="M8 13.4V11.1M4.5 13.4h7" /></svg>
+            <span>Full Screen</span>
+          </button>
+          <!-- Real icon pulled from Penpot (shape "Region icon",
+               5e527851...ce221) — replaces the earlier hand-approximated
+               dashed-corner placeholder. Same reuse trick as the other
+               source icons: updateDependentUI() clones this exact
+               <svg> into #source-toggle-icon when Region is selected,
+               so only this one copy needs to exist. -->
+          <button type="button" class="source-option" id="source-option-region" data-value="region" role="option" aria-selected="false">
+            <svg viewBox="-5979 6489 45 41" fill="currentColor"><path d="M-5934,6491.052734375L-5934,6501.29736328125C-5934,6502.4296875,-5935.00537109375,6503.3505859375,-5936.244140625,6503.3505859375C-5937.49755859375,6503.3505859375,-5938.50341796875,6502.4296875,-5938.50341796875,6501.29736328125L-5938.50341796875,6493.1005859375L-5947.50244140625,6493.1005859375C-5948.7451171875,6493.1005859375,-5949.75439453125,6492.1796875,-5949.75439453125,6491.052734375C-5949.75439453125,6489.9208984375,-5948.7451171875,6489,-5947.50244140625,6489L-5936.25146484375,6489C-5935.00537109375,6489,-5934,6489.9208984375,-5934,6491.052734375ZM-5965.50146484375,6525.89990234375L-5974.4970703125,6525.89990234375L-5974.4970703125,6517.697265625C-5974.4970703125,6516.5634765625,-5975.50634765625,6515.64990234375,-5976.75244140625,6515.64990234375C-5977.99462890625,6515.64990234375,-5978.99658203125,6516.5634765625,-5978.99658203125,6517.697265625L-5978.99658203125,6527.947265625C-5978.99658203125,6529.0791015625,-5977.99462890625,6530,-5976.75244140625,6530L-5965.50146484375,6530C-5964.25537109375,6530,-5963.24951171875,6529.0791015625,-5963.24951171875,6527.947265625C-5963.24951171875,6526.8134765625,-5964.25537109375,6525.89990234375,-5965.50146484375,6525.89990234375ZM-5965.50146484375,6489L-5976.75244140625,6489C-5977.99462890625,6489,-5978.99658203125,6489.9208984375,-5978.99658203125,6491.052734375L-5978.99658203125,6501.29736328125C-5978.99658203125,6502.4296875,-5977.99462890625,6503.3505859375,-5976.75244140625,6503.3505859375C-5975.50634765625,6503.3505859375,-5974.4970703125,6502.4296875,-5974.4970703125,6501.29736328125L-5974.4970703125,6493.1005859375L-5965.494140625,6493.1005859375C-5964.25537109375,6493.1005859375,-5963.24951171875,6492.1796875,-5963.24951171875,6491.052734375C-5963.24951171875,6489.9208984375,-5964.25537109375,6489,-5965.50146484375,6489ZM-5936.244140625,6515.64990234375C-5937.49755859375,6515.64990234375,-5938.50341796875,6516.5634765625,-5938.50341796875,6517.70263671875L-5938.50341796875,6525.89990234375L-5947.50244140625,6525.89990234375C-5948.7451171875,6525.89990234375,-5949.75439453125,6526.8134765625,-5949.75439453125,6527.95263671875C-5949.75439453125,6529.08447265625,-5948.7451171875,6530,-5947.50244140625,6530L-5936.25146484375,6530C-5935.0126953125,6530,-5934.00732421875,6529.08447265625,-5934.00732421875,6527.95263671875L-5934.00732421875,6517.70263671875C-5934,6516.5634765625,-5935.00537109375,6515.64990234375,-5936.244140625,6515.64990234375Z" /></svg>
+            <span>Region</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider (e8c2d37c/5e527851...348f1): 0.5px white hairline, full
+         width, between the top action row and the panel below. -->
+    <hr class="top-divider" />
+
+      <div class="styling-panel">
+        <div class="styling-header">
+          <span>Interactions &amp; Styling</span>
+        </div>
+        <div class="styling-body" id="styling-body">
+        <!-- Aspect Ratio section: Source + Aspect Ratio pills, framed
+             together with the preview swatch (matches the design's single
+             hairline border wrapping both). -->
+        <div class="frame-section">
+          <!-- Kept in the DOM (just hidden) — #source-select and
+               #aspect-ratio-select still drive real logic in popup.js
+               (region mode, aspect-ratio letterboxing, saved settings).
+               Source is now set via the top-row Full Screen/Region
+               button instead of this dropdown. -->
+          <div class="pill-row" hidden>
+            <div class="pill-select-wrap">
+              <svg viewBox="-8355.053 3089 12.158 11" fill="currentColor"><path d="M-8342.89453125,3089.55078125L-8342.89453125,3092.29931640625C-8342.89453125,3092.60302734375,-8343.166015625,3092.85009765625,-8343.501953125,3092.85009765625C-8343.83984375,3092.85009765625,-8344.111328125,3092.60302734375,-8344.111328125,3092.29931640625L-8344.111328125,3090.10009765625L-8346.54296875,3090.10009765625C-8346.87890625,3090.10009765625,-8347.150390625,3089.85302734375,-8347.150390625,3089.55078125C-8347.150390625,3089.2470703125,-8346.87890625,3089,-8346.54296875,3089L-8343.50390625,3089C-8343.166015625,3089,-8342.89453125,3089.2470703125,-8342.89453125,3089.55078125ZM-8351.40625,3098.89990234375L-8353.8359375,3098.89990234375L-8353.8359375,3096.69921875C-8353.8359375,3096.39501953125,-8354.109375,3096.14990234375,-8354.4453125,3096.14990234375C-8354.78125,3096.14990234375,-8355.052734375,3096.39501953125,-8355.052734375,3096.69921875L-8355.052734375,3099.44921875C-8355.052734375,3099.7529296875,-8354.78125,3100,-8354.4453125,3100L-8351.40625,3100C-8351.0703125,3100,-8350.796875,3099.7529296875,-8350.796875,3099.44921875C-8350.796875,3099.14501953125,-8351.0703125,3098.89990234375,-8351.40625,3098.89990234375ZM-8351.40625,3089L-8354.4453125,3089C-8354.78125,3089,-8355.052734375,3089.2470703125,-8355.052734375,3089.55078125L-8355.052734375,3092.29931640625C-8355.052734375,3092.60302734375,-8354.78125,3092.85009765625,-8354.4453125,3092.85009765625C-8354.109375,3092.85009765625,-8353.8359375,3092.60302734375,-8353.8359375,3092.29931640625L-8353.8359375,3090.10009765625L-8351.404296875,3090.10009765625C-8351.068359375,3090.10009765625,-8350.796875,3089.85302734375,-8350.796875,3089.55078125C-8350.796875,3089.2470703125,-8351.0703125,3089,-8351.40625,3089ZM-8343.501953125,3096.14990234375C-8343.83984375,3096.14990234375,-8344.111328125,3096.39501953125,-8344.111328125,3096.70068359375L-8344.111328125,3098.89990234375L-8346.54296875,3098.89990234375C-8346.87890625,3098.89990234375,-8347.150390625,3099.14501953125,-8347.150390625,3099.45068359375C-8347.150390625,3099.75439453125,-8346.87890625,3100,-8346.54296875,3100L-8343.50390625,3100C-8343.16796875,3100,-8342.896484375,3099.75439453125,-8342.896484375,3099.45068359375L-8342.896484375,3096.70068359375C-8342.89453125,3096.39501953125,-8343.166015625,3096.14990234375,-8343.501953125,3096.14990234375Z" /></svg>
+              <select id="source-select">
+                <option value="full-screen">Full Screen</option>
+                <option value="region">Region</option>
+              </select>
+            </div>
+            <div class="pill-select-wrap">
+              <svg viewBox="-8229.132 3089 12.061 11" fill="currentColor"><path d="M-8217.0703125,3089.55078125L-8217.0703125,3092.29931640625C-8217.0703125,3092.60302734375,-8217.33984375,3092.85009765625,-8217.671875,3092.85009765625C-8218.0078125,3092.85009765625,-8218.27734375,3092.60302734375,-8218.27734375,3092.29931640625L-8218.27734375,3090.10009765625L-8220.689453125,3090.10009765625C-8221.0224609375,3090.10009765625,-8221.29296875,3089.85302734375,-8221.29296875,3089.55078125C-8221.29296875,3089.2470703125,-8221.0224609375,3089,-8220.689453125,3089L-8217.673828125,3089C-8217.33984375,3089,-8217.0703125,3089.2470703125,-8217.0703125,3089.55078125ZM-8225.513671875,3098.89990234375L-8227.9248046875,3098.89990234375L-8227.9248046875,3096.69921875C-8227.9248046875,3096.39501953125,-8228.1953125,3096.14990234375,-8228.529296875,3096.14990234375C-8228.8623046875,3096.14990234375,-8229.130859375,3096.39501953125,-8229.130859375,3096.69921875L-8229.130859375,3099.44921875C-8229.130859375,3099.7529296875,-8228.8623046875,3100,-8228.529296875,3100L-8225.513671875,3100C-8225.1796875,3100,-8224.91015625,3099.7529296875,-8224.91015625,3099.44921875C-8224.91015625,3099.14501953125,-8225.1796875,3098.89990234375,-8225.513671875,3098.89990234375ZM-8225.513671875,3089L-8228.529296875,3089C-8228.8623046875,3089,-8229.130859375,3089.2470703125,-8229.130859375,3089.55078125L-8229.130859375,3092.29931640625C-8229.130859375,3092.60302734375,-8228.8623046875,3092.85009765625,-8228.529296875,3092.85009765625C-8228.1953125,3092.85009765625,-8227.9248046875,3092.60302734375,-8227.9248046875,3092.29931640625L-8227.9248046875,3090.10009765625L-8225.51171875,3090.10009765625C-8225.1796875,3090.10009765625,-8224.91015625,3089.85302734375,-8224.91015625,3089.55078125C-8224.91015625,3089.2470703125,-8225.1796875,3089,-8225.513671875,3089ZM-8217.671875,3096.14990234375C-8218.0078125,3096.14990234375,-8218.27734375,3096.39501953125,-8218.27734375,3096.70068359375L-8218.27734375,3098.89990234375L-8220.689453125,3098.89990234375C-8221.0224609375,3098.89990234375,-8221.29296875,3099.14501953125,-8221.29296875,3099.45068359375C-8221.29296875,3099.75439453125,-8221.0224609375,3100,-8220.689453125,3100L-8217.673828125,3100C-8217.341796875,3100,-8217.072265625,3099.75439453125,-8217.072265625,3099.45068359375L-8217.072265625,3096.70068359375C-8217.0703125,3096.39501953125,-8217.33984375,3096.14990234375,-8217.671875,3096.14990234375Z" /></svg>
+              <select id="aspect-ratio-select">
+                <option value="original">Original</option>
+                <option value="16:9">16:9 — Landscape</option>
+                <option value="9:16">9:16 — Vertical</option>
+                <option value="1:1">1:1 — Square</option>
+                <option value="4:5">4:5 — Portrait</option>
+                <option value="5:4">5:4 — Landscape</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Static illustration, exact geometry off e8c2d37c...d33b —
+               not a live preview, just the design's own decorative mockup.
+               The highlight rect's visibility follows the Bounding Box
+               toggle (a real, distinct shape in the source); there's no
+               separate "dim" shape to tie to Dim Background. -->
+          <!-- 3-tile carousel (e8c2d37c/5e527851 "Front Title Preview" /
+               "Screen Recording Preview" / "End Title Preview" mockups):
+               a caption label, side nav arrows (clamped at each end, not
+               wrapping — checked: the leftmost tile's mockup only has a
+               right arrow, the middle one has both), and 3 slides. Opens
+               to the middle (Screen Recording) slide by default. -->
+          <div class="preview-box" id="preview-box" data-tip-tab="background" data-tip-label="Background color" aria-label="Color — Background tab" tabindex="0" role="button">
+            <button type="button" class="preview-nav preview-nav-left" id="preview-nav-left" aria-label="Previous preview">
+              <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1L1 7l6 6" /></svg>
+            </button>
+            <button type="button" class="preview-nav preview-nav-right" id="preview-nav-right" aria-label="Next preview">
+              <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l6 6-6 6" /></svg>
+            </button>
+            <p class="preview-caption" id="preview-caption">Screen Recording Preview</p>
+            <div class="preview-slides">
+              <!-- Slide 0: intro title card -->
+              <div class="preview-slide" id="preview-slide-0" hidden>
+                <div class="preview-titlecard" id="preview-titlecard-start">
+                  <span class="preview-titlecard-text" id="preview-titlecard-start-text"></span>
+                </div>
+              </div>
+              <!-- Slide 1: live recording preview (default) -->
+              <div class="preview-slide" id="preview-slide-1">
+                <div class="preview-content" id="preview-content">
+                  <div class="preview-card" id="preview-card">
+                    <!-- Region-select mode only: 4 corner handles on the
+                         selection card itself, matching the "Region — free-form"
+                         reference thumbnail exactly. -->
+                    <span class="preview-handle preview-handle-nw"></span>
+                    <span class="preview-handle preview-handle-ne"></span>
+                    <span class="preview-handle preview-handle-sw"></span>
+                    <span class="preview-handle preview-handle-se"></span>
+                  </div>
+                  <div class="preview-dot" id="preview-dot-group" title="Source & Aspect Ratio pills above"><span></span><span></span><span></span></div>
+                  <div class="preview-highlight" id="preview-highlight" data-tip-tab="animation" data-tip-label="Bounding Box" aria-label="Bounding Box — Animation tab" tabindex="0" role="button"></div>
+                  <svg class="preview-ripple" id="preview-ripple" viewBox="0 0 24 24" fill="none" data-tip-tab="pointer" data-tip-label="Ripple" aria-label="Ripple — Pointer tab" tabindex="0" role="button">
+                    <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" />
+                    <circle class="preview-ripple-ring" cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4" opacity="0.45" />
+                  </svg>
+                  <svg class="preview-cursor" id="preview-cursor" viewBox="-8260 3168 9 13" fill="currentColor" data-tip-tab="pointer" data-tip-label="Custom Cursor" aria-label="Custom Cursor — Pointer tab" tabindex="0" role="button">
+                    <path d="M-8257.904296875,3168C-8258.15625,3168.001953125,-8258.3701171875,3168.18212890625,-8258.41015625,3168.42578125L-8259.9931640625,3178.2353515625C-8260.025390625,3178.43017578125,-8259.9384765625,3178.625,-8259.7705078125,3178.734375C-8259.603515625,3178.84375,-8259.38671875,3178.84814453125,-8259.21484375,3178.7451171875L-8257.201171875,3177.54248046875L-8256.3583984375,3180.625C-8256.3232421875,3180.7548828125,-8256.236328125,3180.86572265625,-8256.1181640625,3180.9326171875C-8255.9990234375,3181,-8255.857421875,3181.017578125,-8255.724609375,3180.982421875L-8253.40625,3180.373046875C-8253.1318359375,3180.30078125,-8252.96875,3180.02685546875,-8253.041015625,3179.7587890625L-8253.8837890625,3176.67578125L-8251.5263671875,3176.728515625C-8251.326171875,3176.73291015625,-8251.1416015625,3176.623046875,-8251.0537109375,3176.447265625C-8250.96484375,3176.27197265625,-8250.98828125,3176.0625,-8251.11328125,3175.9091796875L-8257.49609375,3168.189453125C-8257.595703125,3168.068359375,-8257.74609375,3167.99853515625,-8257.904296875,3168ZM-8257.572265625,3169.70703125L-8252.6220703125,3175.6943359375L-8254.548828125,3175.65185546875C-8254.7119140625,3175.64794921875,-8254.8662109375,3175.7197265625,-8254.966796875,3175.8447265625C-8255.068359375,3175.9697265625,-8255.1015625,3176.1337890625,-8255.0595703125,3176.28759765625L-8254.16796875,3179.533203125L-8255.494140625,3179.87939453125L-8256.3857421875,3176.6337890625C-8256.427734375,3176.48046875,-8256.541015625,3176.3544921875,-8256.6923828125,3176.2958984375C-8256.84375,3176.23681640625,-8257.0146484375,3176.2509765625,-8257.1533203125,3176.33447265625L-8258.8017578125,3177.31689453125L-8257.572265625,3169.70703125Z" />
+                  </svg>
+                  <div class="preview-tooltip" id="preview-tooltip" hidden>
+                    <span class="preview-tooltip-icon" id="preview-tooltip-icon"></span>
+                    <span class="preview-tooltip-label" id="preview-tooltip-label"></span>
+                  </div>
+                </div>
+              </div>
+              <!-- Slide 2: outro title card -->
+              <div class="preview-slide" id="preview-slide-2" hidden>
+                <div class="preview-titlecard" id="preview-titlecard-end">
+                  <span class="preview-titlecard-text" id="preview-titlecard-end-text"></span>
+                </div>
+              </div>
+            </div>
+            <!-- Sits on top of every slide (not slide-specific) when a
+                 mockup is selected — see applyMockupToPreview() in
+                 popup.js. Its screen area is already cut transparent
+                 (same asset the real render pass uses), so whatever's
+                 underneath (repositioned to line up with that cutout)
+                 shows through exactly like the real compositor. -->
+            <img class="preview-mockup-frame" id="preview-mockup-frame" alt="" hidden />
+          </div>
+        </div>
+
+        <div class="tabs">
+          <!-- Order: Title Card, Background, Pointer, Animation (per
+               direct instruction). Icons are the designer-supplied set
+               (title card/Bg/Pointer/Animation.svg), exported at sizes
+               that already read as consistent side by side, so they
+               render at their own natural width/height (not forced into
+               one box) and fill via currentColor so .active can turn
+               them white. -->
+          <button type="button" class="tab-btn" data-tab="titlecard" title="Title Card" aria-label="Title Card">
+            <svg viewBox="0 0 12 12.069" width="12" height="12.069" fill="currentColor">
+              <path d="M5.142578125,0.0009765625L-0.00048828125,0.0009765625L-0.00048828125,3.45068359375L1.71435546875,3.45068359375L1.71435546875,1.72314453125L5.142578125,1.72314453125L5.142578125,10.3466796875L3.427734375,10.3466796875L3.427734375,12.0703125L5.142578125,12.0703125L6.857421875,12.0703125L8.57177734375,12.0703125L8.57177734375,10.3466796875L6.857421875,10.3466796875L6.857421875,1.72314453125L10.28662109375,1.72314453125L10.28662109375,3.45068359375L11.99951171875,3.45068359375L11.99951171875,0.0009765625L6.857421875,0.0009765625L5.142578125,0.0009765625" />
+            </svg>
+          </button>
+          <button type="button" class="tab-btn" data-tab="background" title="Background" aria-label="Background">
+            <svg viewBox="0.025 -0.025 13.95 14" width="13.95" height="14" fill="currentColor">
+              <path d="M0.02453518845140934,12.573609352111816C0.02453518845140934,13.341187477111816,0.6583242416381836,13.974488258361816,1.4224843978881836,13.974488258361816L12.581664085388184,13.974488258361816C13.347777366638184,13.974488258361816,13.975218772888184,13.341187477111816,13.975218772888184,12.573609352111816L13.975218772888184,1.3719491958618164C13.975218772888184,0.6058359146118164,13.347777366638184,-0.02258206345140934,12.581664085388184,-0.02258206345140934L1.4224843978881836,-0.02258206345140934C0.6583242416381836,-0.02258206345140934,0.02453518845140934,0.6058359146118164,0.02453518845140934,1.3719491958618164ZM0.9561758041381836,12.573609352111816L0.9561758041381836,1.3719491958618164C0.9561758041381836,1.1087656021118164,1.1583242416381836,0.9100351333618164,1.4224843978881836,0.9100351333618164L12.581664085388184,0.9100351333618164C12.848753929138184,0.9100351333618164,13.047972679138184,1.1087656021118164,13.047972679138184,1.3719491958618164L13.047972679138184,12.573609352111816C13.047972679138184,12.840210914611816,12.848753929138184,13.040406227111816,12.581664085388184,13.040406227111816L1.4224843978881836,13.040406227111816C1.1583242416381836,13.040406227111816,0.9561758041381836,12.840210914611816,0.9561758041381836,12.573609352111816ZM1.8873281478881836,6.039429664611816L1.8873281478881836,6.039429664611816C1.8873281478881836,6.165406227111816,1.9356679916381836,6.283570289611816,2.0230703353881836,6.370484352111816L7.604125022888184,11.969117164611816C7.786253929138184,12.153199195861816,8.079222679138184,12.153199195861816,8.259398460388184,11.969117164611816C8.439574241638184,11.787964820861816,8.439574241638184,11.494019508361816,8.259398460388184,11.311402320861816L2.6832265853881836,5.707886695861816L2.6832265853881836,5.712769508361816C2.5933828353881836,5.622437477111816,2.4761953353881836,5.574097633361816,2.3541250228881836,5.574097633361816C2.2296133041381836,5.574097633361816,2.1109609603881836,5.622437477111816,2.0245351791381836,5.712769508361816C1.9356679916381836,5.800171852111816,1.8873281478881836,5.918335914611816,1.8873281478881836,6.039429664611816ZM1.8873281478881836,9.774292945861816L1.8873281478881836,9.774292945861816C1.8873281478881836,9.895386695861816,1.9371328353881836,10.016480445861816,2.0230703353881836,10.103882789611816L3.8824453353881836,11.970582008361816L3.8824453353881836,11.969117164611816C4.064085960388184,12.153199195861816,4.357542991638184,12.153199195861816,4.539183616638184,11.969117164611816C4.719359397888184,11.787964820861816,4.719359397888184,11.494019508361816,4.539183616638184,11.311402320861816L2.6812734603881836,9.446167945861816L2.6832265853881836,9.446167945861816C2.5933828353881836,9.355835914611816,2.4747304916381836,9.308960914611816,2.3541250228881836,9.308960914611816C2.2296133041381836,9.308960914611816,2.1109609603881836,9.355835914611816,2.0230703353881836,9.446167945861816C1.9371328353881836,9.533570289611816,1.8873281478881836,9.649781227111816,1.8873281478881836,9.774292945861816ZM1.8902578353881836,2.3612070083618164L1.8902578353881836,2.3612070083618164C1.9010000228881836,2.4661874771118164,1.9468984603881836,2.5628671646118164,2.0230703353881836,2.6375741958618164L11.321410179138184,11.969117164611816L11.321410179138184,11.969117164611816C11.410765647888184,12.057984352111816,11.527953147888184,12.106324195861816,11.651000022888184,12.106324195861816C11.774535179138184,12.106324195861816,11.891722679138184,12.057984352111816,11.981566429138184,11.969117164611816C12.160277366638184,11.787964820861816,12.160277366638184,11.494019508361816,11.981566429138184,11.311402320861816L2.6832265853881836,1.9764413833618164C2.5933828353881836,1.8890390396118164,2.4747304916381836,1.8372812271118164,2.3541250228881836,1.8372812271118164C2.2296133041381836,1.8372812271118164,2.1109609603881836,1.8890390396118164,2.0230703353881836,1.9764413833618164C1.9234609603881836,2.0799570083618164,1.8726797103881836,2.2205820083618164,1.8902578353881836,2.3612070083618164ZM5.607542991638184,2.3060312271118164L5.606078147888184,2.3060312271118164C5.606078147888184,2.4305429458618164,5.655882835388184,2.5501718521118164,5.743285179138184,2.6375741958618164L11.321410179138184,8.239136695861816C11.410765647888184,8.324585914611816,11.527953147888184,8.376343727111816,11.651000022888184,8.376343727111816C11.774535179138184,8.376343727111816,11.891722679138184,8.324585914611816,11.981566429138184,8.239136695861816C12.067015647888184,8.151734352111816,12.115843772888184,8.033570289611816,12.115843772888184,7.907593727111816C12.115843772888184,7.785035133361816,12.067015647888184,7.665406227111816,11.981566429138184,7.578003883361816L6.398558616638184,1.9764413833618164L6.398558616638184,1.9764413833618164C6.218382835388184,1.7972421646118164,5.923460960388184,1.7972421646118164,5.743285179138184,1.9764413833618164C5.654417991638184,2.0618906021118164,5.606078147888184,2.1834726333618164,5.606078147888184,2.3060312271118164ZM9.322875022888184,2.3060312271118164L9.321410179138184,2.3060312271118164C9.321410179138184,2.4305429458618164,9.373167991638184,2.5501718521118164,9.460570335388184,2.6375741958618164L11.321410179138184,4.505738258361816L11.321410179138184,4.505738258361816C11.410765647888184,4.593140602111816,11.527953147888184,4.642945289611816,11.651000022888184,4.642945289611816C11.774535179138184,4.642945289611816,11.891722679138184,4.593140602111816,11.981566429138184,4.505738258361816C12.067015647888184,4.416871070861816,12.115843772888184,4.298707008361816,12.115843772888184,4.176148414611816C12.115843772888184,4.050171852111816,12.067015647888184,3.9320077896118164,11.981566429138184,3.8446054458618164L10.120726585388184,1.9764413833618164C10.032347679138184,1.8890390396118164,9.913695335388184,1.8372812271118164,9.791625022888184,1.8372812271118164C9.667113304138184,1.8372812271118164,9.548460960388184,1.8890390396118164,9.460570335388184,1.9764413833618164C9.374632835388184,2.0618906021118164,9.322875022888184,2.1834726333618164,9.321410179138184,2.3060312271118164Z" />
+            </svg>
+          </button>
+          <button type="button" class="tab-btn" data-tab="pointer" title="Pointer" aria-label="Pointer">
+            <svg viewBox="-3.346 -1.414 16.692 18.828" width="16.692" height="18.828" fill="currentColor">
+              <path d="M-1.3259007930755615,2.4099860191345215C-1.5676000118255615,2.5535407066345215,-1.6637914180755615,2.8635993003845215,-1.5524632930755615,3.1419196128845215L2.9778101444244385,14.47053337097168C3.0671656131744385,14.69465446472168,3.2717554569244385,14.85188102722168,3.4992945194244385,14.87531852722168C3.7278101444244385,14.89680290222168,3.9397242069244385,14.78303337097168,4.040310382843018,14.57844352722168L5.238552570343018,12.18195915222168L7.953396320343018,14.99836540222168C8.06716537475586,15.11750602722168,8.21804428100586,15.18635368347168,8.37380599975586,15.19318962097168C8.52907943725586,15.19660758972168,8.67751693725586,15.13947868347168,8.78396224975586,15.02912712097168L10.64138412475586,13.09455680847168C10.86111068725586,12.86604118347168,10.84890365600586,12.48322868347168,10.61404037475586,12.23957633972168L7.900173664093018,9.42365837097168L10.20193099975586,8.17072868347168C10.39724349975586,8.06623649597168,10.50857162475586,7.8460211753845215,10.48708724975586,7.6126227378845215C10.46267318725586,7.3748297691345215,10.30788803100586,7.1643805503845215,10.09450912475586,7.0706305503845215L-0.8161351680755615,2.3889899253845215C-0.9875218868255615,2.3147711753845215,-1.1779515743255615,2.3220953941345215,-1.3259007930755615,2.4099860191345215L-1.3259007930755615,2.4099860191345215M0.04665780067443848,4.0442633628845215L8.50759506225586,7.6770758628845215L6.626247882843018,8.69904899597168C6.466579914093018,8.78449821472168,6.364040851593018,8.94758415222168,6.342068195343018,9.13850212097168C6.323025226593018,9.32502555847168,6.391384601593018,9.52033805847168,6.526638507843018,9.66047477722168L9.39040756225586,12.62238883972168L8.32595443725586,13.72541618347168L5.463161945343018,10.76252555847168C5.329372882843018,10.62238883972168,5.139919757843018,10.55158805847168,4.961697101593018,10.57649040222168C4.777126789093018,10.59504508972168,4.621853351593018,10.70490837097168,4.538845539093018,10.87092399597168L3.5569117069244385,12.82697868347168L0.04665780067443848,4.0442633628845215L0.04665780067443848,4.0442633628845215" />
+            </svg>
+          </button>
+          <button type="button" class="tab-btn" data-tab="animation" title="Animation" aria-label="Animation">
+            <svg viewBox="0 0 21.352 13.322" width="21.352" height="13.322" fill="currentColor" fill-rule="evenodd">
+              <path d="M6.13818359375,6.2724609375C6.31494140625,6.1240234375,6.57275390625,6.1474609375,6.72021484375,6.3251953125C6.86474609375,6.4990234375,6.84228515625,6.7626953125,6.67041015625,6.9091796875C5.99853515625,7.4833984375,5.13134765625,7.8291015625,4.18701171875,7.8291015625C3.24169921875,7.8291015625,2.37646484375,7.4833984375,1.70458984375,6.9091796875C0.86083984375,6.1923828125,0.32666015625,5.1162109375,0.32666015625,3.9130859375C0.32666015625,2.7099609375,0.86279296875,1.6337890625,1.70458984375,0.9169921875C2.37646484375,0.3447265625,3.24169921875,-0.0009765625,4.18701171875,-0.0009765625C5.13134765625,-0.0009765625,5.99853515625,0.3447265625,6.67041015625,0.9169921875C6.84228515625,1.0654296875,6.86474609375,1.3271484375,6.72021484375,1.5029296875C6.57275390625,1.6826171875,6.31494140625,1.7041015625,6.13818359375,1.5556640625C5.61474609375,1.1064453125,4.93115234375,0.8330078125,4.18701171875,0.8330078125C3.44580078125,0.8330078125,2.76220703125,1.1064453125,2.23388671875,1.5556640625C1.57080078125,2.1181640625,1.14892578125,2.9697265625,1.14892578125,3.9130859375C1.14892578125,4.8623046875,1.57080078125,5.7080078125,2.23388671875,6.2724609375C2.76220703125,6.7236328125,3.44580078125,6.9951171875,4.18701171875,6.9951171875C4.93115234375,6.9951171875,5.61474609375,6.7236328125,6.13818359375,6.2724609375Z" />
+              <path d="M10.57666015625,6.2724609375C10.74853515625,6.1240234375,11.00830078125,6.1474609375,11.15478515625,6.3251953125C11.30029296875,6.4990234375,11.27685546875,6.7626953125,11.10400390625,6.9091796875C10.43115234375,7.4833984375,9.56689453125,7.8291015625,8.62158203125,7.8291015625C7.67822265625,7.8291015625,6.81005859375,7.4833984375,6.13818359375,6.9091796875C5.29736328125,6.1923828125,4.76123046875,5.1162109375,4.76123046875,3.9130859375C4.76123046875,2.7099609375,5.29931640625,1.6337890625,6.13818359375,0.9169921875C6.81005859375,0.3447265625,7.67822265625,-0.0009765625,8.62158203125,-0.0009765625C9.56689453125,-0.0009765625,10.43115234375,0.3447265625,11.10400390625,0.9169921875C11.27685546875,1.0654296875,11.30029296875,1.3271484375,11.15478515625,1.5029296875C11.00830078125,1.6826171875,10.74853515625,1.7041015625,10.57666015625,1.5556640625C10.04931640625,1.1064453125,9.36767578125,0.8330078125,8.62353515625,0.8330078125C7.87939453125,0.8330078125,7.19775390625,1.1064453125,6.67041015625,1.5556640625C6.00634765625,2.1181640625,5.58447265625,2.9697265625,5.58447265625,3.9130859375C5.58447265625,4.8623046875,6.00634765625,5.7080078125,6.67041015625,6.2724609375C7.19775390625,6.7236328125,7.87939453125,6.9951171875,8.62353515625,6.9951171875C9.36767578125,6.9951171875,10.04931640625,6.7236328125,10.57666015625,6.2724609375Z" />
+              <path d="M15.01123046875,6.2724609375C15.18310546875,6.1240234375,15.44287109375,6.1474609375,15.59033203125,6.3251953125C15.73486328125,6.4990234375,15.71435546875,6.7626953125,15.53857421875,6.9091796875C14.86669921875,7.4833984375,14.00146484375,7.8291015625,13.05810546875,7.8291015625C12.11181640625,7.8291015625,11.24462890625,7.4833984375,10.57470703125,6.9091796875C9.73095703125,6.1923828125,9.19775390625,5.1162109375,9.19775390625,3.9130859375C9.19775390625,2.7099609375,9.73291015625,1.6337890625,10.57470703125,0.9169921875C11.24462890625,0.3447265625,12.11181640625,-0.0009765625,13.05810546875,-0.0009765625C14.00146484375,-0.0009765625,14.86669921875,0.3447265625,15.53857421875,0.9169921875C15.71435546875,1.0654296875,15.73486328125,1.3271484375,15.59033203125,1.5029296875C15.44287109375,1.6826171875,15.18310546875,1.7041015625,15.01123046875,1.5556640625C14.48291015625,1.1064453125,13.80322265625,0.8330078125,13.06005859375,0.8330078125C12.31591796875,0.8330078125,11.63232421875,1.1064453125,11.10400390625,1.5556640625C10.44091796875,2.1181640625,10.02099609375,2.9697265625,10.02099609375,3.9130859375C10.02099609375,4.8623046875,10.44091796875,5.7080078125,11.10400390625,6.2724609375C11.63232421875,6.7236328125,12.31591796875,6.9951171875,13.06005859375,6.9951171875C13.80322265625,6.9951171875,14.48291015625,6.7236328125,15.01123046875,6.2724609375Z" />
+              <path d="M17.49169921875,-0.0009765625C19.62255859375,-0.0009765625,21.35205078125,1.7548828125,21.35205078125,3.9130859375C21.35205078125,6.0751953125,19.62255859375,7.8291015625,17.49169921875,7.8291015625C15.36279296875,7.8291015625,13.63134765625,6.0751953125,13.63134765625,3.9130859375C13.63134765625,1.7548828125,15.36279296875,-0.0009765625,17.49169921875,-0.0009765625ZM17.49169921875,0.8330078125C15.81494140625,0.8330078125,14.45263671875,2.2138671875,14.45263671875,3.9130859375C14.45263671875,5.6123046875,15.81494140625,6.9951171875,17.49169921875,6.9951171875C19.16943359375,6.9951171875,20.53076171875,5.6142578125,20.53076171875,3.9130859375C20.53076171875,2.2138671875,19.16943359375,0.8330078125,17.49169921875,0.8330078125Z" />
+              <path d="M8.62353515625,11.6572265625C8.39599609375,11.6572265625,8.21142578125,11.4736328125,8.21142578125,11.2431640625C8.21142578125,11.0126953125,8.39599609375,10.8251953125,8.62353515625,10.8251953125L20.93994140625,10.8251953125C21.16845703125,10.8251953125,21.35205078125,11.0126953125,21.35205078125,11.2431640625C21.35205078125,11.4736328125,21.16845703125,11.6572265625,20.93994140625,11.6572265625Z" />
+              <path d="M6.98193359375,10.8251953125C7.20654296875,10.8251953125,7.39013671875,11.0126953125,7.39013671875,11.2431640625C7.39013671875,11.4736328125,7.20654296875,11.6572265625,6.98193359375,11.6572265625L4.51513671875,11.6572265625C4.29150390625,11.6572265625,4.10498046875,11.4736328125,4.10498046875,11.2431640625C4.10498046875,11.0126953125,4.29150390625,10.8251953125,4.51513671875,10.8251953125Z" />
+              <path d="M2.87353515625,10.8251953125C3.10009765625,10.8251953125,3.28564453125,11.0126953125,3.28564453125,11.2431640625C3.28564453125,11.4736328125,3.10009765625,11.6572265625,2.87353515625,11.6572265625L0.40869140625,11.6572265625C0.18310546875,11.6572265625,0.00146484375,11.4736328125,0.00146484375,11.2431640625C0.00146484375,11.0126953125,0.18310546875,10.8251953125,0.40869140625,10.8251953125Z" />
+              <path d="M19.00927734375,9.8701171875C18.84912109375,9.7080078125,18.84912109375,9.4443359375,19.00927734375,9.2822265625C19.16943359375,9.1181640625,19.42919921875,9.1181640625,19.58935546875,9.2822265625L21.23193359375,10.9443359375C21.39208984375,11.1064453125,21.39208984375,11.3701171875,21.23193359375,11.5341796875L19.58935546875,13.2001953125C19.43115234375,13.3642578125,19.16943359375,13.3642578125,19.00927734375,13.2001953125C18.84912109375,13.0380859375,18.84912109375,12.7744140625,19.00927734375,12.6123046875C19.00927734375,12.6123046875,20.36083984375,11.2412109375,20.36083984375,11.2412109375L19.00927734375,9.8681640625Z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Animation tab -->
+        <div class="tab-panel" data-panel="animation">
+          <h3 class="section-heading">Animation</h3>
+          <div class="setting-row">
+            <div class="left">
+              <div class="title-row">
+                <span class="field-label">Auto Zoom</span>
+                <span class="hotkey-group" title="Hotkeys: + / -">
+                  <span class="hotkey-badge"><svg class="hotkey-icon" viewBox="0 0 12 12"><path d="M6 2.2V9.8M2.2 6H9.8" /></svg></span>
+                  <span class="hotkey-badge"><svg class="hotkey-icon" viewBox="0 0 12 12"><path d="M2.2 6H9.8" /></svg></span>
+                </span>
+              </div>
+              <p class="hint">Automatically zooms in when you focus on one point — manual zoom still works either way.</p>
+            </div>
+            <div class="right">
+              <label class="switch">
+                <input type="checkbox" id="auto-zoom-toggle" checked />
+                <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="left">
+              <div class="title-row"><span class="field-label">Dim Background</span></div>
+              <p class="hint">Dims everything outside the highlighted element to keep viewer attention on it.</p>
+            </div>
+            <div class="right">
+              <label class="switch">
+                <input type="checkbox" id="dim-background-toggle" checked />
+                <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <div class="setting-row">
+              <div class="left">
+                <div class="title-row">
+                  <span class="field-label">Bounding Box</span>
+                  <span class="hotkey-badge" title="Hotkey: B">B</span>
+                </div>
+                <p class="hint">Draws a highlight box around the clicked element — press B anytime to place it manually.</p>
+              </div>
+              <div class="right">
+                <label class="switch">
+                  <input type="checkbox" id="highlight-toggle" checked />
+                  <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+                </label>
+                <input type="color" id="highlight-color-input" value="#4f7cff" />
+              </div>
+            </div>
+            <div class="sub-option-group" id="motion-style-group">
+              <button type="button" class="sub-title-toggle" id="motion-style-toggle" aria-expanded="false">
+                <span class="sub-title">Choose Motion Style</span>
+                <span class="sub-title-triangle">▾</span>
+              </button>
+              <div class="sub-option-list" id="motion-style-options" hidden>
+                <label class="sub-option">
+                  <input type="radio" name="motion-style" id="motion-style-solid" value="solid" checked />
+                  <span>
+                    <span class="sub-option-label">Solid</span><br />
+                    <span class="sub-option-desc">Box appears and holds steady. No movement, just a clean outline.</span>
+                  </span>
+                </label>
+                <label class="sub-option">
+                  <input type="radio" name="motion-style" id="motion-style-pulse" value="pulse" />
+                  <span>
+                    <span class="sub-option-label">Pulse</span><br />
+                    <span class="sub-option-desc">Box gently pulses while active. Draws the eye without being distracting.</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="left">
+              <div class="title-row">
+                <span class="field-label">Directional Wipe</span>
+                <span class="hotkey-group" title="Hotkeys: ← → ↑ ↓">
+                  <!-- One shared arrow path, just rotated per direction —
+                       guarantees all 4 are visually identical (same
+                       stroke weight/length), instead of relying on each
+                       Unicode arrow glyph's own (very different) natural
+                       size within the font. -->
+                  <span class="hotkey-badge"><svg class="hotkey-icon hotkey-icon-rotate-180" viewBox="0 0 12 12"><path d="M3 6H9M6 3L9 6L6 9" /></svg></span>
+                  <span class="hotkey-badge"><svg class="hotkey-icon" viewBox="0 0 12 12"><path d="M3 6H9M6 3L9 6L6 9" /></svg></span>
+                  <span class="hotkey-badge"><svg class="hotkey-icon hotkey-icon-rotate-n90" viewBox="0 0 12 12"><path d="M3 6H9M6 3L9 6L6 9" /></svg></span>
+                  <span class="hotkey-badge"><svg class="hotkey-icon hotkey-icon-rotate-90" viewBox="0 0 12 12"><path d="M3 6H9M6 3L9 6L6 9" /></svg></span>
+                </span>
+              </div>
+              <p class="hint">Sweeps a solid color across the screen as a transition cue — doesn't scroll the page.</p>
+            </div>
+            <div class="right">
+              <label class="switch">
+                <input type="checkbox" id="wipe-toggle" checked />
+                <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+              </label>
+              <div class="wipe-color-options" id="wipe-color-options" role="radiogroup" aria-label="Wipe color">
+                <label class="wipe-color-option" title="White">
+                  <input type="radio" name="wipe-color" id="wipe-color-white" value="#ffffff" checked />
+                  <span class="wipe-color-swatch" style="background: #ffffff;"></span>
+                </label>
+                <label class="wipe-color-option" title="Black">
+                  <input type="radio" name="wipe-color" id="wipe-color-black" value="#000000" />
+                  <span class="wipe-color-swatch" style="background: #000000;"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pointer tab -->
+        <div class="tab-panel" data-panel="pointer">
+          <h3 class="section-heading">Pointer</h3>
+          <div class="setting-row">
+            <div class="left">
+              <div class="title-row"><span class="field-label">Custom Cursor</span></div>
+              <p class="hint">Replaces the system cursor with a styled one so viewers can track movement clearly.</p>
+            </div>
+            <div class="right">
+              <label class="switch">
+                <input type="checkbox" id="cursor-toggle" checked />
+                <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+              </label>
+              <input type="color" id="cursor-color-input" value="#ffb020" />
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="left">
+              <div class="title-row"><span class="field-label">Ripple</span></div>
+              <p class="hint">Shows a quick ripple at every click — a lightweight cue that something just happened.</p>
+            </div>
+            <div class="right">
+              <label class="switch">
+                <input type="checkbox" id="ripples-toggle" checked />
+                <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+              </label>
+              <input type="color" id="ripple-color-input" value="#4f7cff" />
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="left">
+              <div class="title-row"><span class="field-label">Highlight Selected Text</span></div>
+              <p class="hint">Highlights any text you select while recording, and zooms in while it stays selected.</p>
+            </div>
+            <div class="right">
+              <label class="switch">
+                <input type="checkbox" id="text-highlight-toggle" />
+                <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+              </label>
+              <input type="color" id="text-highlight-color-input" value="#ffe066" title="Text highlighter color" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Background tab -->
+        <div class="tab-panel" data-panel="background">
+          <h3 class="section-heading">Background</h3>
+          <div>
+            <div class="setting-row">
+              <div class="left">
+                <div class="title-row"><span class="field-label">Color</span></div>
+                <p class="hint">Frames your recording inside a padded card instead of edge-to-edge — choose a style below.</p>
+              </div>
+              <div class="right">
+                <label class="switch">
+                  <input type="checkbox" id="background-toggle" checked />
+                  <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+                </label>
+              </div>
+            </div>
+            <div class="sub-option-group" id="background-style-group">
+              <label class="sub-option">
+                <input type="radio" name="background-style" id="background-style-solid" value="solid" checked />
+                <span class="sub-option-label">Solid color</span>
+                <!-- The swatch IS the control now — a real color input sits
+                     invisibly on top of the decorative circle, so clicking
+                     the pretty preview opens the actual picker instead of
+                     a second, unstyled native input floating elsewhere. -->
+                <span class="sub-option-swatch-wrap">
+                  <span class="sub-option-swatch" id="bg-solid-swatch"></span>
+                  <input type="color" id="background-color-start-input" class="sub-option-swatch-input" value="#0061fe" title="Solid color / gradient top" />
+                </span>
+              </label>
+              <label class="sub-option">
+                <input type="radio" name="background-style" id="background-style-gradient" value="gradient" />
+                <span class="sub-option-label">Gradient</span>
+                <span class="sub-option-swatch-wrap">
+                  <span class="sub-option-swatch" id="bg-gradient-swatch"></span>
+                  <input type="color" id="background-color-end-input" class="sub-option-swatch-input" value="#e9eaeb" title="Gradient bottom" />
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Mockup — lives under the Background tab, not its own
+               toolbar icon (per direct instruction). Only one real
+               mockup exists so far (desktop-sample-1, from
+               mockups/index.json); the other 4 slots are plain gray
+               placeholders just to preview the horizontal-scroll
+               layout with a fuller row — not real mockups yet. -->
+          <div class="mockup-section">
+            <div class="setting-row">
+              <div class="left">
+                <div class="title-row"><span class="field-label">Mockup</span></div>
+                <p class="hint">Give your screen recording a professional look with high quality, well designed mockups.</p>
+              </div>
+              <div class="right">
+                <label class="switch">
+                  <input type="checkbox" id="mockup-toggle" />
+                  <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+                </label>
+              </div>
+            </div>
+            <div class="mockup-scroll-row" id="mockup-scroll-row" hidden>
+              <button type="button" class="mockup-thumb" data-mockup-id="desktop-sample-1" title="Desktop Monitor — Two People">
+                <img src="mockups/desktop-sample-1.png" alt="Desktop Monitor mockup" />
+              </button>
+              <div class="mockup-thumb mockup-thumb-placeholder"></div>
+              <div class="mockup-thumb mockup-thumb-placeholder"></div>
+              <div class="mockup-thumb mockup-thumb-placeholder"></div>
+              <div class="mockup-thumb mockup-thumb-placeholder"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Title Card tab -->
+        <div class="tab-panel" data-panel="titlecard">
+          <h3 class="section-heading">Title Card</h3>
+          <div class="setting-row">
+            <div class="left">
+              <div class="title-row"><span class="field-label">Title Card</span></div>
+              <p class="hint">Add a title at start and end of the video.</p>
+            </div>
+            <div class="right">
+              <input type="color" id="title-card-color-input" value="#ffffff" title="Heading text color" />
+            </div>
+          </div>
+          <div class="title-card-body">
+            <div class="title-card-placement">
+              <div class="title-card-placement-row">
+                <span>Show at Start</span>
+                <label class="switch">
+                  <input type="checkbox" id="title-card-start-toggle" />
+                  <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+                </label>
+              </div>
+              <input
+                type="text"
+                id="title-card-text-start-input"
+                class="title-card-text-input"
+                placeholder="Start heading, e.g. Product Walkthrough"
+                maxlength="80"
+              />
+            </div>
+            <div class="title-card-placement">
+              <div class="title-card-placement-row">
+                <span>Show at End</span>
+                <label class="switch">
+                  <input type="checkbox" id="title-card-end-toggle" />
+                  <svg viewBox="-8147.794 3456 25.294 13" fill="currentColor"><path d="M-8128.31689453125,3456L-8141.97607421875,3456C-8145.18701171875,3456,-8147.79345703125,3458.80078125,-8147.79345703125,3462.251953125L-8147.79345703125,3462.748046875C-8147.79345703125,3466.19921875,-8145.18701171875,3469,-8141.97607421875,3469L-8128.31689453125,3469C-8125.10595703125,3469,-8122.49951171875,3466.19921875,-8122.49951171875,3462.748046875L-8122.49951171875,3462.251953125C-8122.49951171875,3458.80078125,-8125.10595703125,3456,-8128.31689453125,3456L-8128.31689453125,3456M-8141.75048828125,3466.3408203125C-8143.72412109375,3466.3408203125,-8145.32470703125,3464.62109375,-8145.32470703125,3462.5C-8145.32470703125,3460.37890625,-8143.72412109375,3458.6591796875,-8141.75048828125,3458.6591796875C-8139.7763671875,3458.6591796875,-8138.17529296875,3460.37890625,-8138.17529296875,3462.5C-8138.17529296875,3464.62109375,-8139.7763671875,3466.3408203125,-8141.75048828125,3466.3408203125L-8141.75048828125,3466.3408203125" /></svg>
+                </label>
+              </div>
+              <input
+                type="text"
+                id="title-card-text-end-input"
+                class="title-card-text-input"
+                placeholder="End heading, e.g. Thanks for watching"
+                maxlength="80"
+              />
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+  </main>
+
+  </div>
+</div>
+<script>
+/* Stand-in for the extension APIs popup.js talks to, so the real popup
+   code runs unchanged in a normal web page. Storage lives in memory and
+   the "background worker" is simulated by the stage script. */
+(function () {
+  const store = {};
+  const listeners = [];
+
+  function pick(keys) {
+    if (keys == null) return { ...store };
+    const list = typeof keys === 'string' ? [keys] : Array.isArray(keys) ? keys : Object.keys(keys);
+    const out = {};
+    list.forEach((k) => { if (k in store) out[k] = store[k]; });
+    return out;
+  }
+
+  function set(obj) {
+    const changes = {};
+    Object.entries(obj).forEach(([k, v]) => {
+      if (store[k] !== v) changes[k] = { oldValue: store[k], newValue: v };
+      store[k] = v;
+    });
+    if (Object.keys(changes).length) {
+      setTimeout(() => listeners.forEach((fn) => fn(changes, 'local')), 0);
+    }
+    return Promise.resolve();
+  }
+
+  const messageHandlers = [];
+
+  window.chrome = {
+    storage: {
+      local: { get: (k) => Promise.resolve(pick(k)), set },
+      onChanged: { addListener: (fn) => listeners.push(fn) }
+    },
+    runtime: {
+      getURL: (p) => p,
+      sendMessage: (msg) => {
+        for (const h of messageHandlers) {
+          const res = h(msg);
+          if (res !== undefined) return Promise.resolve(res);
+        }
+        return Promise.resolve({ ok: true });
+      }
+    },
+    tabs: { create: () => Promise.resolve() }
+  };
+
+  // Hooks for the stage script.
+  window.__demo = {
+    store,
+    set,
+    onChange: (fn) => listeners.push(fn),
+    onMessage: (fn) => messageHandlers.push(fn)
+  };
+
+  // The popup closes itself after Start in the real extension; here it stays.
+  window.close = () => {};
+
+  // Fake microphones so the mic picker has something to show.
+  const fakeMics = [
+    { kind: 'audioinput', deviceId: 'built-in', label: 'Built-in Microphone', groupId: 'a' },
+    { kind: 'audioinput', deviceId: 'usb-mic', label: 'USB Condenser Mic', groupId: 'b' }
+  ];
+  try {
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: {
+        enumerateDevices: () => Promise.resolve(fakeMics),
+        addEventListener: () => {}
+      }
+    });
+    Object.defineProperty(navigator, 'permissions', {
+      configurable: true,
+      value: { query: () => Promise.resolve({ state: 'granted', addEventListener() {}, onchange: null }) }
+    });
+  } catch (e) { /* leave the browser's own objects */ }
+})();
+
+</script>
+<script>
+/* Without a real page to record, simulate the background worker just
+   enough for the popup's Start/Stop/Processing states to play out. */
+(function () {
+  const demo = window.__demo;
+  let renderTimer = null;
+  demo.onMessage((msg) => {
+    switch (msg.type) {
+      case 'START_RECORDING':
+        setTimeout(() => demo.set({ recording: true, paused: false }), 600);
+        return { ok: true, contentScriptReachable: true };
+      case 'STOP_RECORDING': {
+        demo.set({ recording: false, paused: false, processing: true, renderProgress: 0 });
+        let p = 0;
+        clearInterval(renderTimer);
+        renderTimer = setInterval(() => {
+          p = Math.min(1, p + 0.1);
+          demo.set({ renderProgress: p });
+          if (p >= 1) { clearInterval(renderTimer); demo.set({ processing: false, renderProgress: 0 }); }
+        }, 200);
+        return { ok: true };
+      }
+      case 'CANCEL_PROCESSING':
+        clearInterval(renderTimer);
+        demo.set({ processing: false, renderProgress: 0 });
+        return { ok: true };
+      case 'RESUME_RECORDING':
+        demo.set({ paused: false });
+        return { ok: true };
+      default:
+        return undefined;
+    }
+  });
+})();
+
+</script>
+<script>
+/**
+ * popup.js — Oval Recorder popup UI logic.
+ *
+ * Persists user preferences (auto-zoom, ripples, mic device) to
+ * chrome.storage.local, and drives the start/stop recording flow through
+ * messages to the background service worker.
+ */
+
+const startStopBtn = document.getElementById('start-stop-btn');
+const startStopBtnLabel = startStopBtn.querySelector('.btn-label');
+const autoZoomToggle = document.getElementById('auto-zoom-toggle');
+const wipeToggle = document.getElementById('wipe-toggle');
+const wipeColorOptions = document.getElementById('wipe-color-options');
+const wipeColorInputs = Array.from(document.querySelectorAll('input[name="wipe-color"]'));
+const ripplesToggle = document.getElementById('ripples-toggle');
+const rippleColorInput = document.getElementById('ripple-color-input');
+const highlightToggle = document.getElementById('highlight-toggle');
+const dimBackgroundToggle = document.getElementById('dim-background-toggle');
+const highlightColorInput = document.getElementById('highlight-color-input');
+const motionStyleGroup = document.getElementById('motion-style-group');
+const motionStyleToggle = document.getElementById('motion-style-toggle');
+const motionStyleOptions = document.getElementById('motion-style-options');
+const motionStyleSolidInput = document.getElementById('motion-style-solid');
+const motionStylePulseInput = document.getElementById('motion-style-pulse');
+const cursorToggle = document.getElementById('cursor-toggle');
+const cursorColorInput = document.getElementById('cursor-color-input');
+const textHighlightToggle = document.getElementById('text-highlight-toggle');
+const textHighlightColorInput = document.getElementById('text-highlight-color-input');
+const aspectRatioSelect = document.getElementById('aspect-ratio-select');
+const sourceSelect = document.getElementById('source-select');
+const backgroundToggle = document.getElementById('background-toggle');
+const backgroundStyleGroup = document.getElementById('background-style-group');
+const backgroundStyleSolidInput = document.getElementById('background-style-solid');
+const backgroundStyleGradientInput = document.getElementById('background-style-gradient');
+const bgSolidSwatch = document.getElementById('bg-solid-swatch');
+const bgGradientSwatch = document.getElementById('bg-gradient-swatch');
+const backgroundColorStartInput = document.getElementById('background-color-start-input');
+const backgroundColorEndInput = document.getElementById('background-color-end-input');
+const titleCardColorInput = document.getElementById('title-card-color-input');
+const titleCardTextStartInput = document.getElementById('title-card-text-start-input');
+const titleCardTextEndInput = document.getElementById('title-card-text-end-input');
+const titleCardStartToggle = document.getElementById('title-card-start-toggle');
+const titleCardEndToggle = document.getElementById('title-card-end-toggle');
+const micSelect = document.getElementById('mic-select');
+const micPermissionBanner = document.getElementById('mic-permission-banner');
+const micSelectRow = document.getElementById('mic-select-row');
+const grantMicBtn = document.getElementById('grant-mic-btn');
+const refreshMicBtn = document.getElementById('refresh-mic-btn');
+const micToggleBtn = document.getElementById('mic-toggle-btn');
+const sourceToggleBtn = document.getElementById('source-toggle-btn');
+const sourceToggleIcon = document.getElementById('source-toggle-icon');
+const sourcePopoverPanel = document.getElementById('source-popover-panel');
+const sourceOptionFullScreen = document.getElementById('source-option-full-screen');
+const sourceOptionRegion = document.getElementById('source-option-region');
+const micPopoverTrigger = document.getElementById('mic-popover-trigger');
+const micPopoverPanel = document.getElementById('mic-popover-panel');
+const statusEl = document.getElementById('status');
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabPanels = document.querySelectorAll('.tab-panel');
+const previewBox = document.getElementById('preview-box');
+const previewContent = document.getElementById('preview-content');
+const previewCard = document.getElementById('preview-card');
+const previewHighlight = document.getElementById('preview-highlight');
+const previewCursor = document.getElementById('preview-cursor');
+const previewRipple = document.getElementById('preview-ripple');
+const previewTooltip = document.getElementById('preview-tooltip');
+const previewTooltipIcon = document.getElementById('preview-tooltip-icon');
+const previewTooltipLabel = document.getElementById('preview-tooltip-label');
+const previewCaption = document.getElementById('preview-caption');
+const previewNavLeft = document.getElementById('preview-nav-left');
+const previewNavRight = document.getElementById('preview-nav-right');
+const previewSlides = [
+  document.getElementById('preview-slide-0'),
+  document.getElementById('preview-slide-1'),
+  document.getElementById('preview-slide-2'),
+];
+const previewTitleCardStart = document.getElementById('preview-titlecard-start');
+const previewTitleCardStartText = document.getElementById('preview-titlecard-start-text');
+const previewTitleCardEnd = document.getElementById('preview-titlecard-end');
+const previewTitleCardEndText = document.getElementById('preview-titlecard-end-text');
+const previewMockupFrame = document.getElementById('preview-mockup-frame');
+const mockupThumbs = Array.from(document.querySelectorAll('.mockup-thumb[data-mockup-id]'));
+const mockupToggle = document.getElementById('mockup-toggle');
+const mockupScrollRow = document.getElementById('mockup-scroll-row');
+
+let allSettingsInputs = [];
+let previewSlideIndex = 1; // 0 = intro title card, 1 = recording (default), 2 = outro title card
+let activeMockupId = '';
+
+init();
+
+async function init() {
+  const stored = await chrome.storage.local.get([
+    'autoZoom',
+    'wipeTransition',
+    'wipeColor',
+    'ripples',
+    'rippleColor',
+    'highlightElement',
+    'dimBackground',
+    'highlightColor',
+    'highlightMotionStyle',
+    'showCursor',
+    'cursorColor',
+    'textHighlight',
+    'textHighlightColor',
+    'aspectRatio',
+    'regionSelect',
+    'background',
+    'backgroundStyle',
+    'backgroundColorStart',
+    'backgroundColorEnd',
+    'titleCardTextStart',
+    'titleCardTextEnd',
+    'titleCardColor',
+    'titleCardAtStart',
+    'titleCardAtEnd',
+    'micEnabled',
+    'micDeviceId',
+    'mockupId',
+    'recording',
+    'paused',
+    'lastRecordingError'
+  ]);
+
+  autoZoomToggle.checked = stored.autoZoom !== false; // default ON
+  wipeToggle.checked = stored.wipeTransition !== false; // default ON
+  const storedWipeColor = stored.wipeColor || '#ffffff';
+  (wipeColorInputs.find((el) => el.value === storedWipeColor) || wipeColorInputs[0]).checked = true;
+  ripplesToggle.checked = stored.ripples !== false; // default ON
+  rippleColorInput.value = stored.rippleColor || '#4f7cff';
+  highlightToggle.checked = stored.highlightElement !== false; // default ON
+  dimBackgroundToggle.checked = stored.dimBackground !== false; // default ON
+  highlightColorInput.value = stored.highlightColor || '#4f7cff';
+  (stored.highlightMotionStyle === 'pulse' ? motionStylePulseInput : motionStyleSolidInput).checked = true;
+  cursorToggle.checked = stored.showCursor !== false; // default ON
+  cursorColorInput.value = stored.cursorColor || '#ffb020';
+  textHighlightToggle.checked = !!stored.textHighlight; // default OFF — new feature, opt-in
+  textHighlightColorInput.value = stored.textHighlightColor || '#ffe066';
+  aspectRatioSelect.value = stored.aspectRatio || 'original';
+  sourceSelect.value = stored.regionSelect ? 'region' : 'full-screen';
+  backgroundToggle.checked = stored.background !== false; // default ON — matches Auto Zoom/Bounding Box/Cursor all being on by default
+  (stored.backgroundStyle === 'gradient' ? backgroundStyleGradientInput : backgroundStyleSolidInput).checked = true;
+  backgroundColorStartInput.value = stored.backgroundColorStart || '#0061fe';
+  backgroundColorEndInput.value = stored.backgroundColorEnd || '#e9eaeb';
+  titleCardTextStartInput.value = stored.titleCardTextStart || '';
+  titleCardTextEndInput.value = stored.titleCardTextEnd || '';
+  titleCardColorInput.value = stored.titleCardColor || '#ffffff';
+  titleCardStartToggle.checked = !!stored.titleCardAtStart; // default OFF — opt-in
+  titleCardEndToggle.checked = !!stored.titleCardAtEnd; // default OFF — opt-in
+  micToggleBtn.setAttribute('aria-pressed', String(stored.micEnabled !== false)); // default ON
+
+  activeMockupId = stored.mockupId || '';
+  mockupThumbs.forEach((thumb) => {
+    thumb.classList.toggle('selected', thumb.dataset.mockupId === activeMockupId);
+  });
+  mockupToggle.checked = !!activeMockupId;
+  mockupScrollRow.hidden = !activeMockupId;
+  await applyMockupToPreview(activeMockupId);
+
+  updateDependentUI();
+
+  const { processing, renderProgress } = await chrome.storage.local.get(['processing', 'renderProgress']);
+  if (processing) {
+    setProcessingUI(true, renderProgress || 0);
+  } else {
+    setRecordingUI(!!stored.recording, !!stored.paused);
+    // A failed/empty recording (see offscreen.js's finalizeAndDownload)
+    // leaves this set until the popup is next opened — show it once
+    // instead of silently looking like nothing happened, then clear it.
+    if (stored.lastRecordingError) {
+      statusEl.textContent = stored.lastRecordingError;
+      chrome.storage.local.set({ lastRecordingError: null });
+    }
+  }
+
+  allSettingsInputs = [
+    autoZoomToggle,
+    wipeToggle,
+    ...wipeColorInputs,
+    ripplesToggle,
+    rippleColorInput,
+    highlightToggle,
+    dimBackgroundToggle,
+    highlightColorInput,
+    motionStyleSolidInput,
+    motionStylePulseInput,
+    cursorToggle,
+    cursorColorInput,
+    textHighlightToggle,
+    textHighlightColorInput,
+    aspectRatioSelect,
+    sourceSelect,
+    backgroundToggle,
+    backgroundStyleSolidInput,
+    backgroundStyleGradientInput,
+    backgroundColorStartInput,
+    backgroundColorEndInput,
+    titleCardTextStartInput,
+    titleCardTextEndInput,
+    titleCardColorInput,
+    titleCardStartToggle,
+    titleCardEndToggle,
+    micSelect
+  ];
+
+  autoZoomToggle.addEventListener('change', saveSettings);
+  wipeToggle.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  wipeColorInputs.forEach((el) => el.addEventListener('change', saveSettings));
+  ripplesToggle.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  rippleColorInput.addEventListener('input', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  highlightToggle.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  dimBackgroundToggle.addEventListener('change', saveSettings);
+  highlightColorInput.addEventListener('input', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  motionStyleSolidInput.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  motionStylePulseInput.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  cursorToggle.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  cursorColorInput.addEventListener('input', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  textHighlightToggle.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  textHighlightColorInput.addEventListener('input', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  aspectRatioSelect.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  sourceSelect.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+    // Picking "Region" (including from the new toggle dropdown) only
+    // sets the mode now — it used to also immediately kick off the
+    // recording flow, which was surprising/unwanted when selecting it
+    // from the dropdown. Starting still requires an explicit click on
+    // Start Recording, same as every other source.
+  });
+  backgroundToggle.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  backgroundStyleSolidInput.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  backgroundStyleGradientInput.addEventListener('change', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  backgroundColorStartInput.addEventListener('input', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  backgroundColorEndInput.addEventListener('input', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  titleCardTextStartInput.addEventListener('input', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  titleCardTextEndInput.addEventListener('input', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  titleCardColorInput.addEventListener('input', () => {
+    updateDependentUI();
+    saveSettings();
+  });
+  titleCardStartToggle.addEventListener('change', saveSettings);
+  titleCardEndToggle.addEventListener('change', saveSettings);
+  micSelect.addEventListener('change', saveSettings);
+  startStopBtn.addEventListener('click', onToggleRecording);
+
+  micToggleBtn.addEventListener('click', () => {
+    const next = micToggleBtn.getAttribute('aria-pressed') !== 'true';
+    micToggleBtn.setAttribute('aria-pressed', String(next));
+    chrome.storage.local.set({ micEnabled: next });
+  });
+
+  // Third top-row button — opens a small dropdown for #source-select's
+  // two values (same open/close pattern as the mic popover below).
+  // Picking "Region" still drives the immediate-start-region-select
+  // behavior wired on #source-select's own 'change' listener above,
+  // same as picking it from the (now-hidden) original pill dropdown.
+  sourceToggleBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    // stopPropagation() above means this click never reaches document,
+    // so the mic popover's own outside-click listener (below) never
+    // sees it either — close it explicitly, or opening this one leaves
+    // both open at once.
+    micPopoverPanel.hidden = true;
+    micPopoverTrigger.setAttribute('aria-expanded', 'false');
+    sourcePopoverPanel.hidden = !sourcePopoverPanel.hidden;
+    sourceToggleBtn.setAttribute('aria-expanded', String(!sourcePopoverPanel.hidden));
+  });
+  document.addEventListener('click', (event) => {
+    if (!sourcePopoverPanel.hidden && !event.composedPath().includes(sourcePopoverPanel) && !event.composedPath().includes(sourceToggleBtn)) {
+      sourcePopoverPanel.hidden = true;
+      sourceToggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+  [sourceOptionFullScreen, sourceOptionRegion].forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      sourcePopoverPanel.hidden = true;
+      sourceToggleBtn.setAttribute('aria-expanded', 'false');
+      const isRegion = btn.dataset.value === 'region';
+      const alreadySelected = sourceSelect.value === btn.dataset.value;
+      if (!alreadySelected) {
+        sourceSelect.value = btn.dataset.value;
+        updateDependentUI();
+        // Awaited directly (not via the 'change' event's own listener,
+        // which calls saveSettings() but doesn't hand back its promise)
+        // — regionSelect:true has to actually be on disk before this
+        // handler goes on to close the popup below, or background.js
+        // can read a stale value once it's the one doing the reading.
+        await saveSettings();
+      }
+      // Region needs an on-page drag-to-select frame, which can't
+      // happen inside this popup — trigger it immediately (not
+      // deferred to Start Recording) so the user sees and adjusts it
+      // right away, same moment they picked Region, idle or not. Always
+      // fires, even if Region was already selected, so picking it again
+      // re-opens the selector to adjust an existing choice. Full Screen
+      // has nothing to configure, so it just keeps the early-return.
+      if (isRegion) {
+        // Awaited (not fire-and-forget) for the same reason as
+        // saveSettings() above — window.close() right after can tear
+        // this page down before an un-awaited sendMessage has actually
+        // dispatched, so background.js's listener sometimes never
+        // fires at all. This is the actual "doesn't start on the first
+        // go" bug: an intermittent race, not a deterministic one.
+        await chrome.runtime.sendMessage({ type: 'SELECT_REGION_NOW' }).catch(() => {});
+        window.close();
+        return;
+      }
+      if (alreadySelected) return;
+    });
+  });
+
+  tabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      tabBtns.forEach((b) => b.classList.toggle('active', b === btn));
+      tabPanels.forEach((p) => p.classList.toggle('active', p.dataset.panel === target));
+    });
+  });
+
+  motionStyleToggle.addEventListener('click', () => {
+    const expanded = motionStyleToggle.getAttribute('aria-expanded') === 'true';
+    motionStyleToggle.setAttribute('aria-expanded', String(!expanded));
+    motionStyleOptions.hidden = expanded;
+  });
+
+  // Preview elements are clickable shortcuts into their own setting —
+  // e.g. clicking the cursor arrow in the preview jumps straight to
+  // Custom Cursor under the Pointer tab, expanding/switching whatever's
+  // needed to actually get there.
+  wireJumpToSetting(previewHighlight, 'animation', highlightToggle);
+  wireJumpToSetting(previewCursor, 'pointer', cursorToggle);
+  wireJumpToSetting(previewRipple, 'pointer', ripplesToggle);
+  wireJumpToSetting(previewBox, 'background', backgroundToggle);
+
+  [previewBox, previewHighlight, previewCursor, previewRipple].forEach(wirePreviewTooltip);
+
+  // Hex code + copy popover for every color picker — see
+  // wireColorHexPopover() below for why this doesn't touch any row's
+  // layout (each panel is absolutely positioned off the input's own
+  // existing parent, not a new inline element).
+  [
+    highlightColorInput,
+    cursorColorInput,
+    rippleColorInput,
+    textHighlightColorInput,
+    backgroundColorStartInput,
+    backgroundColorEndInput,
+    titleCardColorInput
+  ].forEach(wireColorHexPopover);
+
+  previewNavLeft.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setPreviewSlide(previewSlideIndex - 1);
+  });
+  previewNavRight.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setPreviewSlide(previewSlideIndex + 1);
+  });
+  setPreviewSlide(1); // opens to Screen Recording Preview by default
+  wireTitleCardJump(previewTitleCardStart, titleCardTextStartInput);
+  wireTitleCardJump(previewTitleCardEnd, titleCardTextEndInput);
+
+  // Master on/off — hides the whole thumbnail row and clears any
+  // selection when switched off, same as Background's own toggle
+  // hides its Solid/Gradient options. Switching it back on just
+  // reveals the row again; it doesn't auto-pick a thumbnail on its own.
+  mockupToggle.addEventListener('change', async () => {
+    mockupScrollRow.hidden = !mockupToggle.checked;
+    if (!mockupToggle.checked) {
+      mockupThumbs.forEach((t) => t.classList.remove('selected'));
+      activeMockupId = '';
+      await applyMockupToPreview('');
+      saveSettings();
+    }
+  });
+
+  // Real mockups only — the gray placeholder slots aren't buttons and
+  // have no data-mockup-id, so this naturally never wires them up.
+  mockupThumbs.forEach((thumb) => {
+    thumb.addEventListener('click', async () => {
+      const id = thumb.dataset.mockupId;
+      const wasSelected = thumb.classList.contains('selected');
+      mockupThumbs.forEach((t) => t.classList.remove('selected'));
+      activeMockupId = wasSelected ? '' : id;
+      if (!wasSelected) thumb.classList.add('selected');
+      // Keep the master toggle in sync — picking a thumbnail implies
+      // "on", clearing the last selection implies "off".
+      mockupToggle.checked = !!activeMockupId;
+      await applyMockupToPreview(activeMockupId);
+      saveSettings();
+    });
+  });
+
+  grantMicBtn.addEventListener('click', () => {
+    // A getUserMedia prompt can't reliably render inside this popup (it's
+    // too small and closes on blur), so ask for the permission from a
+    // real tab instead. The grant persists for the extension's origin.
+    chrome.tabs.create({ url: chrome.runtime.getURL('permissions.html') });
+  });
+
+  refreshMicBtn.addEventListener('click', async () => {
+    const { micDeviceId } = await chrome.storage.local.get('micDeviceId');
+    await refreshMicUI(micDeviceId);
+  });
+  micSelect.addEventListener('change', updateMicPopoverTriggerLabel);
+
+  // Device picker trigger — the small chevron half of the mic split
+  // button, right next to the mute toggle (same open/close pattern as
+  // the Full Screen/Region popover).
+  micPopoverTrigger.addEventListener('click', (event) => {
+    event.stopPropagation();
+    // Same reasoning as sourceToggleBtn's own handler above — its
+    // stopPropagation() means this click never reaches document, so
+    // close it explicitly here too.
+    sourcePopoverPanel.hidden = true;
+    sourceToggleBtn.setAttribute('aria-expanded', 'false');
+    micPopoverPanel.hidden = !micPopoverPanel.hidden;
+    micPopoverTrigger.setAttribute('aria-expanded', String(!micPopoverPanel.hidden));
+  });
+  document.addEventListener('click', (event) => {
+    if (!micPopoverPanel.hidden && !event.composedPath().includes(micPopoverPanel) && !event.composedPath().includes(micPopoverTrigger)) {
+      micPopoverPanel.hidden = true;
+      micPopoverTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Live-update the list if a device is plugged/unplugged while the
+  // popup happens to be open.
+  navigator.mediaDevices.addEventListener?.('devicechange', () => {
+    refreshMicUI(micSelect.value);
+  });
+
+  chrome.storage.onChanged.addListener(async (changes, area) => {
+    if (area !== 'local') return;
+    if (changes.processing?.newValue) {
+      setProcessingUI(true, changes.renderProgress?.newValue ?? 0);
+    } else if (changes.processing && changes.processing.newValue === false) {
+      setRecordingUI(false, false);
+    } else if (changes.renderProgress) {
+      setProcessingUI(true, changes.renderProgress.newValue ?? 0);
+    } else if (changes.recording) {
+      const { paused } = await chrome.storage.local.get('paused');
+      setRecordingUI(!!changes.recording.newValue, !!paused);
+    } else if (changes.paused) {
+      const { recording } = await chrome.storage.local.get('recording');
+      setRecordingUI(!!recording, !!changes.paused.newValue);
+    }
+
+    // Independent of which branch above fired — a failed/empty recording
+    // (see offscreen.js's finalizeAndDownload) can complete without ever
+    // passing through processing:true at all (no render pass was ever
+    // started, e.g. tab capture produced zero bytes), so this can't be
+    // nested inside the processing-specific branch above.
+    if (changes.lastRecordingError?.newValue) {
+      statusEl.textContent = changes.lastRecordingError.newValue;
+      chrome.storage.local.set({ lastRecordingError: null });
+    }
+  });
+
+  await refreshMicUI(stored.micDeviceId);
+}
+
+/** Keeps every "only relevant when X is on" bit of UI (hints, sub-option
+ *  groups, the swatch-dim-when-off decision, the live preview box) in
+ *  sync with the toggles that gate them. Called on init and on every
+ *  change to one of those toggles. */
+function updateDependentUI() {
+  motionStyleGroup.classList.toggle('visible', highlightToggle.checked);
+  highlightColorInput.classList.toggle('mc-swatch-off', !highlightToggle.checked);
+
+  wipeColorOptions.classList.toggle('mc-swatch-off', !wipeToggle.checked);
+  rippleColorInput.classList.toggle('mc-swatch-off', !ripplesToggle.checked);
+  cursorColorInput.classList.toggle('mc-swatch-off', !cursorToggle.checked);
+  textHighlightColorInput.classList.toggle('mc-swatch-off', !textHighlightToggle.checked);
+
+  backgroundStyleGroup.classList.toggle('visible', backgroundToggle.checked);
+  // End/bottom stop only matters once Gradient is actually selected —
+  // keeps it un-clickable (not just cosmetically hidden) while Solid is
+  // active, same gating as before this swatch became the click target.
+  backgroundColorEndInput.hidden = backgroundStyleSolidInput.checked;
+
+  bgSolidSwatch.style.background = backgroundColorStartInput.value;
+  bgGradientSwatch.style.background = `linear-gradient(to bottom, ${backgroundColorStartInput.value}, ${backgroundColorEndInput.value})`;
+
+  // Title-card preview slides — same fill rule as the real render
+  // (paintTitleCard() in offscreen.js): always solid/gradient off the
+  // Add Background colors, regardless of whether that toggle is on.
+  const titleCardBg = backgroundStyleGradientInput.checked
+    ? `linear-gradient(to bottom, ${backgroundColorStartInput.value}, ${backgroundColorEndInput.value})`
+    : backgroundColorStartInput.value;
+  previewTitleCardStart.style.background = titleCardBg;
+  previewTitleCardEnd.style.background = titleCardBg;
+  renderTitleCardPreviewText(previewTitleCardStartText, titleCardTextStartInput);
+  renderTitleCardPreviewText(previewTitleCardEndText, titleCardTextEndInput);
+
+  previewHighlight.style.opacity = highlightToggle.checked ? '1' : '0';
+  previewHighlight.classList.toggle('is-pulsing', highlightToggle.checked && motionStylePulseInput.checked);
+  previewHighlight.style.borderColor = highlightColorInput.value;
+  previewCursor.style.opacity = cursorToggle.checked ? '1' : '0';
+  previewCursor.style.color = cursorColorInput.value;
+  previewRipple.style.opacity = ripplesToggle.checked ? '1' : '0';
+  previewRipple.classList.toggle('is-active', ripplesToggle.checked);
+  previewRipple.style.color = rippleColorInput.value;
+
+  // Source = Region takes over the preview entirely — matches the real
+  // "Region — free-form" reference (dashed gray frame, solid-blue
+  // selection card, corner handles) — regardless of the Background
+  // toggle, since it's showing the capture-area UI, not the recording's
+  // own styling.
+  const isRegion = sourceSelect.value === 'region';
+  const isBgOff = !isRegion && !backgroundToggle.checked;
+  previewBox.classList.toggle('region-mode', isRegion);
+  previewBox.classList.toggle('bg-off', isBgOff);
+
+  // Keep the dropdown's selected-option highlight and the main button's
+  // own icon in sync with #source-select, whichever way it changed.
+  sourceOptionFullScreen.setAttribute('aria-selected', String(!isRegion));
+  sourceOptionRegion.setAttribute('aria-selected', String(isRegion));
+  sourceToggleIcon.innerHTML = (isRegion ? sourceOptionRegion : sourceOptionFullScreen).querySelector('svg').outerHTML;
+  sourceToggleBtn.title = isRegion ? 'Region' : 'Full Screen';
+
+  // Preview shape — matches the real Aspect Ratio Preview Thumbnails
+  // (exact ratios pulled from Penpot: 16:9, 9:16, 1:1, 4:5, 5:4).
+  // "original" has no single correct shape (native/variable), so it just
+  // fills the envelope at its default proportions (same as before).
+  //
+  // The outer box's footprint is fixed (see .preview-box CSS) — a tall
+  // 9:16 pick must not grow the box/popup. Instead .preview-card is
+  // letterboxed to the chosen ratio *inside* the box, same idea as a
+  // video player fitting a portrait clip inside a landscape frame:
+  // scaled down until it fits both dimensions of its envelope, then
+  // centered, leaving equal margins on the axis that doesn't fill.
+  if (!isRegion) {
+    const ASPECT_RATIO_NUMERIC = {
+      '16:9': [16, 9],
+      '9:16': [9, 16],
+      '1:1': [1, 1],
+      '4:5': [4, 5],
+      '5:4': [5, 4]
+    };
+    // Matches .preview-content's real on-screen size (228*72.4%, 186*71.5%)
+    // now that it's inset further to clear the caption row above it.
+    const BOX_W = 165;
+    const BOX_H = 133;
+    // The card's default (CSS) envelope in each state — bg-on insets it
+    // as a padded card (80.8% x 76%, matching the static CSS fallback);
+    // bg-off fills edge-to-edge (100% x 100%).
+    const envWPct = isBgOff ? 100 : 80.8;
+    const envHPct = isBgOff ? 100 : 76;
+    const envW = (envWPct / 100) * BOX_W;
+    const envH = (envHPct / 100) * BOX_H;
+
+    const ratio = ASPECT_RATIO_NUMERIC[aspectRatioSelect.value];
+    let cardWPx = envW;
+    let cardHPx = envH;
+    if (ratio) {
+      const [rw, rh] = ratio;
+      const scale = Math.min(envW / rw, envH / rh);
+      cardWPx = rw * scale;
+      cardHPx = rh * scale;
+    }
+
+    const leftPx = (BOX_W - cardWPx) / 2;
+    const topPx = (BOX_H - cardHPx) / 2;
+    previewCard.style.left = `${(leftPx / BOX_W) * 100}%`;
+    previewCard.style.top = `${(topPx / BOX_H) * 100}%`;
+    previewCard.style.width = `${(cardWPx / BOX_W) * 100}%`;
+    previewCard.style.height = `${(cardHPx / BOX_H) * 100}%`;
+  } else {
+    // Region mode's card is a fixed illustrative selection rectangle
+    // (see .preview-box.region-mode .preview-card in CSS), unrelated to
+    // the Aspect Ratio pill — clear any inline sizing left over from a
+    // previous non-region state so that CSS rule takes over cleanly.
+    previewCard.style.left = '';
+    previewCard.style.top = '';
+    previewCard.style.width = '';
+    previewCard.style.height = '';
+  }
+
+  // "Add Background" — matches offscreen.js's real paintFrame() logic
+  // (solid fill vs. top-to-bottom gradient) when on; the "no background"
+  // state (edge-to-edge white card) is handled by the .bg-off class
+  // above instead of an inline color, matching the real
+  // "Aspect Ratio - No Background Row" reference exactly. This sets
+  // .preview-content (the inset color box), not .preview-box itself —
+  // preview-box is just the outer dashed window-chrome frame now (see
+  // the new design's "VIDEO FRAM BORDER") and should never change color.
+  // Used to also require !isRegion — the actual color/gradient never
+  // showed at all while Region was the active source, only the flat
+  // .region-mode placeholder gray (see its CSS) — which looked broken
+  // once Region became a normally-tested path, not an edge case.
+  // Region mode keeps its own dashed border either way (untouched
+  // here); this only ever overrides its background color.
+  previewContent.style.background =
+    backgroundToggle.checked
+      ? backgroundStyleGradientInput.checked
+        ? `linear-gradient(to bottom, ${backgroundColorStartInput.value}, ${backgroundColorEndInput.value})`
+        : backgroundColorStartInput.value
+      : '';
+}
+
+/** Makes a preview element (the cursor arrow, the highlight box) a
+ *  shortcut into its own setting — expands Interactions & Styling if
+ *  it's collapsed, switches to the right tab, then scrolls the actual
+ *  setting row into view and briefly flashes it so it's obvious which
+ *  row just got jumped to. `controlInput` is the row's own toggle
+ *  input, used purely to locate the row via .closest('.setting-row'). */
+function wireJumpToSetting(previewEl, tabName, controlInput) {
+  const activate = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    // Interactions & Styling is always expanded now — nothing to
+    // expand here any more, just switch to the right tab.
+    const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+    tabBtn?.click();
+    const row = controlInput.closest('.setting-row');
+    if (!row) return;
+    // Let the expand/tab-switch reflow settle before measuring/scrolling.
+    requestAnimationFrame(() => {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      row.classList.add('jump-flash');
+      setTimeout(() => row.classList.remove('jump-flash'), 900);
+    });
+  };
+  previewEl.addEventListener('click', activate);
+  previewEl.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') activate(event);
+  });
+}
+
+const PREVIEW_SLIDE_CAPTIONS = ['Front Title Preview', 'Screen Recording Preview', 'End Title Preview'];
+
+/** Switches the preview carousel to the given slide (clamped to
+ *  0-2, not wrapping — matches the real mockups: the leftmost tile
+ *  only shows a right arrow, the rightmost would only show a left
+ *  one, same as any standard non-looping carousel). */
+function setPreviewSlide(index) {
+  previewSlideIndex = Math.max(0, Math.min(previewSlides.length - 1, index));
+  previewSlides.forEach((slide, i) => { slide.hidden = i !== previewSlideIndex; });
+  previewCaption.textContent = PREVIEW_SLIDE_CAPTIONS[previewSlideIndex];
+  previewNavLeft.hidden = previewSlideIndex === 0;
+  previewNavRight.hidden = previewSlideIndex === previewSlides.length - 1;
+}
+
+/** Shows the real heading once there is one, otherwise a muted
+ *  "Add text" placeholder — so an empty title card doesn't just look
+ *  like a blank slide (and looks click-able, see wireTitleCardJump()
+ *  below). Placeholder skips the user's chosen text color: that color
+ *  is for the real heading, not a hint that needs to read against
+ *  whatever background color they've picked. */
+function renderTitleCardPreviewText(textEl, input) {
+  const value = input.value;
+  const isEmpty = !value.trim();
+  textEl.textContent = isEmpty ? 'Add text' : value;
+  textEl.classList.toggle('is-placeholder', isEmpty);
+  textEl.style.color = isEmpty ? '' : titleCardColorInput.value;
+}
+
+/** Clicking a title-card preview slide jumps straight to its own text
+ *  input — expands the panel if needed, switches to the Title Card
+ *  tab, scrolls the input into view, flashes it, and focuses it (with
+ *  the existing text selected) so typing can start immediately. */
+function wireTitleCardJump(slideEl, textInput) {
+  slideEl.addEventListener('click', (event) => {
+    // Without this, the click bubbles up to previewBox's own click
+    // handler (wireJumpToSetting's "Background" jump), which then runs
+    // right after this and overrides the tab switch back to Background.
+    event.stopPropagation();
+    // Interactions & Styling is always expanded now — nothing to
+    // expand here any more, just switch to the right tab.
+    document.querySelector('.tab-btn[data-tab="titlecard"]')?.click();
+    requestAnimationFrame(() => {
+      textInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      textInput.classList.add('jump-flash');
+      setTimeout(() => textInput.classList.remove('jump-flash'), 900);
+      textInput.focus();
+      textInput.select();
+    });
+  });
+}
+
+/** Shows/hides the mockup photo over the live preview and repositions
+ *  the recording content to line up with that mockup's own screen
+ *  quad (read straight from its mockups/<id>.json — the same corner
+ *  data the real WebGL warp pass uses). Only handles the axis-aligned
+ *  case correctly (a plain CSS inset, not a real perspective warp) —
+ *  fine for a flat mockup like the current one, but a tilted mockup
+ *  would need the same homography the real render pass already does,
+ *  not just this simplified live-preview approximation. Pass '' to
+ *  turn the mockup off and restore the plain dashed-border preview. */
+async function applyMockupToPreview(mockupId) {
+  const insetTargets = [previewContent, previewTitleCardStart, previewTitleCardEnd];
+  if (!mockupId) {
+    previewMockupFrame.hidden = true;
+    previewMockupFrame.src = '';
+    previewBox.classList.remove('mockup-active');
+    insetTargets.forEach((el) => {
+      el.style.left = '';
+      el.style.top = '';
+      el.style.width = '';
+      el.style.height = '';
+    });
+    return;
+  }
+  try {
+    const res = await fetch(`mockups/${mockupId}.json`);
+    if (!res.ok) throw new Error(`fetch mockups/${mockupId}.json -> ${res.status}`);
+    const data = await res.json();
+    const { corners, canvasWidth, canvasHeight } = data;
+    const leftPct = (corners.topLeft.x / canvasWidth) * 100;
+    const topPct = (corners.topLeft.y / canvasHeight) * 100;
+    const widthPct = ((corners.topRight.x - corners.topLeft.x) / canvasWidth) * 100;
+    const heightPct = ((corners.bottomLeft.y - corners.topLeft.y) / canvasHeight) * 100;
+
+    insetTargets.forEach((el) => {
+      el.style.left = `${leftPct}%`;
+      el.style.top = `${topPct}%`;
+      el.style.width = `${widthPct}%`;
+      el.style.height = `${heightPct}%`;
+    });
+
+    previewMockupFrame.src = data.image;
+    previewMockupFrame.hidden = false;
+    previewBox.classList.add('mockup-active');
+  } catch (err) {
+    console.error('Oval Recorder: failed to apply mockup to preview', err);
+  }
+}
+
+/** Custom hover/focus tooltip for a preview element — shows the same
+ *  icon that setting uses in the toolbar (cloned in live, not
+ *  duplicated markup) plus a short label, positioned just above
+ *  whatever's being hovered. Reads its tab/label off data-tip-tab and
+ *  data-tip-label so it stays in sync with wireJumpToSetting's target.
+ *
+ *  previewBox (the "Background" target) wraps the white card, dots,
+ *  cursor, highlight and ripple as descendants — mouseenter/mouseleave
+ *  alone would keep the Background tooltip showing while hovering over
+ *  any of those (the "screen" area), so it gets mouseover/mouseout with
+ *  a strict event.target check instead: only previewBox/previewContent
+ *  themselves count as "background", anything nested is "screen" and
+ *  suppresses it (that nested element's own tooltip wiring, if any,
+ *  takes over instead). */
+function wirePreviewTooltip(el) {
+  const tabName = el.dataset.tipTab;
+  const label = el.dataset.tipLabel;
+  if (!tabName || !label) return;
+  const show = () => {
+    const iconSvg = document.querySelector(`.tab-btn[data-tab="${tabName}"] svg`);
+    // Toolbar icons fill with currentColor, so the clone picks up
+    // .preview-tooltip-icon's white on its own.
+    previewTooltipIcon.innerHTML = iconSvg ? iconSvg.outerHTML : '';
+    previewTooltipLabel.textContent = label;
+    previewTooltip.hidden = false;
+    const targetRect = el.getBoundingClientRect();
+    const parentRect = previewContent.getBoundingClientRect();
+    previewTooltip.style.left = `${targetRect.left + targetRect.width / 2 - parentRect.left}px`;
+    previewTooltip.style.top = `${targetRect.top - parentRect.top - 4}px`;
+  };
+  const hide = () => { previewTooltip.hidden = true; };
+
+  if (el === previewBox) {
+    el.addEventListener('mouseover', (event) => {
+      if (event.target === previewBox || event.target === previewContent) show();
+    });
+    el.addEventListener('mouseout', (event) => {
+      if (event.target === previewBox || event.target === previewContent) hide();
+    });
+  } else {
+    el.addEventListener('mouseenter', show);
+    el.addEventListener('mouseleave', hide);
+  }
+  el.addEventListener('focus', show);
+  el.addEventListener('blur', hide);
+}
+
+/** Accepts "#rrggbb", "rrggbb", "#rgb", or "rgb" (any case), and returns
+ *  a normalized "#rrggbb" — or null if it's not a valid hex color at
+ *  all (an <input type="color">'s value setter silently no-ops on an
+ *  invalid string, which would otherwise look like pasting just did
+ *  nothing with no explanation). */
+function parseHexColor(raw) {
+  let s = raw.trim().replace(/^#/, '');
+  if (/^[0-9a-fA-F]{3}$/.test(s)) {
+    s = s.split('').map((c) => c + c).join('');
+  }
+  return /^[0-9a-fA-F]{6}$/.test(s) ? `#${s.toLowerCase()}` : null;
+}
+
+/** Small popover with a copyable (and pastable) hex code, opened right
+ *  alongside the native color picker when its swatch is clicked —
+ *  hex/RGB from the OS dialog itself is hard to read back out, so this
+ *  gives a plain #RRGGBB the user can actually copy or type/paste into
+ *  directly. Deliberately doesn't touch any row's existing layout: the
+ *  panel is absolutely positioned off the color input's OWN existing
+ *  parent (given position:relative if it doesn't already have it —
+ *  invisible, since relative positioning with no offset doesn't move
+ *  anything), not a new wrapper element, so nothing about the row's
+ *  current width/alignment changes. */
+function wireColorHexPopover(colorInput) {
+  const anchor = colorInput.parentElement;
+  if (getComputedStyle(anchor).position === 'static') {
+    anchor.style.position = 'relative';
+  }
+
+  const panel = document.createElement('div');
+  panel.className = 'color-hex-panel';
+  panel.hidden = true;
+
+  const hexInput = document.createElement('input');
+  hexInput.type = 'text';
+  hexInput.className = 'color-hex-input';
+  hexInput.maxLength = 7;
+  hexInput.spellcheck = false;
+  hexInput.autocomplete = 'off';
+
+  const copyBtn = document.createElement('button');
+  copyBtn.type = 'button';
+  copyBtn.className = 'copy-hex-btn';
+  copyBtn.title = 'Copy hex code';
+  copyBtn.innerHTML = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.1"><rect x="3.75" y="3.75" width="6.75" height="6.75" rx="1"/><path d="M2.25 8.25V2.75a1 1 0 0 1 1-1H8.25" /></svg>';
+
+  panel.appendChild(hexInput);
+  panel.appendChild(copyBtn);
+  anchor.appendChild(panel);
+
+  const syncHex = () => { hexInput.value = colorInput.value.toUpperCase(); };
+  syncHex();
+
+  const open = () => {
+    syncHex();
+    panel.hidden = false;
+  };
+  colorInput.addEventListener('click', open);
+  colorInput.addEventListener('input', open);
+
+  // Also a real input, not just a readout — someone who copied a hex
+  // code from elsewhere (a brand palette, a design tool, etc.) can
+  // paste it straight in here instead of hunting for the native
+  // picker's own hex field, which is what wasn't obvious in the first
+  // place. Commits on blur/Enter (not every keystroke) so a
+  // still-being-typed value doesn't get judged before it's finished.
+  const commitHexInput = () => {
+    const parsed = parseHexColor(hexInput.value);
+    if (parsed) {
+      colorInput.value = parsed;
+      colorInput.dispatchEvent(new Event('input', { bubbles: true }));
+      colorInput.dispatchEvent(new Event('change', { bubbles: true }));
+    } else {
+      hexInput.classList.add('invalid');
+      setTimeout(() => hexInput.classList.remove('invalid'), 900);
+    }
+    syncHex(); // re-normalize display either way (or revert on invalid)
+  };
+  hexInput.addEventListener('blur', commitHexInput);
+  hexInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      commitHexInput();
+    }
+  });
+
+  copyBtn.addEventListener('click', async (event) => {
+    event.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(hexInput.value);
+    } catch {
+      hexInput.select();
+      document.execCommand('copy');
+    }
+    copyBtn.classList.add('copied');
+    setTimeout(() => copyBtn.classList.remove('copied'), 1200);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!panel.hidden && !event.composedPath().includes(panel) && !event.composedPath().includes(colorInput)) {
+      panel.hidden = true;
+    }
+  });
+}
+
+/** True once the extension's origin has been granted microphone access. */
+async function hasMicPermission() {
+  try {
+    const status = await navigator.permissions.query({ name: 'microphone' });
+    return status.state === 'granted';
+  } catch (err) {
+    // Some contexts don't support querying the 'microphone' permission —
+    // fall back to a heuristic: enumerateDevices() only returns real
+    // device labels once permission has actually been granted.
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      return devices.some((d) => d.kind === 'audioinput' && d.label);
+    } catch {
+      return false;
+    }
+  }
+}
+
+async function refreshMicUI(savedDeviceId) {
+  const granted = await hasMicPermission();
+  micPermissionBanner.hidden = granted;
+  micSelectRow.hidden = !granted;
+  if (granted) {
+    await populateMicOptions(savedDeviceId);
+  }
+  updateMicPopoverTriggerLabel();
+}
+
+function updateMicPopoverTriggerLabel() {
+  const label = micSelectRow.hidden ? 'Default' : micSelect.selectedOptions[0]?.textContent || 'Default';
+  micPopoverTrigger.title = `Microphone: ${label}`;
+}
+
+async function populateMicOptions(savedDeviceId) {
+  micSelect.innerHTML = '<option value="default">Default Microphone</option>';
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    devices
+      .filter((d) => d.kind === 'audioinput')
+      .forEach((d, i) => {
+        const opt = document.createElement('option');
+        opt.value = d.deviceId;
+        opt.textContent = d.label || `Microphone ${i + 1}`;
+        micSelect.appendChild(opt);
+      });
+  } catch (err) {
+    console.warn('Oval Recorder: could not list audio devices', err);
+  }
+  if (savedDeviceId) micSelect.value = savedDeviceId;
+}
+
+function currentSettings() {
+  return {
+    autoZoom: autoZoomToggle.checked,
+    wipeTransition: wipeToggle.checked,
+    wipeColor: (wipeColorInputs.find((el) => el.checked) || wipeColorInputs[0]).value,
+    ripples: ripplesToggle.checked,
+    rippleColor: rippleColorInput.value,
+    highlightElement: highlightToggle.checked,
+    dimBackground: dimBackgroundToggle.checked,
+    highlightColor: highlightColorInput.value,
+    highlightMotionStyle: motionStylePulseInput.checked ? 'pulse' : 'solid',
+    showCursor: cursorToggle.checked,
+    cursorColor: cursorColorInput.value,
+    textHighlight: textHighlightToggle.checked,
+    textHighlightColor: textHighlightColorInput.value,
+    aspectRatio: aspectRatioSelect.value,
+    regionSelect: sourceSelect.value === 'region',
+    background: backgroundToggle.checked,
+    backgroundStyle: backgroundStyleGradientInput.checked ? 'gradient' : 'solid',
+    backgroundColorStart: backgroundColorStartInput.value,
+    backgroundColorEnd: backgroundColorEndInput.value,
+    titleCardTextStart: titleCardTextStartInput.value,
+    titleCardTextEnd: titleCardTextEndInput.value,
+    titleCardColor: titleCardColorInput.value,
+    titleCardAtStart: titleCardStartToggle.checked,
+    titleCardAtEnd: titleCardEndToggle.checked,
+    micEnabled: micToggleBtn.getAttribute('aria-pressed') === 'true',
+    micDeviceId: micSelect.value,
+    mockupId: activeMockupId
+  };
+}
+
+function saveSettings() {
+  // Returned (not fire-and-forget) — callers that are about to close the
+  // popup (e.g. picking Region below) need to actually wait for this
+  // write to land first. chrome.storage.local.set() is async; closing
+  // the popup before it resolves can tear down this page mid-write, so
+  // the setting silently never persists — an intermittent race, not a
+  // deterministic bug, which is exactly why it only showed up sometimes.
+  return chrome.storage.local.set(currentSettings());
+}
+
+async function onToggleRecording() {
+  const { recording, paused, processing } = await chrome.storage.local.get(['recording', 'paused', 'processing']);
+
+  if (processing) {
+    // Cancel the in-progress render pass instead of Start/Stop — see
+    // setProcessingUI(). Left enabled (unlike the branches below, which
+    // disable it while their own request is in flight) since cancelling
+    // should feel instant; chrome.storage.onChanged takes over the UI
+    // once RECORDING_COMPLETE actually lands.
+    statusEl.textContent = 'Cancelling…';
+    await chrome.runtime.sendMessage({ type: 'CANCEL_PROCESSING' });
+    return;
+  }
+
+  startStopBtn.disabled = true;
+
+  if (recording && paused) {
+    // Matches the design's 6-state button exactly — Paused reads
+    // "Resume Recording" and that's its only action; Stop still lives on
+    // the on-page toolbar (the popup is rarely open at this point anyway).
+    statusEl.textContent = 'Resuming…';
+    await chrome.runtime.sendMessage({ type: 'RESUME_RECORDING' });
+    return;
+  }
+
+  if (recording) {
+    // Recording stops immediately, but the final zoomed video still has
+    // to be rendered (see offscreen.js) — chrome.storage.onChanged above
+    // takes over from here once that starts (processing:true, handled by
+    // the branch above from then on) or, if Auto Zoom was off, once it's
+    // already done and back to idle.
+    statusEl.textContent = 'Stopping…';
+    await chrome.runtime.sendMessage({ type: 'STOP_RECORDING' });
+    return;
+  }
+
+  const settings = currentSettings();
+  const res = await chrome.runtime.sendMessage({
+    type: 'START_RECORDING',
+    settings
+  });
+  if (res && res.ok) {
+    // The popup closes itself once recording is actually underway — the
+    // real countdown/toolbar live on-page (content.js) regardless of
+    // whether this popup stays open to see them, and recording itself
+    // keeps running in the background/offscreen document either way, so
+    // there's nothing this popup needs to stay open for. Matches the
+    // common screen-recorder pattern (Loom, Screen Studio, etc.) of
+    // getting the UI out of the way immediately after Start.
+    if (res.contentScriptReachable === false) {
+      // Reloading the extension invalidates a content script already
+      // injected into a tab that was already open — clicks, the badge,
+      // and zoom silently won't work in that tab until it's refreshed.
+      // Video capture itself is unaffected, so recording still proceeds.
+      // Give this a moment to actually be read before closing.
+      setRecordingUI(true);
+      statusEl.textContent = 'Recording — refresh this tab for click/zoom to work';
+      setTimeout(() => window.close(), 2500);
+    } else {
+      window.close();
+    }
+  } else {
+    startStopBtn.disabled = false;
+    statusEl.textContent = `Error: ${res?.error || 'could not start recording'}`;
+  }
+}
+
+/** Purely cosmetic 3-2-1 "Starting in N…" state on the button, mirroring
+ *  the on-page countdown that already gates real encoding (see
+ *  background.js's COUNTDOWN_SECONDS) — the popup is usually closed by
+ *  the time this would even be seen, so it doesn't need to be exactly
+ *  server-synced, just present when the popup does happen to be open. */
+function setRecordingUI(isRecording, isPaused) {
+  startStopBtn.disabled = false;
+  startStopBtn.classList.remove('starting', 'processing');
+  startStopBtnLabel.textContent = isPaused ? 'Resume Recording' : isRecording ? 'Stop Recording' : 'Start Recording';
+  startStopBtn.classList.toggle('recording', isRecording && !isPaused);
+  startStopBtn.classList.toggle('paused', !!isPaused);
+  allSettingsInputs.forEach((el) => { el.disabled = isRecording; });
+  micToggleBtn.disabled = isRecording;
+  // Buttons, not simple form inputs — allSettingsInputs doesn't cover
+  // them, same reason micToggleBtn above needs its own line. Without
+  // this, reopening the popup mid-recording left both popovers
+  // clickable/openable even though changing either does nothing to a
+  // capture already underway.
+  sourceToggleBtn.disabled = isRecording;
+  micPopoverTrigger.disabled = isRecording;
+  // No idle-state text ("Ready") — the design has nothing there when
+  // there's nothing to report; real states (Recording/errors/etc.)
+  // still show via the other statusEl.textContent assignments below.
+  statusEl.textContent = isPaused ? 'Paused' : isRecording ? 'Recording…' : '';
+}
+
+/** Recording has stopped but the final zoomed video is still being
+ *  rendered (see offscreen.js — a real second encode pass, so this can
+ *  take a while for longer recordings). The button stays enabled, though
+ *  — relabeled "Cancel Processing" and rewired (see onToggleRecording())
+ *  to send CANCEL_PROCESSING instead of Start/Stop, so users aren't
+ *  forced to sit through the whole render just to reach the review
+ *  screen's Discard button if they already know they don't want this
+ *  recording. */
+function setProcessingUI(isProcessing, progress) {
+  if (!isProcessing) return;
+  startStopBtn.disabled = false;
+  startStopBtn.classList.add('processing');
+  startStopBtn.classList.remove('recording', 'starting');
+  startStopBtnLabel.textContent = 'Cancel Processing';
+  allSettingsInputs.forEach((el) => { el.disabled = true; });
+  micToggleBtn.disabled = true;
+  sourceToggleBtn.disabled = true;
+  micPopoverTrigger.disabled = true;
+  const pct = Math.round(Math.min(1, Math.max(0, progress || 0)) * 100);
+  statusEl.textContent = `Rendering final video… ${pct}%`;
+}
+
+</script>
+
+</body></html>

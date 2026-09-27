@@ -270,7 +270,7 @@
   .section-heading {
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
-    font-size: 56px;
+    font-size: 48px;
     line-height: 1.4;
     color: var(--ink);
     margin: 0 0 40px 0;
@@ -401,7 +401,7 @@
   .solution-heading {
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
-    font-size: 56px;
+    font-size: 48px;
     line-height: 1.4;
     color: var(--ink);
     margin: 0 0 40px 0;
@@ -494,12 +494,41 @@
     .point-content { grid-column: 1 / 2; }
     .point-line { display: none; }
 
-    .section-heading, .solution-heading { font-size: 32px; }
+    .section-heading, .solution-heading { font-size: 28px; }
     .point-title { font-size: 22px; }
     .section-copy p, .section-copy ul, .point-content p { font-size: 17px; }
     .media-frame { aspect-ratio: 4 / 5; }
     .scroll-indicator { width: 64px; height: 64px; right: 24px; top: -32px; }
     .scroll-indicator svg { width: 16px; height: 27px; }
+  }
+
+  /* hover label on the jump-to-demo circle */
+  .scroll-indicator::after {
+    content: "Try it yourself";
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translate(6px, -50%);
+    white-space: nowrap;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+    background: #FFFFFF;
+    padding: 8px 12px;
+    border-radius: 4px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .scroll-indicator:hover::after,
+  .scroll-indicator:focus-visible::after {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+  @media (hover: none) {
+    .scroll-indicator::after { display: none; }
   }
 </style>
 </head>

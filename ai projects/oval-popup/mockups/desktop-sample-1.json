@@ -1,0 +1,13 @@
+{
+  "id": "desktop-sample-1",
+  "name": "Desktop Monitor — Two People",
+  "image": "mockups/desktop-sample-1.png",
+  "corners": {
+    "topLeft":     { "x": 289, "y": 209 },
+    "topRight":    { "x": 911, "y": 209 },
+    "bottomRight": { "x": 911, "y": 555 },
+    "bottomLeft":  { "x": 289, "y": 555 }
+  },
+  "canvasWidth": 1195,
+  "canvasHeight": 896
+}

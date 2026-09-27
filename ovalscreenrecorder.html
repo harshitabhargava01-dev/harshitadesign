@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Oval Screen Recorder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&family=Source+Sans+Pro:wght@300;400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent-blue: #27B2FF;
+    --highlight: #BFE7FF;
+    --accent-green: #D6F45C;
+    --ink: #000000;
+    --ink-soft: #4A4B4D;
+    --paper: #F4F4F4;
+    --border: rgba(23, 24, 26, 0.12);
+    --radius: 6px;
+    --nav-height: 84px;
+    --max-width: 1440px;
+    --side-pad: 72px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ---------- SITE NAV ---------- */
+  .site-nav{
+    background:#fff;
+    border-bottom:1px solid rgba(31,30,30,0.08);
+    position:relative;
+    z-index:20;
+  }
+  .site-nav-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:22px 72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .site-nav-home{
+    font-family:'Rubik', sans-serif;
+    font-weight:400;
+    font-size:14px;
+    color:#1F1E1E;
+    text-decoration:none;
+    letter-spacing:0.5px;
+  }
+  .site-nav-home:hover{ color:#FE4520; }
+  .site-nav-links{
+    display:flex;
+    align-items:center;
+    gap:32px;
+  }
+  .site-nav-links a{
+    font-family:'Rubik', sans-serif;
+    font-weight:300;
+    font-size:14px;
+    color:#1F1E1E;
+    letter-spacing:0.5px;
+    text-decoration:none;
+  }
+  .site-nav-links a:hover{ color:#FE4520; }
+  .site-nav-links a.active{ font-weight:400; }
+  .site-nav-ai-link{ display:inline-flex; align-items:center; gap:6px; }
+  .site-nav-sparkle{ color:#4C8DFF; flex-shrink:0; animation:site-nav-sparkle-pulse 2.4s ease-in-out infinite; transform-origin:center; }
+  .site-nav-ai-link:hover .site-nav-sparkle{ color:#FE4520; }
+  @keyframes site-nav-sparkle-pulse{
+    0%, 100%{ transform:scale(1) rotate(0deg); opacity:0.8; }
+    50%{ transform:scale(1.25) rotate(20deg); opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .site-nav-sparkle{ animation:none; }
+  }
+  .site-nav-toggle{
+    display:none;
+    width:22px;
+    height:15px;
+    padding:10px;
+    margin:-10px;
+    box-sizing:content-box;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .site-nav-toggle span{
+    display:block;
+    height:1.5px;
+    width:100%;
+    background:#1F1E1E;
+    border-radius:2px;
+    transition:transform 0.25s ease, opacity 0.25s ease;
+  }
+  .site-nav-toggle.open span:nth-child(1){ transform:translateY(6.75px) rotate(45deg); }
+  .site-nav-toggle.open span:nth-child(2){ opacity:0; }
+  .site-nav-toggle.open span:nth-child(3){ transform:translateY(-6.75px) rotate(-45deg); }
+  @media (max-width:900px){
+    .site-nav-inner{ padding:18px 24px; }
+    .site-nav-toggle{ display:flex; }
+    .site-nav-links{
+      display:flex;
+      position:fixed;
+      top:0;
+      right:0;
+      height:100vh;
+      width:min(78vw, 320px);
+      flex-direction:column;
+      align-items:flex-start;
+      gap:28px;
+      background:#fff;
+      padding:100px 32px 32px;
+      box-shadow:-8px 0 32px rgba(0,0,0,0.18);
+      z-index:30;
+      transform:translateX(100%);
+      transition:transform 0.3s ease;
+    }
+    .site-nav-links a{ white-space:nowrap; font-size:16px; }
+    .site-nav-links.open{
+      display:flex;
+      transform:translateX(0);
+    }
+  }
+
+  body {
+    font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrapper {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--side-pad);
+  }
+
+  /* shared 12-column grid so headings, copy, and points align on the same lines */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 20px;
+  }
+
+  .col-heading { grid-column: 1 / 10; }
+  .col-copy { grid-column: 4 / 13; }
+
+  /* ---------- SECTION 1 : HERO (navy) ---------- */
+  .hero {
+    background: #0A2D41;
+    padding-top: 96px;
+    padding-bottom: 80px;
+  }
+
+  .hero-heading {
+    max-width: 1200px;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 48px;
+    line-height: 1.4;
+    letter-spacing: normal;
+    margin: 0;
+    color: var(--ink);
+  }
+  .hero-heading .line-bold{ font-weight: 400; font-style: normal; }
+  .hero-heading .line-italic{ font-weight: 300; font-style: italic; }
+
+  /* ---------- SECTION 2 : PROTOTYPE MEDIA ---------- */
+  .media-section {
+    position: relative;
+    background: #000000;
+    padding-top: 80px;
+    padding-bottom: 56px;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    top: -43px;
+    right: 147px;
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: #F5F5F5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .media-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9.2;
+    border-radius: 0;
+    overflow: hidden;
+    background: transparent;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .media-frame--left {
+    justify-content: flex-start;
+    padding-left: 0;
+  }
+
+  .media-frame iframe {
+    position: absolute;
+    inset: 20px;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    border: none;
+    border-radius: 0;
+    display: block;
+  }
+
+  .media-frame--left iframe {
+    left: 0;
+    width: calc(100% - 20px);
+  }
+
+
+  .media-placeholder-text {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 14px;
+    padding: 24px;
+  }
+
+  .media-placeholder-text strong {
+    display: block;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .hero { position: relative; }
+
+  @media (max-width: 900px) {
+    :root { --side-pad: 24px; }
+    .hero-heading { font-size: 28px; }
+    .hero { padding-top: 56px; padding-bottom: 56px; }
+  }
+
+  /* ---------- SECTION 2b : ENGINEERING CONSTRAINT ---------- */
+  .constraint {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .constraint:first-of-type {
+    padding-top: 160px;
+  }
+
+  .section-heading {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 48px;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 40px 0;
+  }
+
+  .section-heading.tryit-heading {
+    color: #FFFFFF;
+  }
+
+  .col-copy.tryit-copy {
+    grid-column: 1 / 10;
+  }
+
+  .section-copy.tryit-copy p {
+    color: #FFFFFF;
+  }
+
+  .section-copy .query-list {
+    list-style: none;
+    margin: 20px 0 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 16px;
+    max-width: 574px;
+  }
+
+  .section-copy .query-list--pair {
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+
+  .query-separator {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+  }
+
+  .section-copy .query-list--group2 {
+    margin-top: 28px;
+  }
+
+  .section-copy .query-list--secondary {
+    margin-top: 28px;
+  }
+
+  .query-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 6px;
+    padding: 8px 12px;
+  }
+
+  .query-text {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: #FFFFFF;
+  }
+
+  .copy-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+  }
+
+  .copy-btn:hover {
+    color: #FFFFFF;
+  }
+
+  .copy-btn svg { width: 14px; height: 14px; }
+  .copy-btn .icon-check { display: none; }
+  .copy-btn.copied .icon-copy { display: none; }
+  .copy-btn.copied .icon-check { display: block; }
+  .copy-btn.copied { color: #D6F45C; }
+
+  .media-section .grid {
+    padding-top: 24px;
+    margin-bottom: 40px;
+  }
+
+  .section-copy p {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.3;
+    color: #242424;
+    margin: 0 0 20px 0;
+  }
+
+  .section-copy ul {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.3;
+    color: #242424;
+    margin: 0 0 20px 0;
+    padding-left: 20px;
+  }
+
+  .section-copy li { margin-bottom: 10px; }
+  .section-copy strong { font-weight: 600; }
+
+  .section-copy mark {
+    background: var(--highlight);
+    color: inherit;
+    padding: 0;
+  }
+
+  /* ---------- SECTION 3 : SOLUTION POINTERS ---------- */
+  .solution {
+    padding-top: 80px;
+    padding-bottom: 96px;
+  }
+
+  .solution-heading {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 48px;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 40px 0;
+  }
+
+  .point-row {
+    padding: 40px 0;
+  }
+
+  .point-num-col {
+    grid-column: 1 / 4;
+    align-self: start;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+  }
+
+  .point-num {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    color: #468FFB;
+    white-space: nowrap;
+  }
+
+  .point-line {
+    flex: 1;
+    height: 1px;
+    background: #468FFB;
+    opacity: 0.35;
+  }
+
+  .point-content {
+    grid-column: 4 / 13;
+  }
+
+  .point-title {
+    display: inline-block;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1.2;
+    color: var(--ink);
+    background: var(--highlight);
+    margin: 0 0 20px 0;
+  }
+
+  .point-content p {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.3;
+    color: #242424;
+    margin: 0 0 20px 0;
+    max-width: 830px;
+  }
+
+  .point-content strong { font-weight: 400; color: #242424; }
+
+  .point-media {
+    margin-top: 24px;
+    max-width: 614px;
+  }
+
+  .point-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #B7B7B7;
+  }
+
+  .point-media--row {
+    display: flex;
+    flex-direction: column;
+    gap: 38px;
+    max-width: 614px;
+  }
+
+  .point-media--row .point-media-item {
+    width: 100%;
+  }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; column-gap: 0; row-gap: 16px; }
+    .col-heading, .col-copy { grid-column: 1 / 2; }
+    .col-copy, .point-content { transform: none; }
+    .point-num-col { grid-column: 1 / 2; padding-top: 0; margin-bottom: 8px; }
+    .point-content { grid-column: 1 / 2; }
+    .point-line { display: none; }
+
+    .section-heading, .solution-heading { font-size: 28px; }
+    .point-title { font-size: 22px; }
+    .section-copy p, .section-copy ul, .point-content p { font-size: 17px; }
+    .media-frame { aspect-ratio: 4 / 5; }
+    .scroll-indicator { width: 64px; height: 64px; right: 24px; top: -32px; }
+    .scroll-indicator svg { width: 16px; height: 27px; }
+  }
+  .hero .hero-heading, .hero .hero-intro { color: #fff; }
+
+  .hero-intro {
+    max-width: 920px;
+    margin: 24px 0 0 0;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .shot-row {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .shot-row img {
+    display: block;
+    width: 268px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .tools-list {
+    list-style: disc;
+    margin: 0;
+    padding-left: 22px;
+    max-width: 920px;
+  }
+
+  .tools-list li {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.4;
+    color: #242424;
+    margin-bottom: 14px;
+  }
+  .tools-list li:last-child { margin-bottom: 0; }
+  .tools-list li strong { font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .hero-intro { font-size: 17px; margin-top: 16px; }
+  }
+
+
+  /* ---------- Docked Oval extension (acts like the real Chrome popup) ---------- */
+  .ext-toggle {
+    position: fixed;
+    top: 76px;
+    right: 24px;
+    z-index: 40;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid rgba(39, 178, 255, 0.5);
+    border-radius: 8px;
+    background: #0A2D41;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(10, 45, 65, 0.25);
+  }
+  .ext-toggle img { width: 28px; height: auto; display: block; }
+  .ext-toggle:focus-visible { outline: 2px solid #27B2FF; outline-offset: 2px; }
+  .ext-toggle[aria-expanded="true"] { border-color: #27B2FF; }
+
+  .ext-dock {
+    position: fixed;
+    top: 128px;
+    right: 24px;
+    z-index: 40;
+    width: 300px;
+    max-height: calc(100vh - 144px);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(10, 45, 65, 0.15), 0 20px 50px rgba(10, 45, 65, 0.35);
+    display: none;
+  }
+  .ext-open .ext-dock { display: block; }
+  .ext-dock iframe {
+    display: block;
+    width: 300px;
+    height: 560px;
+    max-height: calc(100vh - 144px);
+    border: 0;
+    background: transparent;
+  }
+
+  /* smaller screens: a floating button in the corner, popup opens above it */
+  @media (max-width: 1199px) {
+    .ext-toggle { top: auto; bottom: 20px; right: 16px; }
+    .ext-dock { top: auto; bottom: 76px; right: 16px; max-width: calc(100vw - 32px); max-height: calc(100vh - 96px); }
+    .ext-dock iframe { max-height: calc(100vh - 96px); }
+  }
+
+  /* wide screens: the popup stays open and the text column makes room for it */
+  @media (min-width: 1200px) {
+    .ext-open .wrapper { padding-right: calc(var(--side-pad) + 324px); }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html" class="site-nav-home">HB</a>
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index.html#ai-playground" class="site-nav-ai-link active">
+          <svg class="site-nav-sparkle" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+            <path d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z" fill="currentColor"/>
+          </svg>
+          AI PLAYGROUND
+        </a>
+        <a href="index.html#projects">PROJECTS</a>
+        <a href="index.html#writings">WRITING</a>
+        <a href="about.html">ABOUT</a>
+      </div>
+      <button class="site-nav-toggle" id="siteNavToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="siteNavLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ================= SECTION 1 : HERO ================= -->
+  <section class="hero">
+    <div class="wrapper">
+      <h1 class="hero-heading"><span class="line-bold">The Oval Screen Recorder</span></h1>
+      <p class="hero-intro">I have been designing and building my own screen recorder, because I wanted more control over the small decisions, like how and where to zoom in, and the little micro interactions that happen when you highlight something on screen. Vibe coding helped me build these interactions directly into the product, instead of working around whatever any other existing tool already gives me. I have enjoyed the process so much.</p>
+    </div>
+  </section>
+
+  <section class="constraint">
+    <div class="wrapper grid">
+      <h2 class="section-heading col-heading">Hypothesis</h2>
+      <div class="section-copy col-copy">
+        <p><mark>If users can control small decisions, such as zoom and highlights, while they are recording, will that reduce the time spent editing in post-processing?</mark></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="solution">
+    <div class="wrapper">
+      <h2 class="solution-heading">Solution:<br>Designing Control Into the Recording</h2>
+      <div class="point-row grid">
+        <div class="point-num-col">
+          <span class="point-num">01</span>
+          <span class="point-line"></span>
+        </div>
+        <div class="point-content">
+          <h3 class="point-title">Platform: Chrome Extension</h3>
+          <p>I chose to build this entirely as a Chrome extension rather than a standalone app, partly a practical call, since a separate application would mean cloud infrastructure and managing the cost associated with it.</p>
+        </div>
+      </div>
+      <div class="point-row grid">
+        <div class="point-num-col">
+          <span class="point-num">02</span>
+          <span class="point-line"></span>
+        </div>
+        <div class="point-content">
+          <h3 class="point-title">Handling Engineering Constraints: Auto Zoom</h3>
+          <p>Despite multiple tries of giving prompts, I was unable to fix the sudden jerk of auto zoom. For example, if I am typing in a search bar, the process would zoom in and out multiple times, which did not look good for a screen recording video and added an unnecessary distraction. Instead, I tried adding manual zoom controls, which could be controlled with hotkeys, plus and minus, via the keyboard. This gives users control during the screen recording, where they can zoom in and out based on where the mouse cursor is. I must say it felt quite natural to navigate through the keyboard keys.</p>
+          <div class="shot-row">
+            <img src="images/screen-recorder/animation-panel.png" alt="Animation settings with Auto Zoom and its plus and minus hotkeys, Dim Background, and Bounding Box" />
+          </div>
+        </div>
+      </div>
+      <div class="point-row grid">
+        <div class="point-num-col">
+          <span class="point-num">03</span>
+          <span class="point-line"></span>
+        </div>
+        <div class="point-content">
+          <h3 class="point-title">Preview Panel</h3>
+          <p>The extension window is small, and listing down all the features could easily feel like a big list of features, making it hard to use. So I added a preview panel that shows the effect of a setting immediately, in the same space, and it works both ways, selecting a tool updates the preview, and clicking on something inside the preview opens its settings directly.</p>
+          <div class="shot-row">
+            <img src="images/screen-recorder/pointer-preview.png" alt="Interactions &amp; Styling panel with the recording preview, showing the custom cursor and click ripple" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="constraint">
+    <div class="wrapper grid">
+      <h2 class="section-heading col-heading">Tools Used:<br>Designing in Penpot With Claude</h2>
+      <div class="section-copy col-copy">
+        <ul>
+          <li><strong>Penpot:</strong> Screens were designed in Penpot, an open source tool and an alternative to Figma.</li>
+          <li><strong>Claude + MCP:</strong> Claude was used alongside Penpot, connected via MCP, as part of the design and build workflow.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DOCKED EXTENSION ================= -->
+  <button class="ext-toggle" id="extToggle" type="button" aria-label="Oval extension" aria-expanded="false" aria-controls="extDock" title="Try the Oval extension">
+    <img src="images/screen-recorder/oval-logo-white.svg" alt="" />
+  </button>
+  <div class="ext-dock" id="extDock">
+    <iframe id="extFrame" title="Interactive Oval extension popup"></iframe>
+  </div>
+
+  <script>
+    (function(){
+      var toggle = document.getElementById('siteNavToggle');
+      var links = document.getElementById('siteNavLinks');
+      function setOpen(isOpen){
+        links.classList.toggle('open', isOpen);
+        toggle.classList.toggle('open', isOpen);
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+      toggle.addEventListener('click', function(){
+        setOpen(!links.classList.contains('open'));
+      });
+      links.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(){ setOpen(false); });
+      });
+    })();
+    (function(){
+      var wide = window.matchMedia('(min-width: 1200px)');
+      var btn = document.getElementById('extToggle');
+      var frame = document.getElementById('extFrame');
+      function setOpen(open){
+        if (open && !frame.getAttribute('src')) frame.setAttribute('src', 'ai%20projects/oval-popup/index.html?docked');
+        document.body.classList.toggle('ext-open', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      btn.addEventListener('click', function(){
+        setOpen(!document.body.classList.contains('ext-open'));
+      });
+      // grow and shrink with the popup as settings panels open and close
+      window.addEventListener('message', function(e){
+        if (e.source !== frame.contentWindow || !e.data || !e.data.ovalPopupHeight) return;
+        frame.style.height = e.data.ovalPopupHeight + 'px';
+      });
+      setOpen(wide.matches);
+    })();
+  </script>
+
+</body>
+</html>
