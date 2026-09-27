@@ -327,6 +327,9 @@
   .project-art--tb .slide-bp{ margin:0; position:relative; }
   .project-art--tb .fblock .slide-bp img{ border:1px solid #e6e6e6; border-radius:.6cqw; }
   .project-art--tb .bp-tag{ display:none; }
+  .project-art--tb .slide-card.card-eq{ box-sizing:border-box; min-height:34.3cqw; display:flex; flex-direction:column; }
+  .project-art--tb .slide .slide-card.card-eq p.card-note{ margin-top:auto; }
+
 
   /* ---------- WRITING CARDS ---------- */
   .cards{
@@ -478,9 +481,10 @@
               <div class="slide" aria-roledescription="slide" aria-label="2 of 11">
                 <div class="slide-canvas">
                 <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Discovery</span></div>
-                <div class="fblock fblock--text" style="left:0.0%;top:9.0%;width:100.0%"><p>I collaborated with the Customer Success team to map the full customer journey, from deployment, through onboarding, to the site going live.</p></div>
-                <div class="fblock fblock--text" style="left:0.0%;top:25.0%;width:100.0%"><p>To validate this, we looked back at the previous 6-7 deployments and found a consistent pattern:</p></div>
-                <div class="fblock fblock--list" style="left:0.0%;top:38.0%;width:100.0%"><ul><li>On site confusion about the right way to connect accessories and hardware, a disconnect between CS and TechOps team</li><li>Accessories frequently failed to detect</li><li>Every deployment following a different connection and setup approach, with no repeatable steps</li></ul></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:9.0%;width:50.0%"><p>I collaborated with the Customer Success team to map the full customer journey, from deployment, through onboarding, to the site going live.</p></div>
+                <div class="fblock fblock--text" style="left:0.0%;top:30.0%;width:50.0%"><p>To validate this, we looked back at the previous 6-7 deployments and found a consistent pattern:</p></div>
+                <div class="fblock fblock--list" style="left:0.0%;top:43.0%;width:50.0%"><ul><li>On site confusion about the right way to connect accessories and hardware, a disconnect between CS and TechOps team</li><li>Accessories frequently failed to detect</li><li><mark class="hl">Every deployment following a different connection and setup approach, with no repeatable steps</mark></li></ul></div>
+                <div class="fblock fblock--fig" style="left:56.0%;top:9.0%;width:44.0%"><figure class="slide-bp" title="View the full deployment matrix"><img src="images/case-study-1/deployment-matrix-strip.jpg" alt="Deployment matrix: site name, system setup and the blocker behind each past deployment"><span class="bp-tag">View all deployments &#8599;</span></figure></div>
                 </div>
               </div>
 
@@ -507,16 +511,16 @@
                 <div class="slide-canvas">
                 <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Connecting the dots</span></div>
                 <div class="fblock fblock--lead" style="left:0.0%;top:8.0%;width:100.0%"><p class="slide-lead">The blueprint surfaced four insights, each pointing to a specific gap the design needed to close.</p></div>
-                <div class="fblock fblock--card" style="left:0.0%;top:22.0%;width:48.8%"><div class="slide-card"><strong>1. With scale, custom workflow became impossible to manage</strong><p>Every deployment used a custom workflow, which worked well when scale was small (6-10 systems for one project), but it became difficult to manage 100+ systems for one project.</p><p class="card-note"><strong>Decision:</strong> Stop depending on the client side infra, start using the qTrack kits shipped along with the laptop, and standardize the steps.</p></div></div>
-                <div class="fblock fblock--card" style="left:51.2%;top:22.0%;width:48.8%"><div class="slide-card"><strong>2. Standardization alone will not help until accountability for pre configuration is clearly defined</strong><p>TechOps owned accessory pre configuration in the kit, but with so much uncertainty this step often got missed and was left to be figured out on site.</p><p class="card-note"><strong>Process update:</strong> Add this step as a mandatory check for the TechOps and CS teams on their Jira boards.</p></div></div>
+                <div class="fblock fblock--card" style="left:0.0%;top:22.0%;width:48.8%"><div class="slide-card card-eq"><strong>1. With scale, custom workflow became impossible to manage</strong><p><mark class="hl">Every deployment used a custom workflow, which worked well when scale was small (6-10 systems for one project), but it became difficult to manage 100+ systems for one project.</mark></p><p class="card-note"><strong>Decision:</strong> Stop depending on the client side infra, start using the qTrack kits shipped along with the laptop, and standardize the steps.</p></div></div>
+                <div class="fblock fblock--card" style="left:51.2%;top:22.0%;width:48.8%"><div class="slide-card card-eq"><strong>2. Standardization alone will not help until accountability for pre configuration is clearly defined</strong><p><mark class="hl">TechOps owned accessory pre configuration in the kit, but with so much uncertainty this step often got missed and was left to be figured out on site.</mark></p><p class="card-note"><strong>Process update:</strong> Add this step as a mandatory check for the TechOps and CS teams on their Jira boards.</p></div></div>
                 </div>
               </div>
 
               <div class="slide" aria-roledescription="slide" aria-label="6 of 11">
                 <div class="slide-canvas">
                 <div class="fblock fblock--kicker" style="left:0.0%;top:0.0%;width:100.0%"><span class="slide-kicker">Connecting the dots</span></div>
-                <div class="fblock fblock--card" style="left:0.0%;top:8.0%;width:48.8%"><div class="slide-card"><strong>3. Getting on the product had high friction, making users question the product value</strong><p><mark class="hl">Users skipped the remote access feature because using it involved highly technical steps like finding the IP address of the laptop and then typing it in a mobile browser.</mark></p><p class="card-note"><strong>Design opportunity:</strong> Improve the onboarding experience by simplifying and reducing the overall connection and process steps, especially where hardware is involved.</p></div></div>
-                <div class="fblock fblock--card" style="left:51.2%;top:8.0%;width:48.8%"><div class="slide-card"><strong>4. Mismatch in training timeline vs when users actually start using the product on ground</strong><p><mark class="hl">There's often a months long gap between when a team is trained and when they actually start using the product on camp sites.</mark></p><p class="card-note"><strong>Design opportunity:</strong> Build guidance into the product itself, so users are not dependent on memory of a one time training done months earlier.</p></div></div>
+                <div class="fblock fblock--card" style="left:0.0%;top:8.0%;width:48.8%"><div class="slide-card card-eq"><strong>3. Getting on the product had high friction, making users question the product value</strong><p><mark class="hl">Users skipped the remote access feature because using it involved highly technical steps like finding the IP address of the laptop and then typing it in a mobile browser.</mark></p><p class="card-note"><strong>Design opportunity:</strong> Improve the onboarding experience by simplifying and reducing the overall connection and process steps, especially where hardware is involved.</p></div></div>
+                <div class="fblock fblock--card" style="left:51.2%;top:8.0%;width:48.8%"><div class="slide-card card-eq"><strong>4. Mismatch in training timeline vs when users actually start using the product on ground</strong><p><mark class="hl">There's often a months long gap between when a team is trained and when they actually start using the product on camp sites.</mark></p><p class="card-note"><strong>Design opportunity:</strong> Build guidance into the product itself, so users are not dependent on memory of a one time training done months earlier.</p></div></div>
                 </div>
               </div>
 
