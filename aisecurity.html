@@ -543,6 +543,18 @@
     .point-num-col { margin-bottom: 4px; }
     .point-title { margin-bottom: 12px; }
   }
+  /* phones: render the prototype at desktop size and scale it down to fit */
+  @media (max-width: 900px) {
+    .media-frame.is-scaled { aspect-ratio: 1024 / 600; padding: 0; }
+    .media-frame.is-scaled iframe {
+      inset: auto;
+      top: 0;
+      left: 0;
+      width: 1024px;
+      height: 600px;
+      transform-origin: 0 0;
+    }
+  }
 </style>
 </head>
 <body>
@@ -777,6 +789,25 @@
         });
       });
     });
+    // phones: scale the prototype down from its desktop size so it fits
+    (function(){
+      var frames = document.querySelectorAll('.media-frame iframe');
+      var small = window.matchMedia('(max-width: 900px)');
+      function fit(){
+        frames.forEach(function(iframe){
+          var box = iframe.parentElement;
+          if (small.matches) {
+            box.classList.add('is-scaled');
+            iframe.style.transform = 'scale(' + (box.clientWidth / 1024) + ')';
+          } else {
+            box.classList.remove('is-scaled');
+            iframe.style.transform = '';
+          }
+        });
+      }
+      fit();
+      window.addEventListener('resize', fit);
+    })();
   </script>
 
 </body>
