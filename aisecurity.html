@@ -530,6 +530,19 @@
   @media (hover: none) {
     .scroll-indicator::after { display: none; }
   }
+  /* tighter vertical rhythm on phones (same as the Oval case study) */
+  @media (max-width: 900px) {
+    .hero { padding-top: 40px; padding-bottom: 40px; }
+    .media-section { padding-top: 48px; padding-bottom: 32px; }
+    .media-section .grid { padding-top: 8px; margin-bottom: 24px; }
+    .constraint { padding-top: 40px; padding-bottom: 40px; }
+    .solution { padding-top: 24px; padding-bottom: 16px; }
+    .section-heading { margin-bottom: 0; }
+    .solution-heading { margin-bottom: 8px; }
+    .point-row { padding: 12px 0; }
+    .point-num-col { margin-bottom: 4px; }
+    .point-title { margin-bottom: 12px; }
+  }
 </style>
 </head>
 <body>
