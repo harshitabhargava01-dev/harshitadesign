@@ -582,7 +582,7 @@
   <!-- ================= SECTION 1 : NAV + GREEN HERO ================= -->
   <section class="hero">
     <div class="wrapper">
-      <h1 class="hero-heading"><span class="line-bold">The Semantic Video Search Perception Gap</span><br><span class="line-italic">Designing transparency for crop-frame constraints.</span></h1>
+      <h1 class="hero-heading"><span class="line-bold">The Semantic Video Search Perception Gap</span><br><span class="line-italic">Showing operators what the AI is actually searching for.</span></h1>
     </div>
   </section>
 
@@ -606,13 +606,13 @@
     <div class="wrapper grid">
       <h2 class="section-heading col-heading">Problem:<br>Perception Gap &amp; Business Impact</h2>
       <div class="section-copy col-copy">
-        <p>Semantic video search promises to let operators search through videos using everyday natural language. Users expect the same behaviour as how they interact with LLMs: <mark>you can type anything, and you'll be shown the relevant results.</mark></p>
+        <p>Semantic video search promises to let operators search through videos using everyday natural language. Users expect the same behaviour as how they interact with LLMs: <mark>you can type anything, and you will be shown the relevant results.</mark></p>
         <p>However, a big problem happens because looking at the whole video perfectly is way too expensive for companies to build and store. To save money, most systems use a more cost-effective method that only looks at a tiny cropped square around an object. <mark>This creates a "hit or miss" problem. Simple searches work perfectly, but complex searches fail completely if the subjects fall outside that isolated crop boundary.</mark></p>
-        <p>Let's see how this works in AI Video Security. When users start interacting with the search, they see <mark>a&nbsp;mismatch in how they understand the feature and how it actually works.</mark></p>
+        <p>Let us see how this works in AI Video Security. When users start interacting with the search, they see <mark>a&nbsp;mismatch in how they understand the feature and how it actually works.</mark></p>
         <p>This mismatch can show as:</p>
         <ul>
-          <li><strong>Manual Scroll Backlog:</strong> Operators don't find what they were looking for, meaning they still have to scroll through long search results manually.</li>
-          <li><strong>The Rewording Loop:</strong> Some queries work, some don't, so they start rewording the same search a few times, unsure if the problem is their phrasing or the tool.</li>
+          <li><strong>Manual Scroll Backlog:</strong> Operators do not find what they were looking for, meaning they still have to scroll through long search results manually.</li>
+          <li><strong>The Rewording Loop:</strong> Some queries work, some do not, so they start rewording the same search a few times, unsure if the problem is their phrasing or the tool.</li>
         </ul>
       </div>
     </div>
@@ -633,7 +633,7 @@
   <!-- ================= SECTION 3 : SOLUTION POINTERS ================= -->
   <section class="solution">
     <div class="wrapper">
-      <h2 class="solution-heading">Solution:<br>Designing Semantic Search Journey</h2>
+      <h2 class="solution-heading">Solution:<br>Guiding Operators Through the Search</h2>
 
       <div class="point-row grid">
         <div class="point-num-col">
@@ -643,7 +643,7 @@
         <div class="point-content">
           <h3 class="point-title">Before Typing: Search Examples</h3>
           <p><strong>What is happening:</strong><br>A rotating placeholder inside the empty search input cycles through valid phrasing patterns (e.g., "person wearing red cap") before the user interacts.</p>
-          <p><strong>How it helps:</strong><br>Acts as passive, zero-friction onboarding. It nudges operators on how they can form their search query.</p>
+          <p><strong>How it helps:</strong><br>Example searches in the search bar give operators a starting point for framing their own queries.</p>
           <div class="point-media">
             <img src="ai%20projects/search_bar_demo.gif" alt="Rotating placeholder text inside the empty search bar cycling through example queries" />
           </div>
@@ -656,9 +656,9 @@
           <span class="point-line"></span>
         </div>
         <div class="point-content">
-          <h3 class="point-title">During Search: Showing What's Being Searched</h3>
-          <p><strong>What is happening:</strong><br>As the system processes a query, an inline status message translates the user's sentence into plain system logic. If the query names something attached to a person, like "person with a red cap," it mirrors that directly: "Searching for person with red cap...". If the query names something merely nearby, like "person watching television," it says so plainly: "Searching for person near television..."</p>
-          <p><strong>How it helps:</strong><br>Shows the operator how the AI is actually thinking about their query, in real time: whether it's treating the object as something confirmed on the person, or something it's only checking for close by. This sets the right expectation for the result before it even loads.</p>
+          <h3 class="point-title">During Search: Showing What Is Being Searched</h3>
+          <p><strong>What is happening:</strong><br>As the system processes a query, a status message shows the operator how the system is searching it. If the query names something attached to a person, like "person with a red cap," it mirrors that directly: "Searching for person with red cap...". If the query names something merely nearby, like "person watching television," it says so plainly: "Searching for person near television..."</p>
+          <p><strong>How it helps:</strong><br>The operator can see whether the AI is looking for the object on the person or just nearby, so they know what kind of results to expect.</p>
           <div class="point-media point-media--row">
             <div class="point-media-item">
               <img src="ai%20projects/thinking_anchored.gif" alt="Status message reading Searching for person wearing red cap, for a query anchored directly to a person" />
@@ -676,9 +676,9 @@
           <span class="point-line"></span>
         </div>
         <div class="point-content">
-          <h3 class="point-title">When There's No Person or Vehicle: Filling the Gap</h3>
+          <h3 class="point-title">When There Is No Person or Vehicle: Filling the Gap</h3>
           <p><strong>What is happening:</strong><br>When a search has no person or vehicle at all (e.g., "grapes"), the system discloses that it added the anchor on its own: "Searching for grapes near person or vehicle..."</p>
-          <p><strong>How it helps:</strong><br>Makes clear the system never searches on its own. It always needs a person or vehicle to attach to, even when the user didn't ask for one.</p>
+          <p><strong>How it helps:</strong><br>Makes clear the system cannot search for an object by itself. It always needs a person or vehicle to attach it to, even when the user did not mention one.</p>
           <div class="point-media">
             <img src="ai%20projects/grapes_loop_demo.gif" alt="Status banner reading Searching for grapes near person or vehicle, disclosing the anchor the system added on its own" />
           </div>
@@ -692,7 +692,7 @@
     <div class="wrapper grid">
       <h2 class="section-heading col-heading tryit-heading">Try It Yourself</h2>
       <div class="section-copy col-copy tryit-copy">
-        <p>To showcase specific edge cases of our crop-frame model, this interactive sandbox uses a curated set of preset query paths. Try the suggested queries below to observe how the interface dynamically updates its status messaging based on spatial anchoring.</p>
+        <p>This prototype only works for a few preset searches. Try the ones below and watch how the status message changes depending on different queries being searched.</p>
         <ul class="query-list query-list--pair">
           <li class="query-item">
             <span class="query-text">Man eating grapes</span>
