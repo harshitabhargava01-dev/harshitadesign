@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>EB-1A Visa Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400&family=Nunito:wght@300;400;500;600;700;800&display=swap">
+<style>
+/* Layout: one 1136px column on a 12-col grid (72px margins at 1280), full-bleed colour bands per section. Single brand look, light only. */
+:root {
+  --forest: #0A4D3B;      /* brand dark green */
+  --forest-2: #145A47;    /* tiles on dark */
+  --ink-green: #0C3C2E;   /* headings on light */
+  --deep: #0A2E22;        /* text on lime */
+  --lime: #DEF696;        /* main accent */
+  --on-dark: rgba(255, 255, 255, .86); /* body text on forest */
+  --sage: #9CCFB9;        /* secondary text on dark */
+  --ink: #1A231F;         /* body text */
+  --muted: #5C6361;       /* secondary text */
+  --muted-2: #283A31;     /* text on lime */
+  --line: #E4ECE8;        /* card borders */
+  --soft: #F4F7F2;        /* soft band */
+  --paper: #FFFFFF;
+  --faq: #F5F5F5;
+  --shadow: 0 6px 18px rgba(10, 46, 34, .12);
+  --sans: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --serif: "Lora", Georgia, "Times New Roman", serif;
+  --gutter: clamp(16px, 5.625vw, 72px);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--forest); outline-offset: 3px; border-radius: 6px; }
+.on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--lime); }
+h1, h2, h3, p { margin: 0; }
+h1, h2 { text-wrap: balance; font-weight: 400; }
+.wrap { width: 100%; max-width: calc(1136px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.icon { display: block; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; font-size: 14px; line-height: 1.5; padding: 12px 22px; white-space: nowrap; transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease; text-decoration: none; }
+.btn:hover { transform: translateY(-1px); }
+.btn-dark { background: var(--forest); color: #fff; }
+.btn-lime { background: var(--lime); color: var(--forest); }
+.btn-line { border: 1px solid var(--forest); color: var(--forest); }
+.costs .btn-line:hover, .costs .btn-line[aria-expanded="true"] { background: var(--lime); border-color: var(--lime); }
+.btn-arrow { padding: 10px 10px 10px 20px; }
+.arrow { width: 28px; height: 28px; border-radius: 999px; display: grid; place-items: center; background: var(--lime); color: var(--forest); flex: none; }
+.btn-lime .arrow { background: var(--forest); color: var(--lime); }
+.arrow .icon { width: 16px; height: 16px; stroke-width: 2.2; }
+.arrow-o { width: 28px; height: 28px; flex: none; display: block; }
+.send-o { width: 34px; height: 34px; }
+.round-o { width: 40px; height: 40px; flex: none; }
+.spark-round { width: 40px; height: 40px; border-radius: 999px; background: var(--forest); color: var(--lime); display: grid; place-items: center; flex: none; }
+.spark-round .icon { width: 18px; height: 18px; }
+.twinkle { transform-box: fill-box; transform-origin: center; animation: twinkle 2.4s ease-in-out infinite; }
+.twinkle.t2 { animation-delay: .8s; } .twinkle.t3 { animation-delay: 1.6s; }
+@keyframes twinkle { 0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; } 45% { transform: scale(.72) rotate(12deg); opacity: .55; } 60% { transform: scale(1.12) rotate(-4deg); opacity: 1; } }
+.tri { width: 8px; height: 5px; flex: none; }
+
+/* NAV */
+.nav { background: var(--paper); }
+.nav .wrap { height: 86px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #0C1310; font-family: var(--serif); font-size: 19px; white-space: nowrap; }
+.brand img { width: 47px; height: 26px; }
+.nav-links { display: flex; gap: 32px; font-size: 15px; line-height: 1.4; }
+.nav-links a { text-decoration: none; }
+.nav-links a:hover { color: var(--forest); text-decoration: underline; text-underline-offset: 4px; }
+.nav-actions { display: flex; align-items: center; gap: 20px; font-size: 15px; }
+.nav-actions .btn { padding: 11px 20px; }
+.nav-actions > a:first-child { text-decoration: none; }
+
+/* HERO */
+.hero { background: var(--forest); color: #fff; padding-top: 74px; padding-bottom: 71px; }
+.hero h1 { font-size: clamp(34px, 4.6vw, 46px); font-weight: 300; line-height: 1.08; max-width: 600px; }
+.hero .lede { font-size: 17px; line-height: 1.55; max-width: 560px; margin-top: 32px; }
+.frank-row { display: flex; justify-content: flex-end; margin-top: 70px; }
+.frank { width: min(548px, 100%); min-height: 178px; background: var(--forest); border-radius: 8px; box-shadow: var(--shadow); padding: 22px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; align-content: start; }
+.frank .ask { margin-top: 20px; }
+.frank-note { margin-top: 22px; text-align: right; }
+.frank-title { color: var(--lime); font-size: 15px; display: flex; align-items: center; gap: 8px; }
+.frank-title .icon { width: 16px; height: 16px; }
+.ask { display: flex; align-items: center; gap: 8px; border: 3px solid transparent; border-radius: 60px; height: 54px; padding: 0 6px 0 18px;
+  background: linear-gradient(#F6F8F7, #F6F8F7) padding-box, conic-gradient(from var(--ring), var(--forest), var(--lime) 25%, var(--forest) 50%, var(--lime) 75%, var(--forest)) border-box;
+  animation: ring 4s linear infinite; }
+@property --ring { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes ring { to { --ring: 360deg; } }
+.ask:focus-within { animation-duration: 2s; }
+.ask input { flex: 1; min-width: 0; width: 0; border: 0; background: transparent; font: inherit; font-size: 12px; color: var(--forest); outline: none; }
+.ask { position: relative; }
+.ask-hint { position: absolute; left: 18px; right: 160px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--forest); pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity .3s ease, transform .3s ease; }
+.ask-hint.out { opacity: 0; transform: translateY(calc(-50% - 6px)); }
+.ask.typing .ask-hint { display: none; }
+.ask .upload { border: 1px solid rgba(10, 77, 59, .25); border-radius: 999px; padding: 6px 14px; font-size: 10px; color: var(--forest); white-space: nowrap; }
+.ask .send { width: 34px; height: 34px; border-radius: 999px; display: grid; place-items: center; flex: none; }
+.ask .send .icon { width: 16px; height: 16px; stroke-width: 2.2; }
+.frank-note { font-size: 10px; }
+.people { display: grid; grid-template-columns: 384fr 224fr 224fr 268fr; gap: 12px; margin-top: 50px; }
+.person { position: relative; height: 233px; border-radius: 16px; overflow: hidden; background: #D9E2DC; }
+.person img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.person.researcher img { object-position: center 12%; }
+.person .chip { position: absolute; left: 16px; bottom: 13px; background: #fff; color: var(--ink-green); border-radius: 999px; padding: 6px 12px; font-size: 13px; }
+
+/* ROUTE NAVIGATOR */
+.routes { position: relative; z-index: 30; pointer-events: none; }
+.routes::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 35px; background: var(--forest); }
+.routes::before { transition: background-color .2s ease; }
+.routes.dim::before { background: #0A3E2E; }
+.routes .wrap { position: relative; display: flex; justify-content: center; padding-block: 0; }
+.pill { pointer-events: auto; min-width: 0; margin-left: 10px; display: flex; align-items: center; gap: 5px; padding: 6px; background: #fff; border-radius: 999px; box-shadow: var(--shadow); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.pill::-webkit-scrollbar { display: none; }
+.tab { display: grid; place-items: center; text-align: center; text-decoration: none; flex: none; height: 58px; border-radius: 999px; padding: 0 16px; color: #0F1F19; transition: background-color .2s ease; }
+.tab:nth-child(1) { width: 218px; } .tab:nth-child(2) { width: 214px; } .tab:nth-child(3) { width: 227px; } .tab:nth-child(4) { width: 210px; }
+.tab b { font-weight: 400; font-size: 14px; line-height: 1.5; }
+.tab small { display: block; font-size: 11px; line-height: 1.5; opacity: .75; white-space: nowrap; }
+.tab:hover { background: var(--soft); }
+.tab[aria-current="page"] { background: var(--forest); color: #fff; }
+.compare-btn { margin-right: 7px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 101px; height: 52px; flex: none; border-radius: 999px; background: var(--lime); color: var(--deep); font-size: 13px; font-weight: 700; }
+.compare-btn .tri { transition: transform .2s ease; }
+.compare-btn[aria-expanded="true"] .tri { transform: rotate(180deg); }
+.panel { pointer-events: auto; position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); width: min(1010px, calc(100% - 2 * var(--gutter))); background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; }
+.panel-scroll { overflow-x: auto; }
+.cmp { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14px; line-height: 1.35; }
+.cmp th, .cmp td { text-align: left; vertical-align: middle; padding: 0 20px; border-top: 1px solid var(--line); }
+.cmp thead th { border-top: 0; height: 84px; vertical-align: top; padding-top: 20px; }
+.cmp thead th b { display: block; font-size: 17px; font-weight: 700; line-height: 1.3; color: var(--ink-green); }
+.cmp thead th span { font-size: 12px; font-weight: 600; color: var(--muted); }
+.cmp tbody td, .cmp tbody th { height: 66px; }
+.cmp tbody th { width: 150px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.cmp td { color: var(--ink); }
+.cmp .here { background: var(--lime); }
+.cmp td.here { font-weight: 700; color: var(--forest); }
+.cmp thead .here span { color: var(--forest); }
+.cmp .flash { animation: flash 1.2s ease; }
+@keyframes flash { 0% { background: var(--lime); } 100% { background: transparent; } }
+.panel-foot { background: var(--forest); padding: 22px 20px; font-size: 13px; color: #fff; }
+.scrim { position: fixed; inset: 0; z-index: 25; background: rgba(10, 46, 34, .5); opacity: 0; transition: opacity .2s ease; }
+.scrim.on { opacity: 1; }
+
+/* EB-1A */
+.eb { padding-top: 96px; padding-bottom: 96px; }
+.eb-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 64px; }
+.eb-top > div:first-child { padding-top: 8px; }
+.eb h2 { font-size: clamp(30px, 4vw, 40px); line-height: 1.12; color: var(--forest); max-width: 552px; }
+.eb .body { font-size: 16px; line-height: 1.4; color: #292929; max-width: 535px; margin-top: 32px; }
+.eb .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.eb .btns .btn-line { padding: 13px 22px; }
+.eb .btns .btn-dark { padding-left: 22px; }
+.fit { width: 480px; min-height: 341px; flex: none; background: var(--forest); color: #fff; border-radius: 8px; padding: 39px 28px 43px; display: grid; gap: 18px; align-content: start; }
+.fit-label { font-size: 14px; line-height: 1.4; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip-btn { border: 1px solid var(--lime); color: #fff; border-radius: 999px; padding: 7.5px 11px; font-size: 13px; line-height: 1.4; transition: background-color .2s ease, color .2s ease; }
+.chip-btn:hover { background: rgba(222, 246, 150, .14); }
+.chip-btn[aria-pressed="true"] { background: var(--lime); border-color: var(--lime); color: var(--forest); font-weight: 600; }
+.fit hr { border: 0; height: 1px; background: rgba(255, 255, 255, .15); margin: -4px 0 -5px; }
+.example { display: grid; gap: 10px; transition: opacity .2s ease; margin-top: 7px; }
+.example.fade { opacity: 0; }
+.example h3 { font-size: 22px; font-weight: 600; line-height: 1.3; }
+.example p { font-size: 14px; color: var(--on-dark); }
+.ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ticks li { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.example .ticks li { font-weight: 600; }
+.check { width: 18px; height: 18px; border-radius: 999px; display: grid; place-items: center; flex: none; background: var(--forest); }
+.check svg { width: 10px; height: 10px; fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.check.lime { background: var(--lime); } .check.lime svg { stroke: var(--forest); }
+.check.grey { background: #B9C7C0; }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 76px; }
+.fact > div { max-width: 170px; } .fact:nth-child(2) > div { max-width: 211px; }
+.fact { display: flex; align-items: center; gap: 14px; min-height: 96px; padding: 18px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.tile { width: 44px; height: 44px; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: var(--lime); color: var(--forest); flex: none; }
+.fact small { display: block; font-size: 12px; line-height: 1.3; color: var(--muted); }
+.fact strong { display: block; font-weight: 400; font-size: 16px; line-height: 1.3; }
+.fact.fee strong { color: var(--forest); }
+.eb .keep { font-size: 16px; color: var(--forest); margin-top: 12px; }
+.redirect { display: flex; align-items: center; gap: 16px; margin-top: 49px; min-height: 118px; padding: 24px; border-radius: 8px; background: var(--lime); }
+.redirect .round { width: 40px; height: 40px; border-radius: 999px; background: var(--forest); color: var(--lime); display: grid; place-items: center; flex: none; }
+.redirect .round .icon { width: 18px; height: 18px; stroke-width: 2.2; }
+.redirect h3 { font-size: 17px; font-weight: 400; line-height: 1.4; color: var(--ink-green); }
+.redirect p { font-size: 14px; color: var(--muted-2); max-width: 900px; margin-top: 4px; }
+
+/* HOW IT WORKS */
+.how { background: var(--lime); padding-top: 96px; padding-bottom: 96px; color: var(--muted-2); }
+.how h2 { font-size: clamp(30px, 4vw, 40px); line-height: 1.12; color: var(--ink-green); }
+.how .sub { font-size: 16px; line-height: 1.6; margin-top: 12px; }
+.how .intro { font-size: 16px; line-height: 1.6; margin-top: 5px; }
+.path { display: grid; grid-template-columns: 374px 1fr; gap: 17px; margin-top: 34px; align-items: stretch; }
+.phases { background: #fff; border-radius: 8px; padding: 0 16px; overflow: hidden; display: flex; flex-direction: column; }
+.phase { position: relative; flex: 1; display: flex; flex-wrap: wrap; align-content: center; align-items: flex-start; gap: 14px; width: 100%; text-align: left; padding: 20px 6px; border-top: 1px solid var(--line); }
+.phase:first-child { border-top: 0; }
+.phase::before { content: ""; position: absolute; left: -16px; top: 50%; width: 3px; height: 64px; transform: translateY(-50%) scaleY(0); background: var(--forest); border-radius: 2px; transition: transform .2s ease; }
+.phase[aria-selected="true"]::before { transform: translateY(-50%) scaleY(1); }
+.phase .tile { background: #fff; border: 1.5px solid var(--forest); color: var(--forest); display: flex; align-items: center; justify-content: center; }
+.phase[aria-selected="true"] .tile { background: var(--lime); }
+.phase > span:last-child { flex: 1; min-width: 0; }
+.phase small { display: block; font-size: 10px; line-height: 1; padding-top: 1px; color: #4A6358; }
+.phase b { display: block; font-weight: 500; font-size: 18px; line-height: 1.3; margin-top: 4px; color: var(--ink); }
+.phase span:not(.tile) { display: block; font-size: 12px; line-height: 1.5; color: #4A5A52; }
+.phase:hover b { text-decoration: underline; text-underline-offset: 4px; }
+.steps { background: #fff; border-radius: 8px; padding: 34px 32px 32px; display: grid; gap: 44px; align-content: start; min-height: 323px; }
+.steps .fine { margin-top: -16px; margin-left: 90px; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; background: var(--lime); color: var(--forest); font-weight: 600; }
+.steps .fine .icon { width: 18px; height: 18px; flex: none; }
+@media (max-width: 1100px) { .steps .fine { margin-left: 0; } }
+.step > div { max-width: 562px; }
+.step { display: flex; gap: 22px; align-items: flex-start; }
+.step .tile { width: 68px; height: 68px; border-radius: 8px; background: var(--forest); color: var(--lime); }
+.step .tile .icon { width: 28px; height: 28px; }
+.ctile .icon { width: 29px; height: 29px; }
+.step h3 { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 16px; font-weight: 400; line-height: 1.3; margin-top: -1px; }
+.step p { font-size: 14px; line-height: 1.6; margin-top: 8px; }
+.step em { font-style: normal; font-size: 12px; line-height: 1.5; background: var(--lime); color: var(--forest); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+.steps .fine { font-size: 13px; line-height: 1.4; align-self: start; }
+.timing { border-top: 1px solid rgba(10, 77, 59, .25); margin-top: 72px; padding-top: 40px; display: flex; justify-content: space-between; gap: 48px; color: var(--forest); }
+.timing h3 { font-size: 24px; font-weight: 500; line-height: 1.2; }
+.timing p { font-size: 14px; line-height: 1.55; max-width: 840px; margin-top: 10px; }
+.ext { display: grid; gap: 13px; align-content: start; padding-top: 4px; }
+.ext a { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 236px; height: 33px; padding: 0 16px; border: 1px solid rgba(10, 77, 59, .5); border-radius: 999px; font-size: 12px; font-weight: 500; line-height: 1.4; text-decoration: none; }
+.ext a:hover { background: rgba(255, 255, 255, .4); }
+.ext .icon { width: 14px; height: 14px; stroke-width: 2; }
+
+/* CRITERIA */
+.crit { background: var(--forest); color: #fff; padding-top: 96px; padding-bottom: 96px; }
+.crit h2 { font-size: clamp(30px, 4vw, 40px); line-height: 1.2; }
+.crit .intro { font-size: 16px; color: var(--sage); max-width: 744px; margin-top: 6px; }
+.crit-row { display: flex; gap: 93px; margin-top: 67px; align-items: flex-start; }
+.detail { padding-top: 4px; }
+.tiles { display: grid; grid-template-columns: repeat(4, 106px); gap: 10px 13px; flex: none; }
+.ctile { width: 106px; height: 106px; border-radius: 7.3px; background: var(--forest-2); color: #fff; display: grid; place-content: center; justify-items: center; gap: 9px; padding: 0 7px; text-align: center; font-size: 11px; line-height: 1.25; transition: background-color .2s ease, transform .15s ease; }
+.ctile .icon { width: 29px; height: 29px; stroke-width: 1.6; color: var(--lime); }
+.ctile:hover { transform: translateY(-2px); }
+.ctile[aria-selected="true"] { background: #fff; color: var(--forest); }
+.ctile[aria-selected="true"] .icon { color: var(--forest); }
+.arts { grid-column: 1 / -1; font-size: 12px; line-height: 1.4; color: var(--sage); margin: 11px 0 -5px; }
+.detail { flex: 1; min-width: 0; }
+.detail h3 { font-size: 48px; font-weight: 400; line-height: 1.15; }
+.detail .gist { font-size: 16px; line-height: 1.4; color: var(--sage); margin-top: -6px; }
+.verdict { display: flex; align-items: center; gap: 10px; font-size: 16px; line-height: 1.4; margin-top: 32px; }
+.verdict + p { font-size: 12px; color: var(--on-dark); max-width: 408px; margin-top: 7px; }
+.verdict.no { margin-top: 20px; }
+.verdict.no + p { margin-top: 0; }
+.badge { width: 14px; height: 14px; border-radius: 999px; display: grid; place-items: center; flex: none; }
+.badge svg { width: 8px; height: 8px; fill: none; stroke: var(--forest); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.badge.yes, .badge.no { background: var(--lime); }
+.prompt { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; margin-top: 40px; }
+.prompt p { display: flex; gap: 10px; font-size: 14px; color: var(--sage); max-width: 312px; }
+.prompt p .icon { width: 16px; height: 16px; color: var(--lime); stroke-width: 2; margin-top: 2px; }
+.prompt .btn { font-size: 12px; padding: 12px 12px 12px 22px; min-height: 52px; min-width: 184px; justify-content: space-between; }
+.detail-body { transition: opacity .2s ease; }
+.detail-body.fade { opacity: 0; }
+.step-two { background: rgba(255, 255, 255, .08); border-radius: 8px; padding: 36px 28px 21px; margin-top: 34px; min-height: 137px; }
+.step-two h3 { font-size: 20px; font-weight: 400; line-height: 1.4; }
+.step-two p { font-size: 15px; line-height: 1.55; color: var(--on-dark); margin-top: 6px; }
+.step-two a { color: var(--lime); font-weight: 600; }
+
+/* COSTS */
+.costs { padding-top: 96px; padding-bottom: 96px; }
+.costs h2 { font-size: clamp(30px, 4vw, 40px); line-height: 1.2; color: var(--forest); }
+.costs .sub { font-size: 16px; color: var(--muted); margin-top: 12px; }
+.cards { display: grid; gap: 16px; margin-top: 32px; }
+.card { display: grid; grid-template-columns: 470px 1fr; gap: 48px; padding: 32px 32px 28px; border: 1px solid var(--line); border-radius: 8px; background: #fff; transition: background-color .25s ease; }
+.card.off { background: #F6F8F7; }
+.name { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 18px; line-height: 1.4; color: var(--ink-green); }
+.card.off .name, .card.off .price, .card.off h4 { color: var(--muted); }
+.tag { background: var(--lime); color: var(--forest); border-radius: 999px; padding: 3px 10px; font-size: 11px; line-height: 1.4; }
+.toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.track { width: 36px; height: 20px; border-radius: 999px; background: #C9D3CE; padding: 2px; transition: background-color .2s ease; }
+.track i { display: block; width: 16px; height: 16px; border-radius: 999px; background: #fff; transition: transform .2s ease; }
+.toggle[aria-checked="true"] .track { background: var(--forest); }
+.toggle[aria-checked="true"] .track i { transform: translateX(16px); }
+.price { display: flex; align-items: flex-end; gap: 8px; margin-top: 15px; color: var(--ink-green); font-size: 40px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.price small { font-size: 15px; line-height: 1.6; color: var(--muted); }
+.card .desc { font-size: 14px; color: var(--muted); max-width: 440px; margin-top: 14px; }
+.card .btn { margin-top: 14px; }
+.card h4 { margin: 0 0 10px; font-size: 15px; font-weight: 400; line-height: 1.4; color: var(--ink); }
+.card.off .ticks li { color: #8A958F; }
+.more { margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--forest); }
+.more .tri { transition: transform .2s ease; }
+.more[aria-expanded="true"] .tri { transform: rotate(180deg); }
+.fees { grid-column: 1 / -1; overflow-x: auto; }
+.fees table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14px; }
+.fees th, .fees td { text-align: left; padding: 12px 16px 12px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.fees thead th { border-top: 0; font-size: 12px; font-weight: 700; color: var(--muted); }
+.fees td:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fees .opt { font-size: 11px; background: var(--lime); color: var(--forest); border-radius: 999px; padding: 2px 8px; margin-left: 6px; }
+.fees-note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+.total { display: flex; align-items: center; justify-content: space-between; gap: 48px; margin-top: 32px; padding: 28px 32px; border-radius: 8px; background: var(--lime); color: var(--ink-green); }
+.total .lbl { font-size: 15px; line-height: 1.4; }
+.total .amt { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 10px; font-size: 40px; line-height: 1.1; margin-top: 6px; }
+.total .amt small { font-size: 15px; line-height: 1.6; }
+.total .note { font-size: 13px; color: #3E4A44; max-width: 340px; }
+
+/* FAQ */
+.faq { padding-top: 96px; padding-bottom: 96px; }
+.faq h2 { font-size: clamp(30px, 4vw, 40px); line-height: 1.12; color: var(--forest); }
+.qs { display: grid; gap: 10px; max-width: 712px; margin-top: 44px; }
+.q { min-height: 72px; } .q:has(button[aria-expanded="true"]) { min-height: 152px; }
+.q { background: var(--faq); border-radius: 18px; }
+.q button { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; text-align: left; padding: 20px 22px; font-size: 15px; color: #0F1F19; }
+.q .pm { width: 32px; height: 32px; border-radius: 999px; border: 1px solid var(--forest); color: var(--forest); display: grid; place-items: center; flex: none; font-size: 16px; line-height: 1; transition: background-color .2s ease; }
+.q button[aria-expanded="true"] .pm { background: var(--forest); color: #fff; }
+.q .a { padding: 2px 22px 24px; font-size: 14px; line-height: 1.65; color: #56605B; max-width: 668px; }
+.view-more { display: inline-flex; align-items: center; gap: 8px; padding-left: 16px; margin-top: 8px; font-size: 15px; line-height: 21px; font-weight: 700; color: var(--forest); justify-self: start; }
+.view-more .tri { transition: transform .2s ease; }
+.view-more[aria-expanded="true"] .tri { transform: rotate(180deg); }
+
+/* CTA + SOURCES */
+.cta { background: var(--forest); color: #fff; text-align: center; padding-top: 96px; padding-bottom: 64px; }
+.cta h2 { font-size: clamp(28px, 3.6vw, 36px); line-height: 1.2; }
+.cta .btn { margin-top: 31px; font-size: 16px; padding: 12px 14px 12px 26px; min-height: 60px; min-width: 235px; justify-content: space-between; }
+.cta p { font-size: 14px; color: var(--sage); margin-top: 20px; }
+.sources { background: var(--forest); padding-top: 0; padding-bottom: 96px; }
+.sources .wrap { margin-top: 0; }
+.src-card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 28px; }
+.src-card h2 { font-size: 20px; line-height: 28px; color: var(--ink); }
+.src-card .date { font-size: 13px; line-height: 18px; color: var(--muted); margin-top: 4px; }
+.src-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 56px; margin-top: 17px; }
+.src-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; align-content: start; }
+.src-cols li { line-height: 20px; height: 20px; } .src-cols a { font-size: 14px; line-height: 20px; color: var(--forest); text-underline-offset: 2px; }
+
+/* FOOTER */
+.foot { background: var(--lime); color: var(--forest); padding-top: 96px; padding-bottom: 96px; }
+.foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 48px; }
+.foot .brandname { font-size: 18px; line-height: 27px; }
+.foot .about p + p { font-size: 13px; line-height: 1.6; max-width: 516px; margin-top: 10px; }
+.foot-cols { display: grid; grid-template-columns: 212px 212px 88px; }
+.foot-cols h3 { font-size: 13px; font-weight: 700; }
+.foot-cols ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; font-size: 13px; }
+.foot-cols a { text-decoration: none; } .foot-cols a:hover { text-decoration: underline; }
+
+/* toast */
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); opacity: 0; background: var(--deep); color: #fff; padding: 12px 18px; border-radius: 999px; font-size: 14px; box-shadow: var(--shadow); transition: opacity .2s ease, transform .2s ease; z-index: 50; max-width: calc(100% - 32px); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .nav-links { display: none; }
+  .eb-top { flex-direction: column; align-items: stretch; }
+  .fit { width: 100%; }
+  .path { grid-template-columns: 1fr; }
+  .crit-row { flex-direction: column; gap: 40px; }
+  .card { grid-template-columns: 1fr; gap: 24px; }
+  .timing { flex-direction: column; gap: 20px; }
+}
+@media (max-width: 760px) {
+  .nav-actions > a:first-child { display: none; }
+  .people { grid-template-columns: 1fr 1fr; }
+  .person { height: 180px; }
+  .facts { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+  .ctile { width: auto; }
+  .total { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .src-cols { grid-template-columns: 1fr; }
+  .foot .wrap { flex-direction: column; gap: 32px; }
+  .foot-cols { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+  .routes .wrap { justify-content: flex-start; }
+  .frank-row { margin-top: 40px; }
+}
+@media (max-width: 480px) {
+  .brand span { display: none; }
+  .btn { white-space: normal; }
+  .detail h3 { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4z"/></symbol>
+    <symbol id="i-show" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 2.5h6v3H9z"/><path d="M8.5 11l1.5 1.5 2.5-2.5M8.5 16l1.5 1.5 2.5-2.5M14.5 11.5h1.5M14.5 16.5h1.5"/></symbol>
+    <symbol id="i-time" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+    <symbol id="i-fee" viewBox="0 0 24 24"><path d="M5 3h14v18l-2.5-1.5L14 21l-2-1.5L10 21l-2.5-1.5L5 21z"/><path d="M14 8.2c-.4-.7-1.2-1.2-2.2-1.2-1.3 0-2.3.7-2.3 1.7 0 2.3 4.8 1.2 4.8 3.6 0 1-1.1 1.7-2.4 1.7-1 0-1.9-.5-2.3-1.3M12 5.8v1.2M12 14v1.2"/></symbol>
+    <symbol id="i-frank" viewBox="0 0 24 24"><path d="M12 3l2.1 6.9L21 12l-6.9 2.1L12 21l-2.1-6.9L3 12l6.9-2.1z"/></symbol>
+    <symbol id="i-law" viewBox="0 0 24 24"><path d="M12 3.5v17M8 20.5h8M4 7h16M7 7l-3 7a3 3 0 006 0zM17 7l-3 7a3 3 0 006 0z"/></symbol>
+    <symbol id="i-gov" viewBox="0 0 24 24"><path d="M3 20.5h18M5.5 18V10M18.5 18V10M10 18v-8M14 18v-8M3 18h18M3 10l9-6.5 9 6.5z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5"/><path d="M20.5 20.5l-4.2-4.2M8 11h6M11 8v6"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><path d="M20.6 9.6A9 9 0 1114.4 3.4"/><path d="M16.4 10.8A4.5 4.5 0 1113.2 7.6"/><circle cx="12" cy="12" r="1"/><path d="M12 12l7.5-7.5M16.5 4.5h3v3"/></symbol>
+    <symbol id="i-memo" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h4M14 14h3"/></symbol>
+    <symbol id="i-awards" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 01-10 0z"/><path d="M17 5.5h2.5a.5.5 0 01.5.5v1a3.5 3.5 0 01-3.5 3.5M7 5.5H4.5a.5.5 0 00-.5.5v1a3.5 3.5 0 003.5 3.5M12 14v3.5M8 20.5h8M9.5 17.5h5v3h-5z"/></symbol>
+    <symbol id="i-membership" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0112 0v1M16 4a4 4 0 010 8M22 21v-1a6 6 0 00-4-5.7"/></symbol>
+    <symbol id="i-press" viewBox="0 0 24 24"><path d="M4 4h13v16H6a2 2 0 01-2-2zM17 8h3v10a2 2 0 01-2 2M8 8h5M8 12h5M8 16h3"/></symbol>
+    <symbol id="i-judging" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></symbol>
+    <symbol id="i-contrib" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></symbol>
+    <symbol id="i-articles" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></symbol>
+    <symbol id="i-role" viewBox="0 0 24 24"><path d="M4 22V4M4 4h13l-2 4 2 4H4"/></symbol>
+    <symbol id="i-pay" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></symbol>
+    <symbol id="i-exhibit" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></symbol>
+    <symbol id="i-commercial" viewBox="0 0 24 24"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16v-7"/></symbol>
+<symbol id="o-phase1" viewBox="106.20 2729.20 17.6 17.6"><g id="shape-0df7f567-f96d-80f0-8008-c1dda29fb80b" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1dda2a10151"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1dda2a10151"><path d="M115,2729.750244140625L116.7412109375,2734.4248046875L121.4169921875,2736.166015625L116.7412109375,2737.908203125L115,2742.583740234375L113.2587890625,2737.908203125L108.5830078125,2736.166015625L113.2587890625,2734.4248046875L115,2729.750244140625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08dad8c-0df7f567-f96d-80f0-8008-c1dda2a10151" class="strokes"><g class="stroke-shape"><path d="M115,2729.750244140625L116.7412109375,2734.4248046875L121.4169921875,2736.166015625L116.7412109375,2737.908203125L115,2742.583740234375L113.2587890625,2737.908203125L108.5830078125,2736.166015625L113.2587890625,2734.4248046875L115,2729.750244140625" style="fill: none; stroke-width: 1.75; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-phase2" viewBox="104 2838 22 22"><g id="shape-0df7f567-f96d-80f0-8008-c1ddbe27578b" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1ddbe28e260"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1ddbe28e260"><rect width="18.33333333333212" height="12.83333333333212" x="105.83333333333394" stroke-linejoin="round" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)" style="fill: none;" ry="2" fill="none" stroke-linecap="round" rx="2" y="2844.4166666666683"></rect></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08e1130-0df7f567-f96d-80f0-8008-c1ddbe28e260" class="strokes"><g class="stroke-shape"><rect rx="2" ry="2" x="105.83333333333394" y="2844.4166666666683" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)" width="18.33333333333212" height="12.83333333333212" style="fill: none; stroke-width: 1.75; stroke: currentColor; stroke-opacity: 1;"></rect></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1ddbe29065e"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1ddbe29065e"><path d="M118.6669921875,2857.250244140625L118.6669921875,2842.583251953125C118.6669921875,2841.57080078125,117.845703125,2840.750244140625,116.8330078125,2840.749755859375L113.1669921875,2840.749755859375C112.154296875,2840.750244140625,111.3330078125,2841.57080078125,111.3330078125,2842.58349609375L111.3330078125,2857.25048828125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08e4dfe-0df7f567-f96d-80f0-8008-c1ddbe29065e" class="strokes"><g class="stroke-shape"><path d="M118.6669921875,2857.250244140625L118.6669921875,2842.583251953125C118.6669921875,2841.57080078125,117.845703125,2840.750244140625,116.8330078125,2840.749755859375L113.1669921875,2840.749755859375C112.154296875,2840.750244140625,111.3330078125,2841.57080078125,111.3330078125,2842.58349609375L111.3330078125,2857.25048828125" style="fill: none; stroke-width: 1.75; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-phase3" viewBox="104 2950 22 22"><g id="shape-0df7f567-f96d-80f0-8008-c1ddd99307e2" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1ddd9959910"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1ddd9959910"><path d="M106.75,2970.1669921875L123.25,2970.166748046875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08ef885-0df7f567-f96d-80f0-8008-c1ddd9959910" class="strokes"><g class="stroke-shape"><path d="M106.75,2970.1669921875L123.25,2970.166748046875" style="fill: none; stroke-width: 1.75; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1ddd9959911"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1ddd9959911"><path d="M109.5,2966.5L109.5,2960.083740234375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08f075f-0df7f567-f96d-80f0-8008-c1ddd9959911" class="strokes"><g class="stroke-shape"><path d="M109.5,2966.5L109.5,2960.083740234375" style="fill: none; stroke-width: 1.75; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1ddd995c395"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1ddd995c395"><path d="M113.1669921875,2966.50048828125L113.1669921875,2960.083251953125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08f0760-0df7f567-f96d-80f0-8008-c1ddd995c395" class="strokes"><g class="stroke-shape"><path d="M113.1669921875,2966.50048828125L113.1669921875,2960.083251953125" style="fill: none; stroke-width: 1.75; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1ddd995c396"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1ddd995c396"><path d="M116.8330078125,2966.50048828125L116.8330078125,2960.083251953125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08f6fa5-0df7f567-f96d-80f0-8008-c1ddd995c396" class="strokes"><g class="stroke-shape"><path d="M116.8330078125,2966.50048828125L116.8330078125,2960.083251953125" style="fill: none; stroke-width: 1.75; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1ddd995c397"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1ddd995c397"><path d="M120.5,2966.5L120.5,2960.083740234375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08f9250-0df7f567-f96d-80f0-8008-c1ddd995c397" class="strokes"><g class="stroke-shape"><path d="M120.5,2966.5L120.5,2960.083740234375" style="fill: none; stroke-width: 1.75; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1ddd99631b3"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1ddd99631b3"><path d="M115,2951.833740234375L122.3330078125,2956.416259765625L107.6669921875,2956.416259765625L115,2951.833740234375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08fec86-0df7f567-f96d-80f0-8008-c1ddd99631b3" class="strokes"><g class="stroke-shape"><path d="M115,2951.833740234375L122.3330078125,2956.416259765625L107.6669921875,2956.416259765625L115,2951.833740234375" style="fill: none; stroke-width: 1.75; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-step1" viewBox="514.5 2742 28 28"><g id="shape-83f5c33a-581c-807d-8008-c1bbaa58e098" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-83f5c33a-581c-807d-8008-c1bbaa58e09a"><g class="fills" id="fills-83f5c33a-581c-807d-8008-c1bbaa58e09a"><path d="M530.833984375,2745.5L522.6669921875,2745.500244140625C521.3779296875,2745.50048828125,520.333984375,2746.54443359375,520.333984375,2747.833251953125L520.333984375,2764.1669921875C520.333984375,2765.455810546875,521.3779296875,2766.50048828125,522.6669921875,2766.500244140625L527.333984375,2766.5" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e01b60f8-83f5c33a-581c-807d-8008-c1bbaa58e09a" class="strokes"><g class="stroke-shape"><path d="M530.833984375,2745.5L522.6669921875,2745.500244140625C521.3779296875,2745.50048828125,520.333984375,2746.54443359375,520.333984375,2747.833251953125L520.333984375,2764.1669921875C520.333984375,2765.455810546875,521.3779296875,2766.50048828125,522.6669921875,2766.500244140625L527.333984375,2766.5" style="fill: none; stroke-width: 1.6; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-83f5c33a-581c-807d-8008-c1bbaa58e09b"><g class="fills" id="fills-83f5c33a-581c-807d-8008-c1bbaa58e09b"><path d="M530.833984375,2745.5L530.833984375,2751.333251953125L536.6669921875,2751.33349609375L536.6669921875,2754.8330078125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e01b60f9-83f5c33a-581c-807d-8008-c1bbaa58e09b" class="strokes"><g class="stroke-shape"><path d="M530.833984375,2745.5L530.833984375,2751.333251953125L536.6669921875,2751.33349609375L536.6669921875,2754.8330078125" style="fill: none; stroke-width: 1.6; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-83f5c33a-581c-807d-8008-c1bbaa58e09c"><g class="fills" id="fills-83f5c33a-581c-807d-8008-c1bbaa58e09c"><ellipse cy="2760.6666666666683" stroke-linejoin="round" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)" style="fill: none;" ry="3.4999999999990905" fill="none" stroke-linecap="round" rx="3.5" cx="533.1666666666661"></ellipse></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e02705dd-83f5c33a-581c-807d-8008-c1bbaa58e09c" class="strokes"><g class="stroke-shape"><ellipse cx="533.1666666666661" cy="2760.6666666666683" rx="3.5" ry="3.4999999999990905" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)" style="fill: none; stroke-width: 1.6; stroke: currentColor; stroke-opacity: 1;"></ellipse></g></g></g><g id="shape-83f5c33a-581c-807d-8008-c1bbaa58e09d"><g class="fills" id="fills-83f5c33a-581c-807d-8008-c1bbaa58e09d"><path d="M539,2766.5L535.7333984375,2763.233642578125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0276665-83f5c33a-581c-807d-8008-c1bbaa58e09d" class="strokes"><g class="stroke-shape"><path d="M539,2766.5L535.7333984375,2763.233642578125" style="fill: none; stroke-width: 1.6; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-awards" viewBox="109.769 3565.31 29.241 29.241"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bb8" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bba"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bba"><path d="M117.044921875,3576.34521484375L115.2177734375,3576.36279296875C113.5341796875,3576.378662109375,112.158203125,3575.02734375,112.142578125,3573.345703125C112.1259765625,3571.662841796875,113.4775390625,3570.287109375,115.16015625,3570.270751953125L116.98828125,3570.2529296875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0720e27-0df7f567-f96d-80f0-8008-c1d74bb99bba" class="strokes"><g class="stroke-shape"><path d="M117.044921875,3576.34521484375L115.2177734375,3576.36279296875C113.5341796875,3576.378662109375,112.158203125,3575.02734375,112.142578125,3573.345703125C112.1259765625,3571.662841796875,113.4775390625,3570.287109375,115.16015625,3570.270751953125L116.98828125,3570.2529296875" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bbb"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bbb"><path d="M131.666015625,3576.20654296875L133.4931640625,3576.189208984375C135.1767578125,3576.173583984375,136.525390625,3574.797119140625,136.509765625,3573.11474609375C136.4931640625,3571.432861328125,135.1171875,3570.08154296875,133.4345703125,3570.09765625L131.6064453125,3570.11474609375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0726531-0df7f567-f96d-80f0-8008-c1d74bb99bbb" class="strokes"><g class="stroke-shape"><path d="M131.666015625,3576.20654296875L133.4931640625,3576.189208984375C135.1767578125,3576.173583984375,136.525390625,3574.797119140625,136.509765625,3573.11474609375C136.4931640625,3571.432861328125,135.1171875,3570.08154296875,133.4345703125,3570.09765625L131.6064453125,3570.11474609375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bbc"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bbc"><path d="M114.7587890625,3592.2060546875L134.251953125,3592.021728515625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0728557-0df7f567-f96d-80f0-8008-c1d74bb99bbc" class="strokes"><g class="stroke-shape"><path d="M114.7587890625,3592.2060546875L134.251953125,3592.021728515625" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bbd"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bbd"><path d="M121.9833984375,3583.195068359375L122.01171875,3586.04541015625C122.017578125,3586.715087890625,121.4501953125,3587.24560546875,120.76953125,3587.531494140625C119.412109375,3588.202392578125,118.39453125,3590.02783203125,118.4140625,3592.171875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e072f5f8-0df7f567-f96d-80f0-8008-c1d74bb99bbd" class="strokes"><g class="stroke-shape"><path d="M121.9833984375,3583.195068359375L122.01171875,3586.04541015625C122.017578125,3586.715087890625,121.4501953125,3587.24560546875,120.76953125,3587.531494140625C119.412109375,3588.202392578125,118.39453125,3590.02783203125,118.4140625,3592.171875" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bbe"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bbe"><path d="M126.85546875,3583.1484375L126.8828125,3586C126.8896484375,3586.66943359375,127.4677734375,3587.188232421875,128.1513671875,3587.462158203125C129.5244140625,3588.10693359375,130.5751953125,3589.91259765625,130.5966796875,3592.05615234375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07326dd-0df7f567-f96d-80f0-8008-c1d74bb99bbe" class="strokes"><g class="stroke-shape"><path d="M126.85546875,3583.1484375L126.8828125,3586C126.8896484375,3586.66943359375,127.4677734375,3587.188232421875,128.1513671875,3587.462158203125C129.5244140625,3588.10693359375,130.5751953125,3589.91259765625,130.5966796875,3592.05615234375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bbf"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bbf"><path d="M131.583984375,3567.67822265625L116.96484375,3567.81689453125L117.044921875,3576.34521484375C117.0830078125,3580.3828125,120.3876953125,3583.624755859375,124.4248046875,3583.58642578125C128.4599609375,3583.548095703125,131.703125,3580.24365234375,131.666015625,3576.20654296875L131.583984375,3567.67822265625L131.583984375,3567.67822265625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07326de-0df7f567-f96d-80f0-8008-c1d74bb99bbf" class="strokes"><g class="stroke-shape"><path d="M131.583984375,3567.67822265625L116.96484375,3567.81689453125L117.044921875,3576.34521484375C117.0830078125,3580.3828125,120.3876953125,3583.624755859375,124.4248046875,3583.58642578125C128.4599609375,3583.548095703125,131.703125,3580.24365234375,131.666015625,3576.20654296875L131.583984375,3567.67822265625L131.583984375,3567.67822265625" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-membership" viewBox="228.769 3565.31 29.241 29.241"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bc2" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bc4"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bc4"><path d="M248.3671875,3590.85009765625L248.34375,3588.413330078125C248.318359375,3585.7216796875,246.1142578125,3583.560546875,243.4248046875,3583.586181640625L236.1142578125,3583.6552734375C233.4228515625,3583.68115234375,231.259765625,3585.8828125,231.287109375,3588.574462890625L231.310546875,3591.011474609375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e074282b-0df7f567-f96d-80f0-8008-c1d74bb99bc4" class="strokes"><g class="stroke-shape"><path d="M248.3671875,3590.85009765625L248.34375,3588.413330078125C248.318359375,3585.7216796875,246.1142578125,3583.560546875,243.4248046875,3583.586181640625L236.1142578125,3583.6552734375C233.4228515625,3583.68115234375,231.259765625,3585.8828125,231.287109375,3588.574462890625L231.310546875,3591.011474609375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bc5"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bc5"><ellipse cy="3573.873829779997" stroke-linejoin="round" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -33.816662, 2.428684)" style="fill: none;" ry="4.8735632183907" fill="none" stroke-linecap="round" rx="4.873563218388881" cx="239.67710904188607"></ellipse></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e074593c-0df7f567-f96d-80f0-8008-c1d74bb99bc5" class="strokes"><g class="stroke-shape"><ellipse cx="239.67710904188607" cy="3573.873829779997" rx="4.873563218388881" ry="4.8735632183907" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -33.816662, 2.428684)" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1;"></ellipse></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bc6"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bc6"><path d="M255.677734375,3590.7802734375L255.654296875,3588.343505859375C255.630859375,3586.123046875,254.1103515625,3584.19873046875,251.9541015625,3583.6640625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0748392-0df7f567-f96d-80f0-8008-c1d74bb99bc6" class="strokes"><g class="stroke-shape"><path d="M255.677734375,3590.7802734375L255.654296875,3588.343505859375C255.630859375,3586.123046875,254.1103515625,3584.19873046875,251.9541015625,3583.6640625" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bc7"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bc7"><path d="M248.162109375,3569.078857421875C250.3232421875,3569.609619140625,251.8486328125,3571.538818359375,251.8701171875,3573.7646484375C251.8896484375,3575.99072265625,250.4013671875,3577.947265625,248.2509765625,3578.52001953125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e074c7a4-0df7f567-f96d-80f0-8008-c1d74bb99bc7" class="strokes"><g class="stroke-shape"><path d="M248.162109375,3569.078857421875C250.3232421875,3569.609619140625,251.8486328125,3571.538818359375,251.8701171875,3573.7646484375C251.8896484375,3575.99072265625,250.4013671875,3577.947265625,248.2509765625,3578.52001953125" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-press" viewBox="347.769 3565.31 29.241 29.241"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bca" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bcc"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bcc"><path d="M352.7587890625,3592.206298828125L372.251953125,3592.02197265625C373.59765625,3592.00927734375,374.6787109375,3590.908203125,374.6669921875,3589.561767578125L374.4814453125,3570.068359375C374.46875,3568.723388671875,373.365234375,3567.642333984375,372.01953125,3567.65576171875L357.4013671875,3567.7939453125C356.0556640625,3567.806396484375,354.9755859375,3568.907958984375,354.98828125,3570.253662109375L355.171875,3589.7470703125C355.1845703125,3591.092041015625,354.1044921875,3592.193603515625,352.7587890625,3592.206298828125L352.7587890625,3592.206298828125M352.7587890625,3592.206298828125C351.4130859375,3592.219482421875,350.310546875,3591.138671875,350.2978515625,3589.79296875L350.1943359375,3578.827880859375C350.181640625,3577.487548828125,351.2685546875,3576.380859375,352.6083984375,3576.368408203125L355.044921875,3576.34521484375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0759046-0df7f567-f96d-80f0-8008-c1d74bb99bcc" class="strokes"><g class="stroke-shape"><path d="M352.7587890625,3592.206298828125L372.251953125,3592.02197265625C373.59765625,3592.00927734375,374.6787109375,3590.908203125,374.6669921875,3589.561767578125L374.4814453125,3570.068359375C374.46875,3568.723388671875,373.365234375,3567.642333984375,372.01953125,3567.65576171875L357.4013671875,3567.7939453125C356.0556640625,3567.806396484375,354.9755859375,3568.907958984375,354.98828125,3570.253662109375L355.171875,3589.7470703125C355.1845703125,3591.092041015625,354.1044921875,3592.193603515625,352.7587890625,3592.206298828125L352.7587890625,3592.206298828125M352.7587890625,3592.206298828125C351.4130859375,3592.219482421875,350.310546875,3591.138671875,350.2978515625,3589.79296875L350.1943359375,3578.827880859375C350.181640625,3577.487548828125,351.2685546875,3576.380859375,352.6083984375,3576.368408203125L355.044921875,3576.34521484375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bcd"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bcd"><path d="M369.72265625,3582.29833984375L359.9765625,3582.390625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e075dec2-0df7f567-f96d-80f0-8008-c1d74bb99bcd" class="strokes"><g class="stroke-shape"><path d="M369.72265625,3582.29833984375L359.9765625,3582.390625" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bce"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bce"><path d="M366.1142578125,3587.206298828125L360.0224609375,3587.263671875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07639cf-0df7f567-f96d-80f0-8008-c1d74bb99bce" class="strokes"><g class="stroke-shape"><path d="M366.1142578125,3587.206298828125L360.0224609375,3587.263671875" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bcf"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bcf"><path d="M359.8837890625,3572.643798828125L369.6298828125,3572.551513671875L369.6767578125,3577.425048828125L359.9296875,3577.51708984375L359.8837890625,3572.643798828125L359.8837890625,3572.643798828125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07677a2-0df7f567-f96d-80f0-8008-c1d74bb99bcf" class="strokes"><g class="stroke-shape"><path d="M359.8837890625,3572.643798828125L369.6298828125,3572.551513671875L369.6767578125,3577.425048828125L359.9296875,3577.51708984375L359.8837890625,3572.643798828125L359.8837890625,3572.643798828125" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-judging" viewBox="465.703 3558.311 29.241 29.241"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bd2" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bd4"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bd4"><rect width="9.747126436779581" height="4.8735632183916096" x="475.35770125965973" stroke-linejoin="round" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -33.704709, 4.705097)" style="fill: none;" ry="0.9137770336011372" fill="none" stroke-linecap="round" rx="0.9137770336011372" y="3560.747756160586"></rect></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07719ba-0df7f567-f96d-80f0-8008-c1d74bb99bd4" class="strokes"><g class="stroke-shape"><rect rx="0.9137770336011372" ry="0.9137770336011372" x="475.35770125965973" y="3560.747756160586" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -33.704709, 4.705097)" width="9.747126436779581" height="4.8735632183916096" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1;"></rect></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bd5"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bd5"><path d="M485.10546875,3563.138427734375L487.541015625,3563.114990234375C488.88671875,3563.102294921875,489.98828125,3564.18359375,490.0009765625,3565.529541015625L490.1611328125,3582.586181640625C490.173828125,3583.931884765625,489.09375,3585.03271484375,487.748046875,3585.045166015625L473.1298828125,3585.184326171875C471.7841796875,3585.196533203125,470.6826171875,3584.116455078125,470.669921875,3582.7705078125L470.5078125,3565.712890625C470.4951171875,3564.3681640625,471.5751953125,3563.266357421875,472.9208984375,3563.254150390625L475.357421875,3563.23095703125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07719bb-0df7f567-f96d-80f0-8008-c1d74bb99bd5" class="strokes"><g class="stroke-shape"><path d="M485.10546875,3563.138427734375L487.541015625,3563.114990234375C488.88671875,3563.102294921875,489.98828125,3564.18359375,490.0009765625,3565.529541015625L490.1611328125,3582.586181640625C490.173828125,3583.931884765625,489.09375,3585.03271484375,487.748046875,3585.045166015625L473.1298828125,3585.184326171875C471.7841796875,3585.196533203125,470.6826171875,3584.116455078125,470.669921875,3582.7705078125L470.5078125,3565.712890625C470.4951171875,3564.3681640625,471.5751953125,3563.266357421875,472.9208984375,3563.254150390625L475.357421875,3563.23095703125" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bd6"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bd6"><path d="M476.6923828125,3575.40234375L479.1513671875,3577.816162109375L483.9794921875,3572.896484375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07773cc-0df7f567-f96d-80f0-8008-c1d74bb99bd6" class="strokes"><g class="stroke-shape"><path d="M476.6923828125,3575.40234375L479.1513671875,3577.816162109375L483.9794921875,3572.896484375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-contrib" viewBox="109.703 3674.311 29.241 29.241"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bd9" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bdb"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bdb"><path d="M128.0009765625,3691.333251953125C128.2353515625,3690.1123046875,128.8349609375,3689.25390625,129.80078125,3688.27001953125C131.0087890625,3687.162109375,131.603515625,3685.572509765625,131.5869140625,3683.989013671875C131.5498046875,3679.950927734375,128.24609375,3676.70947265625,124.208984375,3676.747802734375C120.171875,3676.7861328125,116.9287109375,3680.089599609375,116.9677734375,3684.12744140625C116.978515625,3685.34521484375,117.2373046875,3686.804931640625,118.8349609375,3688.374267578125C119.697265625,3689.218505859375,120.435546875,3690.18603515625,120.69140625,3691.402587890625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0786614-0df7f567-f96d-80f0-8008-c1d74bb99bdb" class="strokes"><g class="stroke-shape"><path d="M128.0009765625,3691.333251953125C128.2353515625,3690.1123046875,128.8349609375,3689.25390625,129.80078125,3688.27001953125C131.0087890625,3687.162109375,131.603515625,3685.572509765625,131.5869140625,3683.989013671875C131.5498046875,3679.950927734375,128.24609375,3676.70947265625,124.208984375,3676.747802734375C120.171875,3676.7861328125,116.9287109375,3680.089599609375,116.9677734375,3684.12744140625C116.978515625,3685.34521484375,117.2373046875,3686.804931640625,118.8349609375,3688.374267578125C119.697265625,3689.218505859375,120.435546875,3690.18603515625,120.69140625,3691.402587890625" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bdc"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bdc"><path d="M120.7373046875,3696.275634765625L128.0478515625,3696.206787109375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07891b2-0df7f567-f96d-80f0-8008-c1d74bb99bdc" class="strokes"><g class="stroke-shape"><path d="M120.7373046875,3696.275634765625L128.0478515625,3696.206787109375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bdd"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bdd"><path d="M122.0029296875,3701.136962890625L126.875,3701.09130859375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07891b3-0df7f567-f96d-80f0-8008-c1d74bb99bdd" class="strokes"><g class="stroke-shape"><path d="M122.0029296875,3701.136962890625L126.875,3701.09130859375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-articles" viewBox="229.769 3681.31 29.241 29.241"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99be0" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99be2"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99be2"><path d="M247.9296875,3683.71337890625L236.9638671875,3683.81640625C235.6181640625,3683.829833984375,234.5380859375,3684.9306640625,234.55078125,3686.2763671875L234.736328125,3705.769775390625C234.7490234375,3707.11572265625,235.8486328125,3708.196044921875,237.1943359375,3708.18359375L251.814453125,3708.04541015625C253.16015625,3708.031982421875,254.240234375,3706.93115234375,254.2275390625,3705.585693359375L254.078125,3689.7470703125L247.9296875,3683.71337890625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0799a3a-0df7f567-f96d-80f0-8008-c1d74bb99be2" class="strokes"><g class="stroke-shape"><path d="M247.9296875,3683.71337890625L236.9638671875,3683.81640625C235.6181640625,3683.829833984375,234.5380859375,3684.9306640625,234.55078125,3686.2763671875L234.736328125,3705.769775390625C234.7490234375,3707.11572265625,235.8486328125,3708.196044921875,237.1943359375,3708.18359375L251.814453125,3708.04541015625C253.16015625,3708.031982421875,254.240234375,3706.93115234375,254.2275390625,3705.585693359375L254.078125,3689.7470703125L247.9296875,3683.71337890625" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99be3"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99be3"><path d="M246.7099609375,3683.72509765625L246.7568359375,3688.59765625C246.76953125,3689.943603515625,247.8720703125,3691.024169921875,249.2177734375,3691.011962890625L254.0908203125,3690.965576171875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e079ffa2-0df7f567-f96d-80f0-8008-c1d74bb99be3" class="strokes"><g class="stroke-shape"><path d="M246.7099609375,3683.72509765625L246.7568359375,3688.59765625C246.76953125,3689.943603515625,247.8720703125,3691.024169921875,249.2177734375,3691.011962890625L254.0908203125,3690.965576171875" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99be4"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99be4"><path d="M241.91796875,3692.299072265625L239.48046875,3692.32177734375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07a1b80-0df7f567-f96d-80f0-8008-c1d74bb99be4" class="strokes"><g class="stroke-shape"><path d="M241.91796875,3692.299072265625L239.48046875,3692.32177734375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99be5"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99be5"><path d="M249.275390625,3697.102783203125L239.5263671875,3697.19482421875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07a1b81-0df7f567-f96d-80f0-8008-c1d74bb99be5" class="strokes"><g class="stroke-shape"><path d="M249.275390625,3697.102783203125L239.5263671875,3697.19482421875" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99be6"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99be6"><path d="M249.3212890625,3701.97607421875L239.5732421875,3702.068603515625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07a788b-0df7f567-f96d-80f0-8008-c1d74bb99be6" class="strokes"><g class="stroke-shape"><path d="M249.3212890625,3701.97607421875L239.5732421875,3702.068603515625" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-role" viewBox="350.703 3674.311 29.241 29.241"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99be9" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99beb"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99beb"><path d="M355.6123046875,3692.678466796875C355.6123046875,3692.678466796875,356.8173828125,3691.4482421875,360.4716796875,3691.414306640625C364.126953125,3691.379150390625,366.5888671875,3693.792724609375,370.2431640625,3693.7578125C373.8984375,3693.723388671875,375.103515625,3692.494140625,375.103515625,3692.494140625L374.9658203125,3677.8740234375C374.9658203125,3677.8740234375,373.759765625,3679.103759765625,370.1064453125,3679.137939453125C366.451171875,3679.17236328125,363.990234375,3676.75927734375,360.3349609375,3676.793701171875C356.6796875,3676.828857421875,355.47265625,3678.058349609375,355.47265625,3678.058349609375L355.6123046875,3692.678466796875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07b4b15-0df7f567-f96d-80f0-8008-c1d74bb99beb" class="strokes"><g class="stroke-shape"><path d="M355.6123046875,3692.678466796875C355.6123046875,3692.678466796875,356.8173828125,3691.4482421875,360.4716796875,3691.414306640625C364.126953125,3691.379150390625,366.5888671875,3693.792724609375,370.2431640625,3693.7578125C373.8984375,3693.723388671875,375.103515625,3692.494140625,375.103515625,3692.494140625L374.9658203125,3677.8740234375C374.9658203125,3677.8740234375,373.759765625,3679.103759765625,370.1064453125,3679.137939453125C366.451171875,3679.17236328125,363.990234375,3676.75927734375,360.3349609375,3676.793701171875C356.6796875,3676.828857421875,355.47265625,3678.058349609375,355.47265625,3678.058349609375L355.6123046875,3692.678466796875" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bec"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bec"><path d="M355.6923828125,3701.206787109375L355.6123046875,3692.678466796875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07bb0bf-0df7f567-f96d-80f0-8008-c1d74bb99bec" class="strokes"><g class="stroke-shape"><path d="M355.6923828125,3701.206787109375L355.6123046875,3692.678466796875" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-pay" viewBox="468.769 3681.31 29.241 29.241"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bef" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bf1"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bf1"><ellipse cy="3695.9309140033993" stroke-linejoin="round" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -34.961038, 4.740939)" style="fill: none;" ry="12.183908045977432" fill="none" stroke-linecap="round" rx="12.18390804597584" cx="483.3897792265343"></ellipse></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07c59d9-0df7f567-f96d-80f0-8008-c1d74bb99bf1" class="strokes"><g class="stroke-shape"><ellipse cx="483.3897792265343" cy="3695.9309140033993" rx="12.18390804597584" ry="12.183908045977432" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -34.961038, 4.740939)" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1;"></ellipse></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bf2"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bf2"><path d="M488.2177734375,3691.01171875L480.9072265625,3691.080810546875C479.5615234375,3691.09326171875,478.48046875,3692.1943359375,478.4931640625,3693.5400390625C478.5048828125,3694.88623046875,479.6083984375,3695.966796875,480.9541015625,3695.9541015625L485.826171875,3695.90771484375C487.171875,3695.895263671875,488.2734375,3696.9755859375,488.2861328125,3698.3212890625C488.2998046875,3699.667724609375,487.216796875,3700.768798828125,485.87109375,3700.78125L478.5625,3700.85009765625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07c8454-0df7f567-f96d-80f0-8008-c1d74bb99bf2" class="strokes"><g class="stroke-shape"><path d="M488.2177734375,3691.01171875L480.9072265625,3691.080810546875C479.5615234375,3691.09326171875,478.48046875,3692.1943359375,478.4931640625,3693.5400390625C478.5048828125,3694.88623046875,479.6083984375,3695.966796875,480.9541015625,3695.9541015625L485.826171875,3695.90771484375C487.171875,3695.895263671875,488.2734375,3696.9755859375,488.2861328125,3698.3212890625C488.2998046875,3699.667724609375,487.216796875,3700.768798828125,485.87109375,3700.78125L478.5625,3700.85009765625" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bf3"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bf3"><path d="M483.4580078125,3703.2412109375L483.3203125,3688.620849609375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07cf646-0df7f567-f96d-80f0-8008-c1d74bb99bf3" class="strokes"><g class="stroke-shape"><path d="M483.4580078125,3703.2412109375L483.3203125,3688.620849609375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-exhibit" viewBox="108.769 3830.31 29.241 29.241"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bf6" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bf8"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bf8"><rect width="21.93103448275906" height="21.93103448275724" x="112.42426198516114" stroke-linejoin="round" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -36.387478, 1.340145)" style="fill: none;" ry="1.8275540672022743" fill="none" stroke-linecap="round" rx="1.8275540672022743" y="3833.965396762103"></rect></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07d9b7c-0df7f567-f96d-80f0-8008-c1d74bb99bf8" class="strokes"><g class="stroke-shape"><rect rx="1.8275540672022743" ry="1.8275540672022743" x="112.42426198516114" y="3833.965396762103" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -36.387478, 1.340145)" width="21.93103448275906" height="21.93103448275724" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1;"></rect></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bf9"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bf9"><ellipse cy="3841.310502231121" stroke-linejoin="round" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -36.353379, 1.305059)" style="fill: none;" ry="2.4367816091951227" fill="none" stroke-linecap="round" rx="2.4367816091962595" cx="119.70017364495288"></ellipse></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07d9b7d-0df7f567-f96d-80f0-8008-c1d74bb99bf9" class="strokes"><g class="stroke-shape"><ellipse cx="119.70017364495288" cy="3841.310502231121" rx="2.4367816091962595" ry="2.4367816091951227" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -36.353379, 1.305059)" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1;"></ellipse></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bfa"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bfa"><path d="M134.3896484375,3848.482177734375L130.58984375,3844.75341796875C129.6298828125,3843.81787109375,128.0947265625,3843.831787109375,127.15234375,3844.7861328125L116.18359375,3855.965576171875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07dc5b1-0df7f567-f96d-80f0-8008-c1d74bb99bfa" class="strokes"><g class="stroke-shape"><path d="M134.3896484375,3848.482177734375L130.58984375,3844.75341796875C129.6298828125,3843.81787109375,128.0947265625,3843.831787109375,127.15234375,3844.7861328125L116.18359375,3855.965576171875" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-commercial" viewBox="227.713 3823.311 29.24 29.24"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bfd" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bff"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bff"><path d="M242.4423828125,3849.505859375L242.3056640625,3835.037353515625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07eb72a-0df7f567-f96d-80f0-8008-c1d74bb99bff" class="strokes"><g class="stroke-shape"><path d="M242.4423828125,3849.505859375L242.3056640625,3835.037353515625" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99c00"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99c00"><path d="M251.1220703125,3849.423583984375L250.9033203125,3826.275146484375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07eeaf9-0df7f567-f96d-80f0-8008-c1d74bb99c00" class="strokes"><g class="stroke-shape"><path d="M251.1220703125,3849.423583984375L250.9033203125,3826.275146484375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99c01"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99c01"><path d="M233.76171875,3849.587646484375L233.70703125,3843.800537109375" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e07f0755-0df7f567-f96d-80f0-8008-c1d74bb99c01" class="strokes"><g class="stroke-shape"><path d="M233.76171875,3849.587646484375L233.70703125,3843.800537109375" style="fill: none; stroke-width: 1.59911; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-ext" viewBox="1151.5 3111.5 14 14"><g id="shape-0df7f567-f96d-80f0-8008-c1e8733f6f11" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1e873413f4a"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1e873413f4a"><path d="M1155.5830078125,3121.41650390625L1161.4169921875,3115.583251953125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0d904ef-0df7f567-f96d-80f0-8008-c1e873413f4a" class="strokes"><g class="stroke-shape"><path d="M1155.5830078125,3121.41650390625L1161.4169921875,3115.583251953125" style="fill: none; stroke-width: 2; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1e873413f4b"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1e873413f4b"><path d="M1155.5830078125,3115.583251953125L1161.4169921875,3115.583251953125L1161.4169921875,3121.41650390625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0d904f0-0df7f567-f96d-80f0-8008-c1e873413f4b" class="strokes"><g class="stroke-shape"><path d="M1155.5830078125,3115.583251953125L1161.4169921875,3115.583251953125L1161.4169921875,3121.41650390625" style="fill: none; stroke-width: 2; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-spark" viewBox="641 3841 18 18"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99c05" width="24" height="24" rx="0" ry="0" style="fill: currentColor;"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99c07"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99c07"><path d="M650,3843.250244140625L651.4248046875,3847.07470703125L655.25,3848.499755859375L651.4248046875,3849.92529296875L650,3853.749755859375L648.5751953125,3849.92529296875L644.75,3848.499755859375L648.5751953125,3847.07470703125L650,3843.250244140625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e08093ef-0df7f567-f96d-80f0-8008-c1d74bb99c07" class="strokes"><g class="stroke-shape"><path d="M650,3843.250244140625L651.4248046875,3847.07470703125L655.25,3848.499755859375L651.4248046875,3849.92529296875L650,3853.749755859375L648.5751953125,3849.92529296875L644.75,3848.499755859375L648.5751953125,3847.07470703125L650,3843.250244140625" style="fill: none; stroke-width: 2; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></symbol>
+<symbol id="o-btn-arrow" viewBox="229 1516 36 36"><g id="shape-1e84f306-3ec2-800d-8008-c12d65f86cee"><g class="frame-container-wrapper"><g class="frame-container-blur"><g class="frame-container-shadows"><g fill="none"><g class="fills" id="fills-1e84f306-3ec2-800d-8008-c12d65f86cee"><rect width="36" height="35.99999999999818" class="frame-background" x="229" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)" style="fill: rgb(222, 246, 150); fill-opacity: 1;" ry="17.99999999999909" rx="17.99999999999909" y="1515.999999999999"></rect></g><g class="frame-children"><g id="shape-1e84f306-3ec2-800d-8008-c12d65f86cf0" width="24" height="24" rx="0" ry="0" style="fill: rgb(0, 0, 0);"><g id="shape-1e84f306-3ec2-800d-8008-c12d65f86cf2"><g class="fills" id="fills-1e84f306-3ec2-800d-8008-c12d65f86cf2"><path d="M242.333984375,1533.99951171875L251.666015625,1533.99951171875M247.666015625,1530L251.666015625,1533.99951171875L247.666015625,1538.00048828125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0176685-1e84f306-3ec2-800d-8008-c12d65f86cf2" class="strokes"><g class="stroke-shape"><path d="M242.333984375,1533.99951171875L251.666015625,1533.99951171875M247.666015625,1530L251.666015625,1533.99951171875L247.666015625,1538.00048828125" style="fill: none; stroke-width: 2; stroke: rgb(10, 46, 34); stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></g></g></g></g></g></g></symbol>
+<symbol id="o-crit-btn-arrow" viewBox="1100.106 3839.736 28.264 28.264"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99ba8"><g class="frame-container-wrapper"><g class="frame-container-blur"><g class="frame-container-shadows"><g fill="none"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99ba8"><rect width="27.99999999999818" height="28" class="frame-background" x="1100.2391515950112" transform="matrix(0.999955, -0.009465, 0.009465, 0.999955, -36.427692, 10.719124)" style="fill: rgb(10, 77, 59); fill-opacity: 1;" ry="13.99999999999909" rx="13.99999999999909" y="3839.8689827665485"></rect></g><g class="frame-children"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99baa" width="24" height="24" rx="0" ry="0" style="fill: rgb(0, 0, 0);"><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bac"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bac"><path d="M1110.158203125,3853.907958984375L1118.322265625,3853.830322265625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e06155ee-0df7f567-f96d-80f0-8008-c1d74bb99bac" class="strokes"><g class="stroke-shape"><path d="M1110.158203125,3853.907958984375L1118.322265625,3853.830322265625" style="fill: none; stroke-width: 2.25; stroke: rgb(222, 246, 150); stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1d74bb99bad"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1d74bb99bad"><path d="M1114.201171875,3849.78662109375L1118.322265625,3853.830322265625L1114.27734375,3857.951904296875" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e06155ef-0df7f567-f96d-80f0-8008-c1d74bb99bad" class="strokes"><g class="stroke-shape"><path d="M1114.201171875,3849.78662109375L1118.322265625,3853.830322265625L1114.27734375,3857.951904296875" style="fill: none; stroke-width: 2.25; stroke: rgb(222, 246, 150); stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></g></g></g></g></g></g></symbol>
+<symbol id="o-cta-arrow" viewBox="692 6493 32 32"><g id="shape-0df7f567-f96d-80f0-8008-c1e73c5e097b"><g class="frame-container-wrapper"><g class="frame-container-blur"><g class="frame-container-shadows"><g fill="none"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1e73c5e097b"><rect width="31.99999999999818" height="31.99999999999818" class="frame-background" x="692" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)" style="fill: rgb(10, 77, 59); fill-opacity: 1;" ry="15.999999999999092" rx="15.999999999999092" y="6493.000000000002"></rect></g><g class="frame-children"><g id="shape-0df7f567-f96d-80f0-8008-c1e73c7bcca7" width="24" height="24" rx="0" ry="0" style="fill: rgb(0, 0, 0);"><g id="shape-0df7f567-f96d-80f0-8008-c1e73c7d5df8"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1e73c7d5df8"><path d="M703.3330078125,6509.00048828125L712.6669921875,6509.00048828125" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0c5f034-0df7f567-f96d-80f0-8008-c1e73c7d5df8" class="strokes"><g class="stroke-shape"><path d="M703.3330078125,6509.00048828125L712.6669921875,6509.00048828125" style="fill: none; stroke-width: 2.25; stroke: rgb(222, 246, 150); stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g><g id="shape-0df7f567-f96d-80f0-8008-c1e73c7d5df9"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1e73c7d5df9"><path d="M708,6504.33349609375L712.6669921875,6509.00048828125L708,6513.666015625" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0c60431-0df7f567-f96d-80f0-8008-c1e73c7d5df9" class="strokes"><g class="stroke-shape"><path d="M708,6504.33349609375L712.6669921875,6509.00048828125L708,6513.666015625" style="fill: none; stroke-width: 2.25; stroke: rgb(222, 246, 150); stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></g></g></g></g></g></g></symbol>
+<symbol id="o-redirect" viewBox="104 2184.5 40 40"><g id="shape-0df7f567-f96d-80f0-8008-c1e6d6dbfd68"><g class="frame-container-wrapper"><g class="frame-container-blur"><g class="frame-container-shadows"><g fill="none"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1e6d6dbfd68"><rect width="40" height="40" class="frame-background" x="104.00000000000182" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)" style="fill: rgb(10, 77, 59); fill-opacity: 1;" ry="20" rx="20" y="2184.4999999999986"></rect></g><g class="frame-children"><g id="shape-0df7f567-f96d-80f0-8008-c1e6d6f53fa2" width="24" height="24" rx="0" ry="0" style="fill: rgb(0, 0, 0);"><g id="shape-0df7f567-f96d-80f0-8008-c1e6d6f74b7f"><g class="fills" id="fills-0df7f567-f96d-80f0-8008-c1e6d6f74b7f"><path d="M124,2197L125.5830078125,2201.24951171875L129.8330078125,2202.833984375L125.5830078125,2204.416015625L124,2208.66650390625L122.4169921875,2204.416015625L118.1669921875,2202.833984375L122.4169921875,2201.24951171875L124,2197" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"></path></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-05b77f34-1b82-8016-8008-c206e0a7949c-0df7f567-f96d-80f0-8008-c1e6d6f74b7f" class="strokes"><g class="stroke-shape"><path d="M124,2197L125.5830078125,2201.24951171875L129.8330078125,2202.833984375L125.5830078125,2204.416015625L124,2208.66650390625L122.4169921875,2204.416015625L118.1669921875,2202.833984375L122.4169921875,2201.24951171875L124,2197" style="fill: none; stroke-width: 2; stroke: rgb(222, 246, 150); stroke-opacity: 1; stroke-linecap: round;"></path></g></g></g></g></g></g></g></g></g></g></symbol>
+<symbol id="o-step2" viewBox="0 0 28 28"><g id="shape-83f5c33a-581c-807d-8008-c1bdb40ac1b6" width="24" height="24" rx="0" ry="0" ><g id="shape-83f5c33a-581c-807d-8008-c1bdb40ac1b8"><g class="fills" id="fills-83f5c33a-581c-807d-8008-c1bdb40ac1b8"><ellipse cy="13.999999999998181" stroke-linejoin="round" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)" style="fill: none;" ry="10" fill="none" stroke-linecap="round" rx="10" cx="14"/></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-06bf872d-4bfb-8090-8008-c24b3bfe96c6-83f5c33a-581c-807d-8008-c1bdb40ac1b8" class="strokes"><g class="inner-stroke-shape" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)"><defs><clipPath id="inner-stroke-render-3-83f5c33a-581c-807d-8008-c1bdb40ac1b8-0"><use href="#stroke-shape-render-3-83f5c33a-581c-807d-8008-c1bdb40ac1b8-0"/></clipPath><ellipse cx="14" cy="13.999999999998181" rx="10" ry="10" id="stroke-shape-render-3-83f5c33a-581c-807d-8008-c1bdb40ac1b8-0" style="fill: none; stroke-width: 2.4; stroke: currentColor; stroke-opacity: 1;"/></defs><use href="#stroke-shape-render-3-83f5c33a-581c-807d-8008-c1bdb40ac1b8-0" clip-path="url('#inner-stroke-render-3-83f5c33a-581c-807d-8008-c1bdb40ac1b8-0')"/></g></g></g><g id="shape-83f5c33a-581c-807d-8008-c1bdb40ac1b9"><g class="fills" id="fills-83f5c33a-581c-807d-8008-c1bdb40ac1b9"><ellipse cy="14.00000000000091" stroke-linejoin="round" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)" style="fill: none;" ry="4.66666666666697" fill="none" stroke-linecap="round" rx="4.66666666666697" cx="13.99999999999909"/></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-06bf872d-4bfb-8090-8008-c24b3bff2fc7-83f5c33a-581c-807d-8008-c1bdb40ac1b9" class="strokes"><g class="inner-stroke-shape" transform="matrix(1.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000)"><defs><clipPath id="inner-stroke-render-4-83f5c33a-581c-807d-8008-c1bdb40ac1b9-0"><use href="#stroke-shape-render-4-83f5c33a-581c-807d-8008-c1bdb40ac1b9-0"/></clipPath><ellipse cx="13.99999999999909" cy="14.00000000000091" rx="4.66666666666697" ry="4.66666666666697" id="stroke-shape-render-4-83f5c33a-581c-807d-8008-c1bdb40ac1b9-0" style="fill: none; stroke-width: 2.4; stroke: currentColor; stroke-opacity: 1;"/></defs><use href="#stroke-shape-render-4-83f5c33a-581c-807d-8008-c1bdb40ac1b9-0" clip-path="url('#inner-stroke-render-4-83f5c33a-581c-807d-8008-c1bdb40ac1b9-0')"/></g></g></g><g id="shape-83f5c33a-581c-807d-8008-c1bdb40ac1ba"><g class="fills" id="fills-83f5c33a-581c-807d-8008-c1bdb40ac1ba"><path d="M14,14L19,9M16.5,9L19,9L19,11.5" fill="none" stroke-linejoin="round" stroke-linecap="round" style="fill: none;"/></g><g fill="none" stroke-linejoin="round" stroke-linecap="round" id="strokes-06bf872d-4bfb-8090-8008-c24b3bffb4f2-83f5c33a-581c-807d-8008-c1bdb40ac1ba" class="strokes"><g class="stroke-shape"><path d="M14,14L19,9M16.5,9L19,9L19,11.5" style="fill: none; stroke-width: 1.2; stroke: currentColor; stroke-opacity: 1; stroke-linecap: round;"/></g></g></g></g></symbol>
+    <symbol id="tri-down" viewBox="0 0 8 5"><path d="M0.6 0.5H7.4C7.75 0.5 7.93 0.92 7.69 1.17L4.29 4.72C4.13 4.88 3.87 4.88 3.71 4.72L0.31 1.17C0.07 0.92 0.25 0.5 0.6 0.5Z"/></symbol>
+    <symbol id="tick" viewBox="0 0 8 8"><path d="M6.667 2L3 5.667L1.333 4"/></symbol>
+    <symbol id="cross" viewBox="0 0 8 8"><path d="M1.5 1.5L6.5 6.5M6.5 1.5L1.5 6.5"/></symbol>
+  </defs>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" id="top"><img src="img/logo.svg" alt=""><span>Green Card Guide</span></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#routes">Visas</a>
+      <a href="#how">How it works</a>
+      <a href="#costs">Pricing</a>
+      <a href="#faq">Guides</a>
+      <a href="#footer">For employers</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#footer">Log in</a>
+      <button class="btn btn-dark" data-eval>Start free evaluation</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero on-dark">
+  <div class="wrap">
+    <h1>Your work might be<br>enough to get you a visa</h1>
+    <p class="lede">Researchers, engineers, founders and artists get US visas this way every year. Go through the four options below and see which one fits you.</p>
+    <div class="frank-row">
+      <form class="frank" id="ask-form" autocomplete="off">
+        <label class="frank-title" for="ask-input"><svg class="icon twinkle" aria-hidden="true"><use href="#o-spark"/></svg>Not sure which visa fits? Ask Frank.</label>
+        <div class="ask">
+          <input id="ask-input" name="ask" type="text" aria-describedby="ask-hint"><span class="ask-hint" id="ask-hint" aria-hidden="true">What would help my press criterion?</span>
+          <button type="button" class="upload" data-eval>Upload resume</button>
+          <button type="submit" class="send" aria-label="Ask Frank"><svg class="arrow-o send-o"><use href="#o-cta-arrow"/></svg></button>
+        </div>
+        <p class="frank-note">Free. No account, no card. Not legal advice.</p>
+      </form>
+    </div>
+    <div class="people">
+      <figure class="person researcher" style="margin:0"><img src="img/researcher.jpg" alt="A researcher examining a test tube in a lab"></figure>
+      <figure class="person" style="margin:0"><img src="img/engineer.jpg" alt="Two engineers reviewing code on a monitor"></figure>
+      <figure class="person" style="margin:0"><img src="img/artist.jpg" alt="An artist painting a large canvas in a studio"></figure>
+      <figure class="person" style="margin:0"><img src="img/founder.jpg" alt="A founder presenting a startup plan on a whiteboard"></figure>
+    </div>
+  </div>
+</section>
+
+<div class="routes" id="routes">
+  <div class="wrap">
+    <nav class="pill" aria-label="Visas based on your work">
+      <button type="button" class="tab" aria-current="page"><span><b>EB-1A</b><small>Green card | Top of your field, you file</small></span></button>
+      <button type="button" class="tab"><span><b>O-1A / O-1B</b><small>Work visa | Employer files, work now</small></span></button>
+      <button type="button" class="tab"><span><b>EB-1B</b><small>Green card | Researcher, employer files</small></span></button>
+      <button type="button" class="tab"><span><b>EB-2 NIW</b><small>Green card | Degree, serves the US</small></span></button>
+      <button class="compare-btn" id="compare-btn" aria-expanded="false" aria-controls="compare-panel" aria-label="Compare all four visas"><span id="compare-label">Compare</span><svg class="tri" fill="currentColor"><use href="#tri-down"/></svg></button>
+    </nav>
+    <div class="panel" id="compare-panel" hidden>
+      <div class="panel-scroll">
+        <table class="cmp" aria-label="Compare the four visas">
+          <thead>
+            <tr><td style="width:150px"></td>
+              <th class="here" data-col="0"><b>EB-1A</b><span>Green card · This page</span></th>
+              <th data-col="1"><b>O-1A / O-1B</b><span>Work visa</span></th>
+              <th data-col="2"><b>EB-1B</b><span>Green card</span></th>
+              <th data-col="3"><b>EB-2 NIW</b><span>Green card</span></th></tr>
+          </thead>
+          <tbody id="cmp-body"></tbody>
+        </table>
+      </div>
+      <p class="panel-foot">Each petition is judged separately. An O-1 approval does not guarantee EB-1A approval, and you can hold an O-1 while applying for a green card.</p>
+    </div>
+  </div>
+</div>
+
+<section class="eb">
+  <div class="wrap">
+    <div class="eb-top">
+      <div>
+        <h2>Your own green card,<br>with no employer needed</h2>
+        <p class="body">EB-1A is a green card for people at the very top of their field.<br>You can apply on your own, and your spouse and unmarried children under 21 may get green cards with you.</p>
+        <div class="btns">
+          <button class="btn btn-dark btn-arrow" data-eval>Start free evaluation <svg class="arrow-o"><use href="#o-btn-arrow"/></svg></button>
+          <button class="btn btn-line" data-eval="attorney">Talk to an attorney</button>
+        </div>
+      </div>
+      <aside class="fit on-dark" aria-label="Who EB-1A often fits">
+        <p class="fit-label">Could be a good fit for</p>
+        <div class="chips" id="chips"></div>
+        <div class="example" id="example" aria-live="polite"></div>
+      </aside>
+    </div>
+    <div class="facts">
+      <div class="fact"><span class="tile"><svg class="icon"><use href="#i-show"/></svg></span><div><small>What you need to show</small><strong>1 major award, or 3 of 10 criteria</strong></div></div>
+      <div class="fact"><span class="tile"><svg class="icon"><use href="#i-time"/></svg></span><div><small>How long it takes</small><strong>Months to years, depending on your country</strong></div></div>
+      <div class="fact fee"><span class="tile"><svg class="icon"><use href="#i-fee"/></svg></span><div><small>Legal fee</small><strong>From $8,995, flat</strong></div></div>
+    </div>
+    <p class="keep">You'll also need to show that you plan to keep working in your field in the US.</p>
+    <div class="redirect">
+      <span class="spark-round" aria-hidden="true"><svg class="icon twinkle t3"><use href="#o-spark"/></svg></span>
+      <div>
+        <h3>Not at the very top of your field yet?</h3>
+        <p>EB-2 NIW has a lower bar: an advanced degree or exceptional ability, and work that benefits the US. If you're in the arts, an O-1B can also be a good first step.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="sub">Here's the path, step by step.</p>
+    <p class="intro">Frank helps you find and build your evidence. When you're ready, licensed attorneys at an independent partner firm take over the legal work. Green Card Guide is not a law firm.</p>
+    <div class="path">
+      <div class="phases" role="tablist" aria-label="Phases" id="phases"></div>
+      <div class="steps" role="tabpanel" id="steps" aria-live="polite"></div>
+    </div>
+    <div class="timing">
+      <div>
+        <h3>How long can the process take?</h3>
+        <p>USCIS processing times change and depend on your case, so we won't promise you a date. If you pay for premium processing, USCIS must act on your petition within 15 business days. If USCIS asks for more evidence, the clock stops, and a new 15 business days starts when USCIS gets your answer. After approval, how long you wait depends on your country.</p>
+      </div>
+      <div class="ext">
+        <a href="https://egov.uscis.gov/processing-times/" target="_blank" rel="noopener">USCIS processing times <svg class="icon"><use href="#o-ext"/></svg></a>
+        <a href="https://travel.state.gov/content/travel/en/legal/visa-law0/visa-bulletin.html" target="_blank" rel="noopener">State Department Visa Bulletin <svg class="icon"><use href="#o-ext"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="crit on-dark" id="criteria">
+  <div class="wrap">
+    <h2>The 10 criteria USCIS looks at</h2>
+    <p class="intro">You need one major international award, like a Nobel Prize, or evidence for at least 3 of these 10 criteria.</p>
+    <div class="crit-row">
+      <div class="tiles" role="tablist" aria-label="The 10 criteria" id="tiles"></div>
+      <div class="detail" role="tabpanel" id="detail">
+        <div class="detail-body" id="detail-body"></div>
+        <div class="prompt">
+          <p><svg class="icon twinkle t2"><use href="#o-spark"/></svg>Not sure which of these you already meet? Frank can check your resume against all ten.</p>
+          <button class="btn btn-lime" data-eval>Start free evaluation <svg class="arrow-o"><use href="#o-cta-arrow"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="step-two">
+      <h3>Meeting 3 criteria is step one</h3>
+      <p>In step two, USCIS looks at all your evidence together and decides whether you're truly among the best in your field, and have been for a while. If one of these criteria doesn't fit your kind of work, you can show <a href="https://www.uscis.gov/policy-manual/volume-6-part-f-chapter-2" target="_blank" rel="noopener">other evidence of equal weight</a> and explain why. This doesn't apply to the one major award.</p>
+    </div>
+  </div>
+</section>
+
+<section class="costs" id="costs">
+  <div class="wrap">
+    <h2>What EB-1A costs</h2>
+    <p class="sub">Your cost comes in three parts. You pay each one separately.</p>
+    <div class="cards">
+      <article class="card off" id="frank-card">
+        <div>
+          <div class="name">Frank <span class="tag">Optional</span>
+            <button class="toggle" role="switch" aria-checked="false" id="frank-toggle"><span class="track"><i></i></span>Add Frank</button></div>
+          <div class="price">From $49 <small>per month</small></div>
+          <p class="desc">For building your evidence before you file. Starts with a free resume check. Try it free for 7 days, no card needed.</p>
+          <button class="btn btn-line" data-eval>Start free evaluation</button>
+        </div>
+        <div>
+          <h4>What's included</h4>
+          <ul class="ticks" id="frank-ticks">
+            <li><span class="check grey"><svg><use href="#tick"/></svg></span>Free evaluation of your resume against all 10 criteria</li>
+            <li><span class="check grey"><svg><use href="#tick"/></svg></span>Real opportunities matched to the criteria you're missing</li>
+            <li><span class="check grey"><svg><use href="#tick"/></svg></span>Your proof saved in the format USCIS expects</li>
+          </ul>
+        </div>
+      </article>
+      <article class="card">
+        <div>
+          <div class="name">Legal fee <span class="tag">Partner law firm</span></div>
+          <div class="price">From $8,995 <small>flat fee</small></div>
+          <p class="desc">Licensed attorneys at an independent partner firm do the legal work. Your exact fee is quoted before you sign, and it's never hourly.</p>
+          <button class="btn btn-line" data-eval="attorney">Talk to an attorney</button>
+        </div>
+        <div>
+          <h4>What's included</h4>
+          <ul class="ticks">
+            <li><span class="check"><svg><use href="#tick"/></svg></span>A senior attorney leads your case</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>A strategy memo written for your case</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>Your petition prepared and filed</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>A second attorney reviews it before filing</li>
+          </ul>
+          <ul class="ticks" id="more-included" hidden style="margin-top:10px">
+            <li><span class="check"><svg><use href="#tick"/></svg></span>Coaching on your recommendation letters</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>A response if USCIS sends an RFE or NOID</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>Unlimited communication with your case team</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>A case portal</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>Visa stamping support</li>
+          </ul>
+          <button class="more" aria-expanded="false" aria-controls="more-included" id="more-btn"><span>See all 9 included</span><svg class="tri" fill="currentColor"><use href="#tri-down"/></svg></button>
+        </div>
+      </article>
+      <article class="card">
+        <div>
+          <div class="name">Government fees <span class="tag">Paid to USCIS</span></div>
+          <div class="price">From $965</div>
+          <p class="desc">These go straight to the US government, not to us or the law firm. What else you pay depends on whether you finish inside the US or abroad.</p>
+          <button class="btn btn-line" aria-expanded="false" aria-controls="fee-table" id="fees-btn">See every fee <svg class="tri" fill="currentColor"><use href="#tri-down"/></svg></button>
+        </div>
+        <div>
+          <h4>What they cover</h4>
+          <ul class="ticks">
+            <li><span class="check"><svg><use href="#tick"/></svg></span>Petition filing fee (Form I-140): $665 online, $715 by mail</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>Asylum Program Fee: $300</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>Green card application inside the US: $1,440, or fees abroad</li>
+            <li><span class="check"><svg><use href="#tick"/></svg></span>Optional: premium processing, work permit, travel document</li>
+          </ul>
+        </div>
+        <div class="fees" id="fee-table" hidden>
+          <table>
+            <thead><tr><th>What</th><th>Paid to</th><th>Amount</th></tr></thead>
+            <tbody>
+              <tr><td>Form I-140 filing fee</td><td>USCIS</td><td>$715 by mail, $665 online</td></tr>
+              <tr><td>Asylum Program Fee, if you file for yourself</td><td>USCIS</td><td>$300</td></tr>
+              <tr><td>Premium processing (Form I-907)<span class="opt">Optional</span></td><td>USCIS</td><td>$2,965</td></tr>
+              <tr><td>Form I-485, if you apply inside the US (age 14 and over)</td><td>USCIS</td><td>$1,440 by mail, $1,390 online where allowed</td></tr>
+              <tr><td>Work permit while I-485 is pending (Form I-765)<span class="opt">Optional</span></td><td>USCIS</td><td>$260</td></tr>
+              <tr><td>Travel document while I-485 is pending (Form I-131)<span class="opt">Optional</span></td><td>USCIS</td><td>$630 by mail</td></tr>
+              <tr><td>USCIS Immigrant Fee, if you finish abroad</td><td>USCIS</td><td>$235</td></tr>
+              <tr><td>Immigrant visa fees, if you finish abroad</td><td>US Department of State</td><td>Set by the State Department</td></tr>
+            </tbody>
+          </table>
+          <p class="fees-note">Government fees are from the USCIS Fee Schedule (Form G-1055, edition 09/09/26), as of September 2026. If an employer with more than 25 full-time equivalent employees files, the Asylum Program Fee is $600; it is $0 for nonprofits. Fees change, so your attorney confirms them before filing.</p>
+        </div>
+      </article>
+    </div>
+    <div class="total">
+      <div>
+        <p class="lbl">Typical total for one person filing inside the US</p>
+        <p class="amt">From about $11,400 <small id="frank-total">plus from $49 a month if you add Frank</small></p>
+      </div>
+      <p class="note">Legal fee, I-140 by mail, Asylum Program Fee and green card application. Government fees as of September 2026. Your attorney confirms them before filing.</p>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <h2>Frequently asked questions</h2>
+    <div class="qs" id="qs"></div>
+  </div>
+</section>
+
+<section class="cta on-dark">
+  <div class="wrap">
+    <h2>See where you stand on all 10 criteria</h2>
+    <button class="btn btn-lime" data-eval>Start free evaluation <svg class="arrow-o"><use href="#o-cta-arrow"/></svg></button>
+    <p>Free. No account, no card. Not legal advice.</p>
+  </div>
+</section>
+
+<section class="sources">
+  <div class="wrap">
+    <div class="src-card">
+      <h2>Official sources</h2>
+      <p class="date">Checked September 2026</p>
+      <div class="src-cols">
+        <ul>
+          <li><a target="_blank" rel="noopener" href="https://www.ecfr.gov/current/title-8/chapter-I/subchapter-B/part-204/subpart-A/section-204.5">8 CFR 204.5(h), extraordinary ability (eCFR)</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.ecfr.gov/current/title-8/chapter-I/subchapter-B/part-214/section-214.2">8 CFR 214.2(o)(13), O-1 holders seeking a green card (eCFR)</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/policy-manual/volume-6-part-f-chapter-2">USCIS Policy Manual, Vol. 6, Part F, Ch. 2 (EB-1 extraordinary ability)</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/policy-manual/volume-6-part-f-chapter-5">USCIS Policy Manual, Vol. 6, Part F, Ch. 5 (EB-2 and NIW)</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/policy-manual/volume-2-part-m-chapter-4">USCIS Policy Manual, Vol. 2, Part M, Ch. 4 (O-1)</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/working-in-the-united-states/permanent-workers/employment-based-immigration-first-preference-eb-1">USCIS: EB-1 extraordinary ability page</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/g-1055">USCIS Fee Schedule, Form G-1055 (09/09/26)</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/archive/frequently-asked-questions-on-the-uscis-fee-rule">USCIS fee FAQ</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/i-140">Form I-140 page</a></li>
+        </ul>
+        <ul>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/newsroom/alerts/guidance-on-paying-fees-and-completing-information-for-form-i-140-immigrant-petition-for-alien">Asylum Program Fee guidance</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/forms/all-forms/how-do-i-request-premium-processing">Premium processing page</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/green-card/green-card-processes-and-procedures/visa-availability-priority-dates">Visa availability and priority dates</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/green-card/green-card-processes-and-procedures/visa-availability-priority-dates/adjustment-of-status-filing-charts-from-the-visa-bulletin">Adjustment of status filing charts</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/working-in-the-united-states/options-for-alien-entrepreneurs-to-work-in-the-united-states">Alien entrepreneur options</a></li>
+          <li><a target="_blank" rel="noopener" href="https://www.uscis.gov/file-online/forms-available-to-file-online">Forms available to file online (updated 07/24/2026)</a></li>
+          <li><a target="_blank" rel="noopener" href="https://travel.state.gov/content/travel/en/legal/visa-law0/visa-bulletin.html">State Department Visa Bulletin</a></li>
+          <li><a target="_blank" rel="noopener" href="https://egov.uscis.gov/processing-times/">USCIS case processing times</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot" id="footer">
+  <div class="wrap">
+    <div class="about">
+      <p class="brandname">Green Card Guide</p>
+      <p>This page is general information, not legal advice. Rules and fees change, so a partner-firm attorney confirms what applies to you before anything is filed.</p>
+    </div>
+    <div class="foot-cols">
+      <div><h3>Visas</h3><ul><li><a href="#routes">O-1A / O-1B</a></li><li><a href="#routes">EB-1A</a></li><li><a href="#routes">EB-1B</a></li><li><a href="#routes">EB-2 NIW</a></li></ul></div>
+      <div><h3>Green Card Guide</h3><ul><li><a href="#how">Frank</a></li><li><a href="#costs">Pricing</a></li><li><a href="#costs">Attorneys</a></li><li><a href="#footer">Contact</a></li></ul></div>
+      <div><h3>Legal</h3><ul><li><a href="#footer">Disclosure</a></li><li><a href="#footer">Terms</a></li><li><a href="#footer">Privacy</a></li></ul></div>
+    </div>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const svg = (id, cls = "icon") => `<svg class="${cls}"><use href="#${id}"/></svg>`;
+  const tick = (cls = "lime") => `<span class="check ${cls}"><svg><use href="#tick"/></svg></span>`;
+  const fadeSwap = (el, html) => { el.classList.add("fade"); setTimeout(() => { el.innerHTML = html; el.classList.remove("fade"); }, 160); };
+
+  /* toast for actions that would leave the prototype */
+  const toast = $("#toast"); let tt;
+  function say(msg) { toast.textContent = msg; toast.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove("show"), 2600); }
+  document.addEventListener("click", e => {
+    const b = e.target.closest("[data-eval]"); if (!b) return;
+    say(b.dataset.eval === "attorney" ? "Prototype: this opens a call with a partner-firm attorney." : "Prototype: this opens the free evaluation.");
+  });
+  $("#ask-form").addEventListener("submit", e => { e.preventDefault(); say("Prototype: Frank would answer here."); });
+  /* rotating example questions in the Frank bar */
+  const askQs = ["What would help my press criterion?", "Do my peer reviews count as judging others' work?", "Should I apply for EB-1A or EB-2 NIW?", "I have an O-1. Am I ready for EB-1A?", "Which of the 10 criteria do I already meet?", "Does a team award count for the awards criterion?"];
+  const ask = $(".ask"), askIn = $("#ask-input"), hint = $("#ask-hint"); let qi = 0;
+  const syncAsk = () => ask.classList.toggle("typing", askIn.value.length > 0 || document.activeElement === askIn);
+  ["input", "focus", "blur"].forEach(ev => askIn.addEventListener(ev, syncAsk));
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => {
+    if (ask.classList.contains("typing")) return;
+    hint.classList.add("out");
+    setTimeout(() => { qi = (qi + 1) % askQs.length; hint.textContent = askQs[qi]; hint.classList.remove("out"); }, 300);
+  }, 3200);
+
+  /* COMPARE */
+  const rows = [
+    ["Best for", ["Top of your field", "Working in the US now", "Professors and researchers", "Advanced degree, work that helps the US"]],
+    ["Who files", ["You, or anyone for you", "A US employer or agent", "Your employer", "You, or an employer"]],
+    ["Job offer", ["Not needed", "Needed", "Needed, permanent", "Not needed if the waiver is granted"]],
+    ["Evidence", ["Major award, or 3 of 10 criteria", "Award, or 3 of 8 (O-1A) / 3 of 6 (O-1B)", "2 of 6 criteria, plus 3 years of experience", "Advanced degree, plus 3 national-interest tests"]],
+    ["Yearly limit", ["Yes", "No limit", "Yes", "Yes"]],
+    ["Premium processing", ["15 business days", "15 business days", "15 business days", "45 business days"]],
+    ["Legal fee from", ["$8,995", "$6,999", "$8,995", "$7,995"]]
+  ];
+  $("#cmp-body").innerHTML = rows.map(([l, v]) => `<tr><th scope="row">${l}</th>${v.map((x, i) => `<td data-col="${i}"${i === 0 ? ' class="here"' : ""}>${x}</td>`).join("")}</tr>`).join("");
+  const panel = $("#compare-panel"), cbtn = $("#compare-btn"), clabel = $("#compare-label"), routes = $("#routes");
+  const scrim = $("#scrim");
+  function setPanel(open) { panel.hidden = !open; scrim.hidden = !open; requestAnimationFrame(() => scrim.classList.toggle("on", open)); routes.classList.toggle("dim", open); cbtn.setAttribute("aria-expanded", String(open)); cbtn.setAttribute("aria-label", open ? "Close comparison" : "Compare all four visas"); }
+  cbtn.addEventListener("click", e => { e.stopPropagation(); setPanel(panel.hidden); });
+
+  document.addEventListener("click", e => { if (!panel.hidden && !e.target.closest("#compare-panel")) setPanel(false); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !panel.hidden) { setPanel(false); cbtn.focus(); } });
+
+  /* FIT CARD */
+  const fits = [
+    ["Researchers", "Cited researcher", ["Scholarly articles", "Judging others' work", "Major original contributions"]],
+    ["Founders", "Well-known startup founder", ["Press about you", "Leading or critical role", "High pay"]],
+    ["Engineers", "Engineer whose work is used or licensed", ["Major original contributions", "Judging others' work", "Leading or critical role"]],
+    ["Artists", "Artist with major reviews", ["Exhibitions", "Press about you", "Awards"]]
+  ];
+  const chips = $("#chips"), ex = $("#example");
+  const exHtml = f => `<h3>${f[1]}</h3><p>${f[0]} often build their case on criteria like these:</p><ul class="ticks">${f[2].map(c => `<li>${tick()}${c}</li>`).join("")}</ul>`;
+  chips.innerHTML = fits.map((f, i) => `<button class="chip-btn" aria-pressed="${i === 0}" data-i="${i}">${f[0]}</button>`).join("");
+  ex.innerHTML = exHtml(fits[0]);
+  chips.addEventListener("click", e => { const b = e.target.closest(".chip-btn"); if (!b || b.getAttribute("aria-pressed") === "true") return; $$(".chip-btn", chips).forEach(c => c.setAttribute("aria-pressed", String(c === b))); fadeSwap(ex, exHtml(fits[+b.dataset.i])); });
+
+  /* HOW IT WORKS */
+  const phases = [
+    { icon: "o-phase1", label: "Phase 1", title: "With AI Partner Frank", sub: "Free evaluation, then from $49 a month",
+      steps: [["o-step1", "01 | Map your evidence", "Upload your resume and Frank checks it against each criterion, so you can see what's already strong and what still needs work.", "Free"],
+              ["o-step2", "02 | Fill real gaps with real evidence", "Frank finds real opportunities, like panels, peer reviews, awards, speaking slots and press, and shows which criterion each one helps. You approve everything before it goes out, and Frank saves your proof in the format USCIS expects."]],
+      fine: "Frank never uses paid awards, bought panel seats, pay-to-play memberships or pay-to-publish journals." },
+    { icon: "o-phase2", label: "Phase 2", title: "With your attorneys", sub: "Flat fee from $8,995",
+      steps: [["i-memo", "03 | Attorney review and strategy", "A senior attorney at the partner firm leads your case and writes a legal strategy memo. You get a flat fee quote before you sign."],
+              ["i-pen", "04 | Letters and petition", "You get coaching on recommendation letters. The attorneys prepare your Form I-140 petition, and a second attorney reviews it before it goes out."]],
+      fine: "Licensed attorneys at an independent partner firm do all the legal work. Green Card Guide is not a law firm." },
+    { icon: "o-phase3", label: "Phase 3", title: "With USCIS", sub: "Decision, then the wait",
+      steps: [["i-send", "05 | File Form I-140", "You can add premium processing. Then USCIS must act within 15 business days. That can be an approval, a denial or a request for more evidence.", "15 business days with premium"],
+              ["i-card", "06 | Final step to your green card", "When a visa number is available for you, you file Form I-485 in the US, or apply for an immigrant visa abroad. If a number is already available, you can file Form I-485 at the same time as your I-140.", "Depends on your country"]],
+      fine: "After approval, how long you wait depends on your country." }
+  ];
+  const pEl = $("#phases"), sEl = $("#steps");
+  pEl.innerHTML = phases.map((p, i) => `<button class="phase" role="tab" aria-selected="${i === 0}" aria-controls="steps" data-i="${i}"><span class="tile">${svg(p.icon, p.icon === "o-phase1" ? "icon twinkle" : "icon")}</span><span><small>${p.label}</small><b>${p.title}</b><span>${p.sub}</span></span></button>`).join("");
+  const stepsHtml = p => p.steps.map(s => `<div class="step"><span class="tile">${svg(s[0])}</span><div><h3>${s[1]}${s[3] ? `<em>${s[3]}</em>` : ""}</h3><p>${s[2]}</p></div></div>`).join("") + `<p class="fine">${svg("i-shield")}<span>${p.fine}</span></p>`;
+  sEl.innerHTML = stepsHtml(phases[0]);
+  pEl.addEventListener("click", e => { const b = e.target.closest(".phase"); if (!b || b.getAttribute("aria-selected") === "true") return; $$(".phase", pEl).forEach(x => x.setAttribute("aria-selected", String(x === b))); sEl.style.opacity = 0; setTimeout(() => { sEl.innerHTML = stepsHtml(phases[+b.dataset.i]); sEl.style.opacity = 1; }, 160); });
+  sEl.style.transition = "opacity .2s ease";
+
+  /* CRITERIA (text from the live EB-1A page) */
+  const crit = [
+    ["Awards", "o-awards", "Prizes you received, not your company", "National or international prizes you received for excellence in your field. A team award counts if you are named or got your own medal or certificate.", "A prize given to your company, not to you. Awards open only to people in one town, employer or school usually carry little weight."],
+    ["Membership", "o-membership", "Groups that admit only outstanding people", "Membership in an association that requires outstanding achievement, judged by recognized national or international experts. A society's fellow level can qualify when experts judged your work.", "Membership you got through a degree, years of experience, a fee, a subscription, or a job requirement such as a union."],
+    ["Press about you", "o-press", "Articles about you and your work", "Articles about you and your work in professional or major trade publications or major media. You need the title, date and author, plus a translation if needed.", "A passing mention, an article only about your employer, or marketing written to sell your product or service."],
+    ["Judging others' work", "o-judging", "Reviewing other people's work", "You judged the work of others in your field or a related one, alone or on a panel. Examples are peer review for journals, grant review, conference paper review and dissertation committees.", "An invitation alone. You need the request and proof you actually finished the review."],
+    ["Major original contributions", "o-contrib", "Original work that had a major impact", "Original work that made a major impact on your field. Proof can be citations well above others in your field, commercial use, licensing, or detailed expert letters backed by documents.", "A patent, funding or a publication on its own. These show your work is original, not that it mattered widely."],
+    ["Scholarly articles", "o-articles", "Articles you wrote for experts", "Articles you wrote, as a listed author, in professional journals, major trade publications or major media. You don't need to be first author, and citations are not required for this criterion.", "Pieces not written for experts in your field, such as a personal blog post or a sales piece."],
+    ["Leading or<br>critical role", "o-role", "A key role at a distinguished organization", "A leading or critical role for an organization, or a division of one, with a distinguished reputation. What you did matters more than your title. Detailed letters from people who saw your impact help.", "A big title with no proof of impact, or an organization whose reputation is not shown."],
+    ["High pay", "o-pay", "Pay that is high for your field", "Salary or other pay that is high compared with others in your field. Show pay records plus salary surveys for your role and location.", "Comparing yourself with a broad job category, or salary websites with few user reports. Pay earned abroad is compared with local pay there, not converted to US dollars."],
+    ["Exhibitions", "o-exhibit", "Your work shown at artistic showcases", "Your own work shown at artistic exhibitions or showcases, in person or online.", "Trade shows and other shows that are not artistic. Being selected is not enough until your work is actually shown."],
+    ["Commercial success in performing arts", "o-commercial", "Sales that show real success", "Box office receipts or sales of records or videos that show real commercial success.", "Simply releasing music or appearing in a show. The numbers have to show success."]
+  ];
+  const tEl = $("#tiles"), dEl = $("#detail-body");
+  const tileHtml = i => `<button class="ctile" role="tab" aria-selected="${i === 0}" aria-controls="detail" data-i="${i}">${svg(crit[i][1])}<span>${crit[i][0]}</span></button>`;
+  tEl.innerHTML = [0, 1, 2, 3, 4, 5, 6, 7].map(tileHtml).join("") + `<p class="arts">Arts only</p>` + [8, 9].map(tileHtml).join("");
+  const detailHtml = c => `<h3>${c[0].replace("<br>", " ")}</h3><p class="gist">${c[2]}</p><p class="verdict">Counts <span class="badge yes"><svg><use href="#tick"/></svg></span></p><p>${c[3]}</p><p class="verdict no">Doesn't count <span class="badge no"><svg><use href="#cross"/></svg></span></p><p>${c[4]}</p>`;
+  dEl.innerHTML = detailHtml(crit[0]);
+  tEl.addEventListener("click", e => { const b = e.target.closest(".ctile"); if (!b || b.getAttribute("aria-selected") === "true") return; $$(".ctile", tEl).forEach(x => x.setAttribute("aria-selected", String(x === b))); fadeSwap(dEl, detailHtml(crit[+b.dataset.i])); });
+
+  /* COSTS */
+  const tg = $("#frank-toggle"), fcard = $("#frank-card"), ftot = $("#frank-total");
+  tg.addEventListener("click", () => {
+    const on = tg.getAttribute("aria-checked") !== "true";
+    tg.setAttribute("aria-checked", String(on)); fcard.classList.toggle("off", !on);
+    $$("#frank-ticks .check").forEach(c => c.classList.toggle("grey", !on));
+    ftot.textContent = on ? "plus Frank, from $49 a month" : "plus from $49 a month if you add Frank";
+  });
+  function expander(btn, target, openLabel, closedLabel) {
+    btn.addEventListener("click", () => { const open = btn.getAttribute("aria-expanded") !== "true"; btn.setAttribute("aria-expanded", String(open)); target.hidden = !open; const s = btn.querySelector("span") || btn.firstChild; if (s.nodeType === 3) s.textContent = (open ? openLabel : closedLabel) + " "; else s.textContent = open ? openLabel : closedLabel; });
+  }
+  expander($("#more-btn"), $("#more-included"), "Show fewer", "See all 9 included");
+  expander($("#fees-btn"), $("#fee-table"), "Hide fees", "See every fee");
+
+  /* FAQ */
+  const faq = [
+    ["Do I need to tell my employer?", "No. Your employer doesn't need to sign anything or even know. Whether to tell them depends on your situation, so ask your attorney."],
+    ["I already have an O-1. Do I qualify for EB-1A?", "Maybe, but not automatically. The criteria look alike, but each petition is judged on its own. For artists, the bar is higher: O-1B asks for distinction, while EB-1A asks that you be among the small percentage at the very top."],
+    ["Can I apply for EB-1A and EB-2 NIW at the same time?", "Yes, and many people do, since NIW has a lower bar. Each one needs its own petition and fees. Your attorney can tell you if it makes sense for you."],
+    ["Can premium processing get me a green card in weeks?", "No. It only speeds up the decision on your petition, to 15 business days. After that you may wait for your turn, depending on your country, and the green card application takes its own time."],
+    ["Can I pay my way into a criterion?", "It rarely helps and can hurt. A membership you get just by paying doesn't count, and paid marketing isn't press about you."],
+    ["Is the free evaluation legal advice?", "No. It's information to help you plan. A licensed attorney at the partner firm confirms whether you qualify before anything is filed."]
+  ];
+  const qs = $("#qs");
+  qs.innerHTML = faq.map((q, i) => `<div class="q"${i > 2 ? " hidden" : ""}><button aria-expanded="${i === 0}" aria-controls="a${i}" id="q${i}"><span>${q[0]}</span><span class="pm" aria-hidden="true">${i === 0 ? "−" : "+"}</span></button><p class="a" id="a${i}" role="region" aria-labelledby="q${i}"${i === 0 ? "" : " hidden"}>${q[1]}</p></div>`).join("") +
+    `<button class="view-more" aria-expanded="false" id="view-more"><span>View more</span><svg class="tri" fill="currentColor"><use href="#tri-down"/></svg></button>`;
+  qs.addEventListener("click", e => {
+    const vm = e.target.closest("#view-more");
+    if (vm) { const open = vm.getAttribute("aria-expanded") !== "true"; vm.setAttribute("aria-expanded", String(open)); vm.querySelector("span").textContent = open ? "Show fewer" : "View more"; $$(".q", qs).forEach((q, i) => { if (i > 2) q.hidden = !open; }); return; }
+    const b = e.target.closest(".q button"); if (!b) return;
+    const open = b.getAttribute("aria-expanded") !== "true"; b.setAttribute("aria-expanded", String(open));
+    $(".pm", b).textContent = open ? "−" : "+"; $("#" + b.getAttribute("aria-controls")).hidden = !open;
+  });
+})();
+</script>
+</body>
+</html>
