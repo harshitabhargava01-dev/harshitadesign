@@ -257,6 +257,52 @@
     .hero { padding-top: 56px; padding-bottom: 56px; }
   }
 
+  /* ---------- SECTION 2 : VIDEO WALKTHROUGH ---------- */
+  .video-embed {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    border: none;
+    background: #000000;
+    cursor: pointer;
+    overflow: hidden;
+    display: block;
+  }
+  .video-embed img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.2s ease;
+  }
+  .video-embed:hover img { opacity: 0.85; }
+  .video-play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 88px;
+    height: 88px;
+    margin: -44px 0 0 -44px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+  }
+  .video-embed:hover .video-play { transform: scale(1.08); }
+  .video-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  @media (max-width: 900px) {
+    .video-play { width: 64px; height: 64px; margin: -32px 0 0 -32px; }
+  }
+
   /* ---------- SECTION 2b : ENGINEERING CONSTRAINT ---------- */
   .constraint {
     padding-top: 80px;
@@ -596,9 +642,10 @@
       </svg>
     </a>
     <div class="wrapper">
-      <div class="media-frame media-frame--left">
-        <img src="ai%20projects/dog_park_explainer.gif" alt="Demo of a semantic video search query and its result, illustrating the perception gap" style="width:90%;height:90%;object-fit:contain;object-position:left center;" />
-      </div>
+        <button class="video-embed" type="button" data-video="qanC1jgVwrM" aria-label="Play video: What Users Think Your AI Feature Does vs. What It Actually Does">
+          <img src="https://i.ytimg.com/vi/qanC1jgVwrM/maxresdefault.jpg" alt="" />
+          <span class="video-play"><svg width="28" height="32" viewBox="0 0 28 32" aria-hidden="true"><path d="M2 2 L26 16 L2 30 Z" fill="#000000"/></svg></span>
+        </button>
     </div>
   </section>
 
@@ -789,6 +836,18 @@
           }, 1500);
         });
       });
+    });
+    // video: load YouTube only when the thumbnail is clicked
+    document.querySelectorAll('.video-embed').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var f = document.createElement('iframe');
+        f.src = 'https://www.youtube-nocookie.com/embed/' + btn.dataset.video + '?autoplay=1&rel=0';
+        f.title = btn.getAttribute('aria-label').replace('Play video: ', '');
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.allowFullscreen = true;
+        btn.replaceChildren(f);
+        btn.style.cursor = 'default';
+      }, { once: true });
     });
     // phones: scale the prototype down from its desktop size so it fits
     (function(){
