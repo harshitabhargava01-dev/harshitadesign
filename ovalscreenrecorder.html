@@ -516,6 +516,17 @@
     color: var(--ink);
   }
 
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 28px; padding: 12px 22px;
+    background: #fff; color: #000; border-radius: 999px;
+    font-family: 'Source Sans Pro', sans-serif; font-weight: 600; font-size: 17px;
+    text-decoration: none; transition: background .2s ease, transform .2s ease;
+  }
+  .hero-cta:hover { background: var(--highlight); transform: translateY(-1px); }
+  .hero-cta:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 3px; }
+  .point-content p a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
   .tools-list {
     list-style: disc;
     margin: 0;
@@ -632,8 +643,12 @@
   <!-- ================= SECTION 1 : HERO ================= -->
   <section class="hero">
     <div class="wrapper">
-      <h1 class="hero-heading"><span class="line-bold">The Oval Screen Recorder</span> <span class="hero-wip">(WIP)</span></h1>
-      <p class="hero-intro">I have been designing and building my own screen recorder, because I wanted <mark class="hero-mark">more control over the small decisions</mark>, like how and where to zoom in, and the little micro interactions that happen when you highlight something on screen. Vibe coding helped me build these interactions directly into the product, instead of working around whatever any other existing tool already gives me. I have enjoyed the process so much.</p>
+      <h1 class="hero-heading"><span class="line-bold">The Oval Screen Recorder</span></h1>
+      <p class="hero-intro">I designed and built my own screen recorder, now live as a Chrome extension, because I wanted more control over the small decisions, like how and where to zoom in, and the little micro interactions that happen when you highlight something on screen. Vibe coding helped me build these interactions directly into the product, instead of working around whatever any other existing tool already gives me. I have enjoyed the process so much.</p>
+      <a class="hero-cta" href="https://chromewebstore.google.com/detail/ffkifjknaddjobjigdoffnmlcmiopako" target="_blank" rel="noopener">
+        Add to Chrome
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+      </a>
     </div>
   </section>
 
@@ -656,7 +671,7 @@
         </div>
         <div class="point-content">
           <h3 class="point-title">Platform: Chrome Extension</h3>
-          <p>I chose to build this entirely as a Chrome extension rather than a standalone app, partly a practical call, since a separate application would mean cloud infrastructure and managing the cost associated with it.</p>
+          <p>I chose to build this entirely as a Chrome extension rather than a standalone app, partly a practical call, since a separate application would mean cloud infrastructure and managing the cost associated with it. It is now live on the Chrome Web Store, <a href="https://chromewebstore.google.com/detail/ffkifjknaddjobjigdoffnmlcmiopako" target="_blank" rel="noopener">install it here</a>.</p>
         </div>
       </div>
       <div class="point-row grid">
