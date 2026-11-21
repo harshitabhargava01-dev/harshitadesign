@@ -206,6 +206,25 @@
     color:#4c4c4c;
   }
 
+  /* Card that links to its case study but also holds its own CTA:
+     the title link stretches over the whole card, the CTA sits above it */
+  .project-row--stretch{ position:relative; }
+  .project-row-link{ color:inherit; text-decoration:none; }
+  .project-row-link::after{ content:""; position:absolute; inset:0; }
+  .project-row-link:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+  .project-actions{ display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+  .project-actions-divider{ align-self:stretch; width:1px; background:#d0d0d0; }
+  .tag-cta{
+    position:relative; z-index:1;
+    display:inline-flex; align-items:center;
+    padding:12px 24px; border-radius:6px;
+    background:#0a2d41; color:#fff; border:1px solid #0a2d41;
+    font-weight:600; font-size:15px; text-decoration:none;
+    transition:background .2s ease, color .2s ease;
+  }
+  .tag-cta:hover{ background:#fff; color:#0a2d41; }
+  .tag-cta:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
+
   /* ---------- SUPPORT CASE STUDY CAROUSEL ---------- */
   .deck-frame{
     container-type:inline-size;
@@ -721,20 +740,24 @@
           </div>
         </div>
       </a>
-      <a class="project-row" href="ovalscreenrecorder">
+      <div class="project-row project-row--stretch">
         <div class="project-art">
           <img src="images/screen-recorder/thumbnail.png" alt="Oval logo" />
         </div>
         <div class="project-info">
-          <p class="project-title">The Oval Screen Recorder</p>
+          <p class="project-title"><a class="project-row-link" href="ovalscreenrecorder">The Oval Screen Recorder</a></p>
           <p class="project-summary">I designed and vibe coded a Chrome extension for screen recording, now live on the Chrome Web Store, because existing tools did not give me enough control, like how and where to zoom in, and the little micro interactions that happen when you highlight something on screen.</p>
-          <div class="tags">
-            <span class="tag">Product Design</span>
-            <span class="tag">UX Design</span>
-            <span class="tag">Vibe Coded</span>
+          <div class="project-actions">
+            <a class="tag-cta" href="https://chromewebstore.google.com/detail/ffkifjknaddjobjigdoffnmlcmiopako" target="_blank" rel="noopener">Try Oval</a>
+            <span class="project-actions-divider" aria-hidden="true"></span>
+            <div class="tags">
+              <span class="tag">Product Design</span>
+              <span class="tag">UX Design</span>
+              <span class="tag">Vibe Coded</span>
+            </div>
           </div>
         </div>
-      </a>
+      </div>
     </div>
   </section>
 
